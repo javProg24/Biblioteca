@@ -1,4 +1,4 @@
-package Controllers.Datos.DbOperaciones;
+package main.java.Controllers.Datos.DbOperaciones;
 
 import java.io.IOException;
 import java.sql.Connection;
