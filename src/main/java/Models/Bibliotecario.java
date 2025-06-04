@@ -6,7 +6,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
-public class Bibliotecario {
+public class Bibliotecario implements Entidad{
     private int ID;
     private String Usuario;
     private String Contrasena;

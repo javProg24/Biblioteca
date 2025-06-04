@@ -6,7 +6,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
-public class Ejemplar {
+public class Ejemplar implements Entidad{
     private int ID;
     private String Codigo;
     private boolean Estado;

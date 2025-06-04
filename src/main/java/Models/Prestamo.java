@@ -8,7 +8,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
-public class Prestamo {
+public class Prestamo implements Entidad{
     private int ID;
     private Date FechaPrestamo;
     private Date FechaDevolucion;

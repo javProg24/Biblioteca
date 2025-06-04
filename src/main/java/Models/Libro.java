@@ -6,7 +6,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
-public class Libro {
+public class Libro implements Entidad{
     private int ID;
     private String Titulo;
     private String Autor;

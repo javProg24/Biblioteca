@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class ConexionDB {
-    private static Connection conexion=null;
     private static final Properties props=new Properties();
     static {
         try {
@@ -22,15 +21,16 @@ public class ConexionDB {
             String url = props.getProperty("db.url");
             String user = props.getProperty("db.user");
             String password = props.getProperty("db.password");
-            conexion= DriverManager.getConnection(url, user, password);
+            Connection conexion= DriverManager.getConnection(url, user, password);
             if (conexion!=null)
                 System.out.println("Conexion exitosa");
+            return conexion;
         }catch (SQLException e){
             System.out.println("Error al abrir la conexion: "+e.getMessage());
+            return null;
         }
-        return conexion;
     }
-    public Connection CerrarConexion(){
+    public void CerrarConexion(Connection conexion){
         try{
             if (conexion!= null && !conexion.isClosed()) {
                 conexion.close();
@@ -39,6 +39,5 @@ public class ConexionDB {
         }catch (SQLException e){
             System.out.println("Error al cerrar la conexion: "+e.getMessage());
         }
-        return conexion;
     }
 }

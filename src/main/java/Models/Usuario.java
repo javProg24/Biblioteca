@@ -7,7 +7,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
-public class Usuario {
+public class Usuario implements Entidad {
     private int ID;
     private String Nombre;
     private String Apellido;
