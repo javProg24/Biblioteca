@@ -57,12 +57,12 @@ public class PropiedadesCreator {
     public <T extends Entidad> Map<Integer, Object> crearPropiedades(T entidad){// para actualizar y consultas de 2 parametros
         lista.clear();
         try {
-            Class<?> clazz=entidad.getClass();
-            Field[]campos=clazz.getDeclaredFields();
+            Class<?> clase=entidad.getClass();
+            Field[]campos=clase.getDeclaredFields();
             for (Field campo:campos){
                 String nombreCampo=campo.getName();
                 String nombreGetter=metodo+nombreCampo;
-                Method getter=clazz.getMethod(nombreGetter);
+                Method getter=clase.getMethod(nombreGetter);
                 Object valor=getter.invoke(entidad);
                 lista.put(index++,tipoParametro(valor));
             }

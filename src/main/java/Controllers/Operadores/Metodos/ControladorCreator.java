@@ -26,18 +26,29 @@ public class ControladorCreator {
     }
     public <T extends Entidad> boolean crearEntidad(T entidad, E_ROL rol){
         lista=propiedadesEntidad.crearPropiedadesNoID(entidad);
-        String procedimientoAlmacenado=cadenaSP.crearCadenaCompleta(E_CODIGO_SP.SP_INSERTAR,rol);
-        return accesoDb.CrearEntidad(procedimientoAlmacenado,lista);
+        String procedimiento=cadenaSP.crearCadenaCompleta(E_CODIGO_SP.SP_INSERTAR,rol);
+        return accesoDb.CrearEntidad(procedimiento,lista);
     }
-    public <T extends Entidad>List<Map<String,Object>> obtenerEntidad(T entidad, E_ROL rol){
-        String procedimientoAlmacenado=cadenaSP.crearCadenaCompleta(E_CODIGO_SP.SP_OBTENER,rol);
-        return accesoDb.ObtenerEntidad(procedimientoAlmacenado);
+    public <T extends Entidad>List<Map<String,Object>> obtenerEntidad(E_ROL rol){
+        String procedimiento=cadenaSP.crearCadenaCompleta(E_CODIGO_SP.SP_OBTENER,rol);
+        return accesoDb.ObtenerEntidad(procedimiento);
     }
     public <T extends Entidad>List<Map<String,Object>> obtenerEntidadParametro(T entidad, E_ROL rol, E_PARAMETRO parametro,String nombre) {
         lista=propiedadesEntidad.listarPropiedad(entidad,nombre);
         String spNombre = E_CODIGO_SP.SP_OBTENER + parametro.name();
-        String procedimientoAlmacenado = spNombre + rol.name();
-        return accesoDb.ObtenerPorParametro(procedimientoAlmacenado,lista);
+        String procedimiento = spNombre + rol.name();
+        return accesoDb.ObtenerPorParametro(procedimiento,lista);
     }
-    
+    // actualizar
+    public <T extends Entidad> boolean actualizarEntidad(T entidad, E_ROL rol){
+        lista=propiedadesEntidad.crearPropiedades(entidad);
+        String procedimiento=cadenaSP.crearCadenaCompleta(E_CODIGO_SP.SP_ACTUALIZAR,rol);
+        return accesoDb.ActualizarEntidad(procedimiento,lista);
+    }
+    //eliminar
+    public <T extends Entidad>boolean eliminarEntidad(T entidad,E_ROL rol,String parametro){
+        lista=propiedadesEntidad.listarPropiedad(entidad,parametro);
+        String procedimiento=cadenaSP.crearCadenaCompleta(E_CODIGO_SP.SP_ELIMINAR,rol);
+        return accesoDb.EliminarEntidad(procedimiento,lista);
+    }
 }
