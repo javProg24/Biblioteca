@@ -24,15 +24,18 @@ public class ControladorCreator {
         accesoDb=new ExecuteSP();
         propiedadesEntidad=new PropiedadesCreator();
     }
+    // crear
     public <T extends Entidad> boolean crearEntidad(T entidad, E_ROL rol){
         lista=propiedadesEntidad.crearPropiedadesNoID(entidad);
         String procedimiento=cadenaSP.crearCadenaCompleta(E_CODIGO_SP.SP_INSERTAR,rol);
         return accesoDb.CrearEntidad(procedimiento,lista);
     }
-    public <T extends Entidad>List<Map<String,Object>> obtenerEntidad(E_ROL rol){
+    // obtener
+    public List<Map<String,Object>> obtenerEntidad(E_ROL rol){
         String procedimiento=cadenaSP.crearCadenaCompleta(E_CODIGO_SP.SP_OBTENER,rol);
         return accesoDb.ObtenerEntidad(procedimiento);
     }
+    // obtener por parametro
     public <T extends Entidad>List<Map<String,Object>> obtenerEntidadParametro(T entidad, E_ROL rol, E_PARAMETRO parametro,String nombre) {
         lista=propiedadesEntidad.listarPropiedad(entidad,nombre);
         String spNombre = E_CODIGO_SP.SP_OBTENER + parametro.name();
