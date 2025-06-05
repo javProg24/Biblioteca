@@ -13,12 +13,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ControladorCreator {
+public class ControladorGeneral {
     private Map<Integer,Object>lista;
     private final CadenaSPCreator cadenaSP;
     private final Acceso_DB accesoDb;
     private final PropiedadesCreator propiedadesEntidad;
-    public ControladorCreator(){
+    public ControladorGeneral(){
         lista= new HashMap<>();
         cadenaSP=new CadenaSPCreator();
         accesoDb=new ExecuteSP();

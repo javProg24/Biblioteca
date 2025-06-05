@@ -10,9 +10,9 @@ import java.util.Map;
 public class ControladorUsuario {
     private final static String id= "ID"; // Nombre de la propiedad que se usa para identificar al usuario
     private final static String cedula="Cedula"; // Nombre de la propiedad que se usa para identificar al usuario por cedula
-    private final ControladorCreator controlador;
+    private final ControladorGeneral controlador;
     public ControladorUsuario(){
-        controlador=new ControladorCreator();
+        controlador=new ControladorGeneral();
     }
     public <T extends Entidad> boolean crearUsuario(T entidad){ // Metodo para crear un usuario
         return controlador.crearEntidad(entidad, E_ROL._USUARIO);
