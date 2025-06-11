@@ -5,5 +5,6 @@ public enum E_PARAMETRO {
     _CEDULA,
     _TITULO,
     _FECHA_DEVOLUCION,
-    _FECHA_PRESTAMO
+    _FECHA_PRESTAMO,
+    _LIBRO_ID,
 }

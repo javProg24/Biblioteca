@@ -16,7 +16,7 @@ public class ConexionDB {
             System.out.println("Error al cargar las propiedades de la conexion: "+e.getMessage());
         }
     }
-    public Connection AbrirConexion(){
+    protected Connection AbrirConexion(){
         try{
             String url = props.getProperty("db.url");
             String user = props.getProperty("db.user");
@@ -30,7 +30,7 @@ public class ConexionDB {
             return null;
         }
     }
-    public void CerrarConexion(Connection conexion){
+    protected void CerrarConexion(Connection conexion){
         try{
             if (conexion!= null && !conexion.isClosed()) {
                 conexion.close();
