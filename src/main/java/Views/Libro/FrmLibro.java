@@ -1,4 +1,6 @@
 package main.java.Views.Libro;
 
-public class FrmLibro {
+import javax.swing.*;
+
+public class FrmLibro extends JPanel {
 }
