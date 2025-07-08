@@ -1,8 +1,8 @@
 package main.java.Views;
 
 
-import main.java.Views.Libro.FrmLibro;
-import main.java.Views.Usuario.FrmUsuario;
+import main.java.Views.Libro.PanelLibro;
+import main.java.Views.Usuario.PanelUsuario;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,10 +37,10 @@ public class VentanaPrueba {
         frame.add(contentPanel, BorderLayout.CENTER);
 
         // Crear paneles para cada entidad y guardarlos
-        FrmUsuario frmUsuario = new FrmUsuario();
-        FrmLibro personaPanel = new FrmLibro();
+        PanelUsuario panelUsuario = new PanelUsuario();
+        PanelLibro personaPanel = new PanelLibro();
 
-        panelsMap.put("Usuario", frmUsuario);
+        panelsMap.put("Usuario", panelUsuario);
         panelsMap.put("Libro", personaPanel);
 
         // Listener para menú que cambia el panel activo

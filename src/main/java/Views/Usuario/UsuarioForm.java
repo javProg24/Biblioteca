@@ -1,4 +1,4 @@
 package main.java.Views.Usuario;
 
-public class FrmUsuarioForm {
+public class UsuarioForm {
 }

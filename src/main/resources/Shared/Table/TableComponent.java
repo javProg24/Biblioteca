@@ -1,6 +1,6 @@
-package main.Resources.Shared;
+package main.resources.Shared.Table;
 
-import main.Resources.Utils.Column;
+import main.resources.Utils.Column;
 
 import javax.swing.event.EventListenerList;
 import javax.swing.event.TableModelEvent;
@@ -19,11 +19,11 @@ public class TableComponent<T> implements TableModel {
         }
         this.columns = columns;
     }
-    public void addRows(List<T> rows) {
-        if (!rows.isEmpty()) {
-            int first = data.size();
-            data.addAll(rows);
-            fireTableRowsInserted(first, data.size() - 1);
+    public void addRows(List<T> datosEntidad) {
+        if (!datosEntidad.isEmpty()) {
+            int first = this.data.size();
+            this.data.addAll(datosEntidad);
+            fireTableRowsInserted(first, this.data.size() - 1);
         }
     }
     public void addRow(T row) {

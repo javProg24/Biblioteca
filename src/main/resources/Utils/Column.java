@@ -1,4 +1,4 @@
-package main.Resources.Utils;
+package main.resources.Utils;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;

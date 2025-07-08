@@ -1,4 +1,4 @@
-package main.Resources.Shared;
+package main.resources.Shared;
 
 import javax.swing.*;
 

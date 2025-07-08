@@ -1,4 +1,4 @@
 package main.java.Views.Libro;
 
-public class FrmLibroForm {
+public class LibroForm {
 }
