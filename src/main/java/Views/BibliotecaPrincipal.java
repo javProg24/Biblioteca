@@ -20,7 +20,7 @@ public class BibliotecaPrincipal extends JFrame {
 
     public BibliotecaPrincipal(){
         setTitle("Sistema de Biblioteca");
-        setSize(1000, 600);
+        setSize(1100, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         getContentPane().setBackground(ComponentFactory.COLOR_FONDO);

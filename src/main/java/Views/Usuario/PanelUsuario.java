@@ -160,7 +160,8 @@ public class PanelUsuario extends JPanel {
                                 System.err.println("Error parseando fecha en columna: " + e.getMessage());
                             }
                         }
-                )
+                ),
+                new Column<>("Acciones",u->null,(u,v)->{})
         );
         return new TableComponent<>(columns);
     }
