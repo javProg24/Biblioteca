@@ -13,7 +13,7 @@ public class Usuario implements Entidad {
     private String Apellido;
     private String Dirreccion;
     private int Telefono;
-    private Date FechaNacimiento;
+    private Date Fecha_Nacimiento;
 //    public Usuario() {
 //        this.ID=0;
 //        this.Nombre = "";

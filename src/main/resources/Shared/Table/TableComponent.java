@@ -55,7 +55,7 @@ public class TableComponent<T> implements TableModel {
     }
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return false;
+        return columnIndex == getColumnCount() - 1;
     }
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {

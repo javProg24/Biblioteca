@@ -6,10 +6,9 @@ import main.java.Models.Usuario;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+
+import static main.java.Controllers.Operadores.Metodos.ControladorUsuario.obtenerUsuarioID;
 
 public class Main {
     private final static String id= "ID"; // Nombre de la propiedad que se usa para identificar al usuario
@@ -30,10 +29,23 @@ public class Main {
             opcion = Integer.parseInt(sc.nextLine());
             switch (opcion){
                 case 1-> registrarUsuario();
+                case 4-> consultarUsuario();
             }
         }while (opcion!=0);
         //System.out.println(propiedades.crearPropiedades(usuario));
     }
+
+    private static void consultarUsuario() {
+        System.out.print("Ingrese el ID del usuario: ");
+        Scanner sc = new Scanner(System.in);
+        int id = Integer.parseInt(sc.nextLine());
+        List<Object>datoID=new ArrayList<>();
+        datoID.add(id);
+        Usuario user = crearUsuario(datoID);
+        List<Map<String, Object>> resultado = obtenerUsuarioID(user);
+        System.out.println("Resultado: " + resultado);
+    }
+
     private static void registrarUsuario() throws ParseException {
         System.out.print("Ingrese el nombre: ");
         Scanner sc = new Scanner(System.in);
@@ -60,15 +72,16 @@ public class Main {
             System.out.println("Error al registrar el usuario.");
         }
     }
-    private static Usuario crearUsuario(List<Object>datos) throws ParseException {
+    private static Usuario crearUsuario(List<Object>datos) {
         Usuario usuario=new Usuario();
-        usuario.setNombre(datos.get(0).toString());
-        usuario.setApellido(datos.get(1).toString());
-        usuario.setDirreccion(datos.get(2).toString());
-        usuario.setTelefono(Integer.parseInt(datos.get(3).toString()));
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date fecha = sdf.parse(datos.get(4).toString());
-        usuario.setFechaNacimiento(fecha);
+        usuario.setID(Integer.parseInt(datos.get(0).toString()));
+//        usuario.setNombre(datos.get(0).toString());
+//        usuario.setApellido(datos.get(1).toString());
+//        usuario.setDirreccion(datos.get(2).toString());
+//        usuario.setTelefono(Integer.parseInt(datos.get(3).toString()));
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//        Date fecha = sdf.parse(datos.get(4).toString());
+//        usuario.setFechaNacimiento(fecha);
         return usuario;
     }
 }

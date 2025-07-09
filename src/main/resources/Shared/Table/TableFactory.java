@@ -8,7 +8,7 @@ import java.awt.*;
 public class TableFactory {
     private TableFactory() {}
     public static<T>JTable crearTablaEstilo(TableComponent<T> model){
-        JTable table = new JTable(model) {
+        JTable tabla = new JTable(model) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return model.isCellEditable(row, column);
@@ -16,7 +16,7 @@ public class TableFactory {
         };
 
         // 🟦 Estilo del encabezado
-        JTableHeader header = table.getTableHeader();
+        JTableHeader header = tabla.getTableHeader();
         header.setFont(new Font("Segoe UI", Font.BOLD, 14));
         header.setBackground(new Color(0x00, 0x33, 0x66)); // azul marino
         header.setForeground(Color.WHITE);
@@ -24,13 +24,13 @@ public class TableFactory {
         header.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         // 🧾 Estilo de las filas
-        table.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-        table.setRowHeight(28);
-        table.setShowGrid(false);
-        table.setIntercellSpacing(new Dimension(0, 0));
+        tabla.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        tabla.setRowHeight(28);
+        tabla.setShowGrid(false);
+        tabla.setIntercellSpacing(new Dimension(0, 0));
 
         // 🌈 Renderer personalizado para estilo de celdas
-        table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+        DefaultTableCellRenderer celdasCentradas = new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable tbl, Object value,
                                                            boolean isSelected, boolean hasFocus,
@@ -42,11 +42,17 @@ public class TableFactory {
                     c.setBackground(Color.WHITE);
                 }
                 setBorder(BorderFactory.createEmptyBorder(4, 8, 4, 8));
+                setHorizontalAlignment(SwingConstants.CENTER); // centrado horizontal
                 return c;
             }
-        });
+        };
 
-        return table;
+        // Asignar renderer centrado para tipos comunes de datos
+        tabla.setDefaultRenderer(Object.class, celdasCentradas);
+        tabla.setDefaultRenderer(Number.class, celdasCentradas);
+        tabla.setDefaultRenderer(String.class, celdasCentradas);
+
+        return tabla;
     }
     public static JScrollPane wrapWithRoundedBorder(JTable table) {
         JScrollPane scrollPane = new JScrollPane(table);

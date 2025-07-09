@@ -38,31 +38,31 @@ public class PanelAction extends JPanel {
         }
     }
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Panel de Acciones");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(300, 100);
-        PanelAction panel = new PanelAction();
-
-        // Simulación de evento
-        panel.initEvent(new TableActionEvent() {
-            @Override
-            public void onEdit(int row) {
-                System.out.println("Editar fila: " + row);
-            }
-
-            @Override
-            public void onDelete(int row) {
-                System.out.println("Eliminar fila: " + row);
-            }
-
-            @Override
-            public void onView(int row) {
-                System.out.println("Ver fila: " + row);
-            }
-        }, 1);
-
-        frame.add(panel);
-        frame.setVisible(true);
-    }
+//    public static void main(String[] args) {
+//        JFrame frame = new JFrame("Panel de Acciones");
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.setSize(300, 100);
+//        PanelAction panel = new PanelAction();
+//
+//        // Simulación de evento
+//        panel.initEvent(new TableActionEvent() {
+//            @Override
+//            public void onEdit(int row) {
+//                System.out.println("Editar fila: " + row);
+//            }
+//
+//            @Override
+//            public void onDelete(int row) {
+//                System.out.println("Eliminar fila: " + row);
+//            }
+//
+//            @Override
+//            public void onView(int row) {
+//                System.out.println("Ver fila: " + row);
+//            }
+//        }, 1);
+//
+//        frame.add(panel);
+//        frame.setVisible(true);
+//    }
 }

@@ -20,7 +20,7 @@ public class BibliotecaPrincipal extends JFrame {
 
     public BibliotecaPrincipal(){
         setTitle("Sistema de Biblioteca");
-        setSize(900, 600);
+        setSize(1000, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         getContentPane().setBackground(ComponentFactory.COLOR_FONDO);
@@ -88,9 +88,9 @@ public class BibliotecaPrincipal extends JFrame {
         botonesPanel.add(Box.createVerticalStrut(10));
         botonesPanel.add(btnDashboard);
         botonesPanel.add(Box.createVerticalStrut(10));
-        botonesPanel.add(btnLibros);
-        botonesPanel.add(Box.createVerticalStrut(10));
         botonesPanel.add(btnUsuarios);
+        botonesPanel.add(Box.createVerticalStrut(10));
+        botonesPanel.add(btnLibros);
         botonesPanel.add(Box.createVerticalStrut(10));
         botonesPanel.add(btnPrestamos);
 
