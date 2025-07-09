@@ -80,10 +80,10 @@ public class BibliotecaPrincipal extends JFrame {
         botonesPanel.setBackground(ComponentFactory.COLOR_MENU);
         botonesPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         // Botones menú con íconos
-        JButton btnDashboard = crearBotonMenu("Dashboard", ComponentFactory.ruta("menu-dashboard"));
-        JButton btnLibros = crearBotonMenu("Libros", ComponentFactory.ruta("menu-books"));
-        JButton btnUsuarios = crearBotonMenu("Usuarios", ComponentFactory.ruta("menu-users"));
-        JButton btnPrestamos = crearBotonMenu("Préstamos", ComponentFactory.ruta("menu-loans"));
+        JButton btnDashboard = ComponentFactory.crearBoton("Dashboard", ComponentFactory.ruta("menu-dashboard"));
+        JButton btnLibros = ComponentFactory.crearBoton("Libros", ComponentFactory.ruta("menu-books"));
+        JButton btnUsuarios = ComponentFactory.crearBoton("Usuarios", ComponentFactory.ruta("menu-users"));
+        JButton btnPrestamos = ComponentFactory.crearBoton("Préstamos", ComponentFactory.ruta("menu-loans"));
         // Agregar botones con espaciado
         botonesPanel.add(Box.createVerticalStrut(10));
         botonesPanel.add(btnDashboard);
@@ -105,7 +105,7 @@ public class BibliotecaPrincipal extends JFrame {
         logoutPanel.setLayout(new BoxLayout(logoutPanel, BoxLayout.X_AXIS));
         logoutPanel.setBackground(ComponentFactory.COLOR_MENU);
         logoutPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        JButton btnCerrarSesion = crearBotonMenu("Cerrar Sesión", ComponentFactory.ruta("menu-logout"));
+        JButton btnCerrarSesion = ComponentFactory.crearBoton("Cerrar Sesión", ComponentFactory.ruta("menu-logout"));
         btnCerrarSesion.setBackground(new Color(211, 47, 47)); // Rojo para el botón de cerrar sesión
         btnCerrarSesion.setForeground(Color.WHITE);
         btnCerrarSesion.setFont(new Font("Arial", Font.BOLD, 16));
@@ -129,31 +129,31 @@ public class BibliotecaPrincipal extends JFrame {
         PanelPrestamo panelPrestamos = new PanelPrestamo();
         panelPrincipal.add(panelPrestamos, "Prestamos");
     }
-    private JButton crearBotonMenu(String texto, String ruta){
-        ImageIcon icono = new ImageIcon(ruta);
-        Image imagen=icono.getImage().getScaledInstance(28,28,Image.SCALE_SMOOTH);
-        icono = new ImageIcon(imagen);
-        JButton boton = new JButton(texto, icono);
-        boton.setMaximumSize(new Dimension(200, 40));
-        boton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        boton.setBackground(ComponentFactory.COLOR_MENU);
-        boton.setForeground(Color.WHITE);
-        boton.setFont(new Font("Arial", Font.BOLD, 16));
-        boton.setBorderPainted(false);
-        boton.setFocusPainted(false);
-        boton.setContentAreaFilled(true);
-        boton.setHorizontalAlignment(SwingConstants.LEFT);
-        boton.setIconTextGap(15);
-        boton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(MouseEvent e){
-                boton.setBackground(new Color(21, 101, 192));
-            }
-            public void mouseExited(MouseEvent e){
-                boton.setBackground(ComponentFactory.COLOR_MENU);
-            }
-        });
-        return boton;
-    }
+//    private JButton crearBotonMenu(String texto, String ruta){
+//        ImageIcon icono = new ImageIcon(ruta);
+//        Image imagen=icono.getImage().getScaledInstance(28,28,Image.SCALE_SMOOTH);
+//        icono = new ImageIcon(imagen);
+//        JButton boton = new JButton(texto, icono);
+//        boton.setMaximumSize(new Dimension(200, 40));
+//        boton.setAlignmentX(Component.CENTER_ALIGNMENT);
+//        boton.setBackground(ComponentFactory.COLOR_MENU);
+//        boton.setForeground(Color.WHITE);
+//        boton.setFont(new Font("Arial", Font.BOLD, 16));
+//        boton.setBorderPainted(false);
+//        boton.setFocusPainted(false);
+//        boton.setContentAreaFilled(true);
+//        boton.setHorizontalAlignment(SwingConstants.LEFT);
+//        boton.setIconTextGap(15);
+//        boton.addMouseListener(new java.awt.event.MouseAdapter() {
+//            public void mouseEntered(MouseEvent e){
+//                boton.setBackground(new Color(21, 101, 192));
+//            }
+//            public void mouseExited(MouseEvent e){
+//                boton.setBackground(ComponentFactory.COLOR_MENU);
+//            }
+//        });
+//        return boton;
+//    }
     public static void main(String[] args) {
         SwingUtilities.invokeLater(()-> new BibliotecaPrincipal().setVisible(true));
     }

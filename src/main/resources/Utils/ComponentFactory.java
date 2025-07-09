@@ -2,6 +2,7 @@ package main.resources.Utils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 
 public class ComponentFactory {
     // Crear un campos de texto con un tamaño de fuente específico
@@ -15,6 +16,31 @@ public class ComponentFactory {
         JLabel etiqueta = new JLabel(texto);
         etiqueta.setFont(new Font("Arial", Font.BOLD, 14));
         return etiqueta;
+    }
+    public static JButton crearBoton(String texto, String ruta) {
+        ImageIcon icono=new ImageIcon(ruta);
+        Image image=icono.getImage().getScaledInstance(28,28,Image.SCALE_SMOOTH);
+        icono=new ImageIcon(image);
+        JButton boton=new JButton(texto,icono);
+        boton.setMaximumSize(new Dimension(200, 40));
+        boton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        boton.setBackground(ComponentFactory.COLOR_MENU);
+        boton.setForeground(Color.WHITE);
+        boton.setFont(new Font("Arial", Font.BOLD, 16));
+        boton.setBorderPainted(false);
+        boton.setFocusPainted(false);
+        boton.setContentAreaFilled(true);
+        boton.setHorizontalAlignment(SwingConstants.LEFT);
+        boton.setIconTextGap(15);
+        boton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(MouseEvent e){
+                boton.setBackground(new Color(21, 101, 192));
+            }
+            public void mouseExited(MouseEvent e){
+                boton.setBackground(ComponentFactory.COLOR_MENU);
+            }
+        });
+        return boton;
     }
     // Crear una ruta de icono para los botones
     public static String ruta(String icono){

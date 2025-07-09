@@ -8,7 +8,6 @@ import main.java.Models.Usuario;
 
 import javax.swing.*;
 import java.awt.*;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -32,11 +31,51 @@ public class PanelUsuario extends JPanel {
         add(panelTabla, BorderLayout.CENTER);
 
     }
-    private JPanel panelBotones(){
-        JPanel panel = new JPanel();
+    private JPanel panelBotones() {
+        JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(ComponentFactory.COLOR_FONDO);
-        panel.add(new JButton("Nuevo"));
-        panel.add(new JButton("Eliminar"));
+
+        // ---- Subpanel izquierdo: etiqueta + campo ----
+        JPanel panelIzquierdo = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        panelIzquierdo.setBackground(ComponentFactory.COLOR_FONDO);
+
+        JLabel lblCedula = ComponentFactory.crearEtiqueta("Cédula:");
+        txtCedula = ComponentFactory.crearCampoTexto();
+        txtCedula.setColumns(15);
+
+        panelIzquierdo.add(lblCedula);
+        panelIzquierdo.add(txtCedula);
+
+        // ---- Subpanel derecho: botones ----
+        JPanel panelDerecho = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+        panelDerecho.setBackground(ComponentFactory.COLOR_FONDO);
+
+        JButton btnConsultar = ComponentFactory.crearBoton("Buscar", ComponentFactory.ruta("action-search"));
+        JButton btnAgregar = ComponentFactory.crearBoton("Agregar", ComponentFactory.ruta("action-add"));
+
+        panelIzquierdo.add(btnConsultar);
+        panelDerecho.add(btnAgregar);
+
+        // ---- GridBagConstraints para subpanel izquierdo ----
+        GridBagConstraints gbcIzq = new GridBagConstraints();
+        gbcIzq.gridx = 0;
+        gbcIzq.gridy = 0;
+        gbcIzq.weightx = 1.0;      // Para ocupar espacio disponible
+        gbcIzq.anchor = GridBagConstraints.WEST; // Alinear a la izquierda
+        gbcIzq.insets = new Insets(10, 10, 10, 10); // Márgenes
+
+        // ---- GridBagConstraints para subpanel derecho ----
+        GridBagConstraints gbcDer = new GridBagConstraints();
+        gbcDer.gridx = 1;
+        gbcDer.gridy = 0;
+        gbcDer.weightx = 1.0;      // Para ocupar espacio disponible
+        gbcDer.anchor = GridBagConstraints.EAST; // Alinear a la derecha
+        gbcDer.insets = new Insets(10, 10, 10, 10); // Márgenes
+
+        // ---- Agregar subpaneles ----
+        panel.add(panelIzquierdo, gbcIzq);
+        panel.add(panelDerecho, gbcDer);
+
         return panel;
     }
     private JPanel panelTabla(){
@@ -54,13 +93,6 @@ public class PanelUsuario extends JPanel {
                     usuario.setApellido((String) row.get("Apellido"));
                     usuario.setDirreccion((String) row.get("Direccion"));
                     usuario.setTelefono((Integer) row.get("Telefono"));
-//                    Object fechaObj = row.get("Fecha_Nacimiento");
-//                    Date fecha = null;
-//                    if (fechaObj instanceof Date) {
-//                        fecha = (Date) fechaObj;
-//                    } else {
-//                        System.err.println("Tipo desconocido para Fecha_Nacimiento: " + fechaObj.getClass());
-//                    }
                     usuario.setFecha_Nacimiento((Date) row.get("Fecha_Nacimiento"));
                     return usuario;
                 }
@@ -132,14 +164,4 @@ public class PanelUsuario extends JPanel {
         );
         return new TableComponent<>(columns);
     }
-//    public Date parseFecha(String fechaStr) {
-//        if (fechaStr == null || fechaStr.isEmpty()) return null;
-//        try {
-//            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-//            return sdf.parse(fechaStr);
-//        } catch (ParseException e) {
-//            System.err.println("Error parseando fecha: " + e.getMessage());
-//            return null;
-//        }
-//    }
 }
