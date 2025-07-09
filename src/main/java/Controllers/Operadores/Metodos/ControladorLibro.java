@@ -21,14 +21,14 @@ public class ControladorLibro {
         List<String>parametro = List.of(id);
         return ControladorGeneral.eliminarEntidad(entidad, E_ROL._LIBRO, parametro);
     }
-    public List<Map<String, Object>> obtenerLibros() { // Metodo para obtener todos los libros
+    public static List<Map<String, Object>> obtenerLibros() { // Metodo para obtener todos los libros
         return ControladorGeneral.obtenerEntidad(E_ROL._LIBRO);
     }
     public <T extends Entidad> List<Map<String, Object>> obtenerLibroID(T entidad) { // Metodo para obtener un libro por ID
         List<String> parametro = List.of(id);
         return ControladorGeneral.obtenerEntidadParametro(entidad, E_ROL._LIBRO, E_PARAMETRO._ID, parametro);
     }
-    public <T extends Entidad> List<Map<String, Object>> obtenerLibroTitulo(T entidad) { // Metodo para obtener un libro por titulo
+    public static<T extends Entidad> List<Map<String, Object>> obtenerLibroTitulo(T entidad) { // Metodo para obtener un libro por titulo
         List<String> parametro = List.of(titulo);
         return ControladorGeneral.obtenerEntidadParametro(entidad, E_ROL._LIBRO, E_PARAMETRO._TITULO, parametro);
     }
