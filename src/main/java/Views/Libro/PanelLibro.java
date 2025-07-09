@@ -80,7 +80,7 @@ public class PanelLibro extends JPanel {
         JTable tabla = TableFactory.crearTablaEstilo(model);
         JScrollPane scrollPane = TableFactory.wrapWithRoundedBorder(tabla);
 
-        List<Map<String, Object>> datosLibros = ControladorLibro.obtenerLibros();
+        List<Map<String, Object>> datosLibros = ControladorLibro.obtenerLibros(); //probando
         List<Libro> libros = datosLibros.stream().map(row -> {
             return Libro.builder()
                     .ID((Integer) row.get("ID"))
