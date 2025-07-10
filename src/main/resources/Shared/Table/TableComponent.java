@@ -26,6 +26,27 @@ public class TableComponent<T> implements TableModel {
             fireTableRowsInserted(first, this.data.size() - 1);
         }
     }
+    public void clearRows() {
+        int lastIndex = data.size() - 1;
+        if (lastIndex >= 0) {
+            data.clear();
+            // Notifica que se eliminaron filas
+            fireTableRowsDeleted(0, lastIndex);
+        }
+    }
+    public void fireTableDataChanged() {
+        TableModelEvent e = new TableModelEvent(this);
+        fireTableChanged(e);
+    }
+
+
+    public T getRow(int rowIndex){
+        if(rowIndex<0||rowIndex>=data.size()){
+            throw new IndexOutOfBoundsException("Row index out of range: " + rowIndex);
+        }
+        System.out.println(data.get(rowIndex));
+        return data.get(rowIndex);
+    }
     public void addRow(T row) {
         int index = data.size();
         data.add(row);

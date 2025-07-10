@@ -8,13 +8,15 @@ public class ComponentFactory {
     // Crear un campos de texto con un tamaño de fuente específico
     public static JTextField crearCampoTexto(){
         JTextField campo= new JTextField();
-        campo.setFont(new Font("Arial", Font.PLAIN, 14));
+        Dimension campoDimension = new Dimension(200, 30);
+        campo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        campo.setPreferredSize(campoDimension);
         return campo;
     }
     // Crea una etiqueta con un texto y un tamaño de fuente específico
     public static JLabel crearEtiqueta(String texto){
         JLabel etiqueta = new JLabel(texto);
-        etiqueta.setFont(new Font("Arial", Font.BOLD, 14));
+        etiqueta.setFont(new Font("Segoe UI", Font.BOLD, 14));
         return etiqueta;
     }
     public static JButton crearBoton(String texto, String ruta) {

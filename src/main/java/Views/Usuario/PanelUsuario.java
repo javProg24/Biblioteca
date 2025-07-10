@@ -1,5 +1,6 @@
 package main.java.Views.Usuario;
 
+import com.formdev.flatlaf.FlatLightLaf;
 import main.resources.Shared.Table.*;
 import main.resources.Utils.Column;
 import main.resources.Utils.ComponentFactory;
@@ -15,21 +16,26 @@ import java.util.Map;
 
 public class PanelUsuario extends JPanel {
     private JTextField txtCedula;
+    private JButton btnConsultar,
+            btnAgregar;
+    private TableComponent<Usuario> modelUsuario;
     public PanelUsuario() {
+        try{
+            UIManager.setLookAndFeel(new FlatLightLaf());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         setLayout(new BorderLayout());
         setBackground(ComponentFactory.COLOR_FONDO);
         setBorder(BorderFactory.createTitledBorder("Usuarios"));
         initComponents();
-
     }
     private void initComponents(){
         //2 JPanel, Panel de botones y panel de tabla
         JPanel panelBotones = panelBotones();
         JPanel panelTabla = panelTabla();
-
         add(panelBotones, BorderLayout.NORTH);
         add(panelTabla, BorderLayout.CENTER);
-
     }
     private JPanel panelBotones() {
         JPanel panel = new JPanel(new GridBagLayout());
@@ -50,12 +56,17 @@ public class PanelUsuario extends JPanel {
         JPanel panelDerecho = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         panelDerecho.setBackground(ComponentFactory.COLOR_FONDO);
 
-        JButton btnConsultar = ComponentFactory.crearBoton("Buscar", ComponentFactory.ruta("action-search"));
-        JButton btnAgregar = ComponentFactory.crearBoton("Agregar", ComponentFactory.ruta("action-add"));
-
+        btnConsultar = ComponentFactory.crearBoton("Buscar", ComponentFactory.ruta("action-search"));
+        btnAgregar = ComponentFactory.crearBoton("Agregar", ComponentFactory.ruta("action-add"));
         panelIzquierdo.add(btnConsultar);
         panelDerecho.add(btnAgregar);
 
+        btnAgregar.addActionListener(e -> {
+            Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(PanelUsuario.this);
+            UsuarioForm dialog = new UsuarioForm(parentFrame);
+            dialog.setVisible(true);
+            cargarDatosUsuarios();
+        });
         // ---- GridBagConstraints para subpanel izquierdo ----
         GridBagConstraints gbcIzq = new GridBagConstraints();
         gbcIzq.gridx = 0;
@@ -78,12 +89,7 @@ public class PanelUsuario extends JPanel {
 
         return panel;
     }
-    private JPanel panelTabla(){
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(ComponentFactory.COLOR_FONDO);
-        TableComponent<Usuario> model = getUsuarioTableComponent();
-        JTable tabla = TableFactory.crearTablaEstilo(model);
-        JScrollPane scrollPane = TableFactory.wrapWithRoundedBorder(tabla);
+    public void cargarDatosUsuarios(){
         List<Map<String,Object>> datosUsuarios= ControladorUsuario.obtenerUsuarios();
         List<Usuario>usuarios=datosUsuarios.stream().map(
                 row->{
@@ -97,50 +103,55 @@ public class PanelUsuario extends JPanel {
                     return usuario;
                 }
         ).toList();
+        modelUsuario.clearRows();
+        modelUsuario.fireTableDataChanged();
+        modelUsuario.addRows(usuarios);
+    }
+    private JPanel panelTabla(){
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(ComponentFactory.COLOR_FONDO);
+        //modelo de la tabla
+        modelUsuario = getUsuarioTableComponent();
+        JTable tabla = TableFactory.crearTablaEstilo(modelUsuario);
+        JScrollPane scrollPane = TableFactory.wrapWithRoundedBorder(tabla);
+        cargarDatosUsuarios();
         TableActionEvent actionEvent=new TableActionEvent() {
+            private int id=0;
+            private final Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(PanelUsuario.this);
             @Override
             public void onEdit(int row) {
-                System.out.println("Editar fila: " + row);
+                Usuario usuarioSeleccionado=modelUsuario.getRow(row);
+                this.id=usuarioSeleccionado.getID();
+                UsuarioForm dialog = new UsuarioForm(parentFrame,id,true);
+                dialog.setVisible(true);
+                cargarDatosUsuarios();
+                System.out.println("Editar fila: " + row+id);
             }
-
             @Override
             public void onDelete(int row) {
-                System.out.println("Eliminar fila: " + row);
+                System.out.println("Eliminar fila: " + row+id);
             }
         };
         int colAcciones=tabla.getColumnCount()-1;
-        tabla.getColumnModel().getColumn(colAcciones)
-                .setCellRenderer(new TableActionCellRenderer(actionEvent));
-
-        tabla.getColumnModel().getColumn(colAcciones)
-                .setCellEditor(new TableActionCellEditor(actionEvent));
+        tabla.getColumnModel().getColumn(colAcciones).setCellRenderer(new TableActionCellRenderer(actionEvent));
+        tabla.getColumnModel().getColumn(colAcciones).setCellEditor(new TableActionCellEditor(actionEvent));
         tabla.setRowHeight(40);
-        model.addRows(usuarios);
+        //modelUsuario.addRows(usuarios);
         panel.add(scrollPane, BorderLayout.CENTER);
         return panel;
     }
 
     private static TableComponent<Usuario> getUsuarioTableComponent() {
         List<Column<Usuario>>columns= List.of(
-                new Column<>("ID",
-                        Usuario::getID,
-                        (u, v) -> u.setID((Integer) v)
+                new Column<>("ID", Usuario::getID, (u, v) -> u.setID((Integer) v)
                 ),
-                new Column<>("Nombre",
-                        Usuario::getNombre,
-                        (u, v) -> u.setNombre((String) v)
+                new Column<>("Nombre", Usuario::getNombre, (u, v) -> u.setNombre((String) v)
                 ),
-                new Column<>("Apellido",
-                        Usuario::getApellido,
-                        (u, v) -> u.setApellido((String) v)
+                new Column<>("Apellido", Usuario::getApellido, (u, v) -> u.setApellido((String) v)
                 ),
-                new Column<>("Direccion",
-                        Usuario::getDirreccion,
-                        (u, v) -> u.setDirreccion((String) v)
+                new Column<>("Direccion", Usuario::getDirreccion, (u, v) -> u.setDirreccion((String) v)
                 ),
-                new Column<>("Telefono",
-                        Usuario::getTelefono,
-                        (u, v) -> u.setTelefono((Integer) v)
+                new Column<>("Telefono", Usuario::getTelefono, (u, v) -> u.setTelefono((Integer) v)
                 ),
                 new Column<>("Fecha de Nacimiento",
                         usuario -> {

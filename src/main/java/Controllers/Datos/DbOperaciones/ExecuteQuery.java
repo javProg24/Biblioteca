@@ -65,16 +65,4 @@ public class ExecuteQuery {
             return null;
         }
     }
-//    private Object tipoParametro(Object parametro){
-//        if (parametro instanceof Integer){
-//            return parametro;
-//        }
-//        if( parametro instanceof String){
-//            return parametro;
-//        }
-//        if(parametro instanceof Boolean){
-//            return parametro;
-//        }
-//        throw new IllegalArgumentException("Tipo de parametro no soportado: " + parametro.getClass().getName());
-//    }
 }
