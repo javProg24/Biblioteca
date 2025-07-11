@@ -5,5 +5,9 @@ public enum E_ROL {
     _USUARIO,
     _LIBRO,
     _PRESTAMO,
-    _EJEMPLAR
+    _EJEMPLAR;
+    public String getDisplayName() {
+        String clean = this.name().replace("_", "").toLowerCase();
+        return clean.substring(0, 1).toUpperCase() + clean.substring(1);
+    }
 }

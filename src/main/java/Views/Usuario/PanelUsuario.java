@@ -1,6 +1,8 @@
 package main.java.Views.Usuario;
 
 import com.formdev.flatlaf.FlatLightLaf;
+import main.java.Controllers.Operadores.Enums.E_ROL;
+import main.resources.Shared.Dialog.DialogComponent;
 import main.resources.Shared.Notification.NotificationComponent;
 import main.resources.Shared.Table.*;
 import main.resources.Utils.Column;
@@ -130,7 +132,7 @@ public class PanelUsuario extends JPanel {
         cargarDatosUsuarios();
         TableActionEvent actionEvent=new TableActionEvent() {
             private int id=0;
-            //private final Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(PanelUsuario.this);
+            //private Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(PanelUsuario.this);
             @Override
             public void onEdit(int row) {
                 Usuario usuarioSeleccionado=modelUsuario.getRow(row);
@@ -138,11 +140,37 @@ public class PanelUsuario extends JPanel {
                 Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(PanelUsuario.this);
                 UsuarioForm dialog = new UsuarioForm(parentFrame, id, true, ()-> cargarDatosUsuarios());
                 dialog.setVisible(true);
-                System.out.println("Editar fila: " + row+id);
+                //System.out.println("Editar fila: " + row+id);
             }
             @Override
             public void onDelete(int row) {
-                System.out.println("Eliminar fila: " + row+id);
+                Usuario usuarioSeleccionado=modelUsuario.getRow(row);
+                this.id=usuarioSeleccionado.getID();
+                Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(PanelUsuario.this);
+                DialogComponent ventanaEliminar = new DialogComponent(
+                        parentFrame,
+                        E_ROL._USUARIO,()->{
+                            Usuario usuario = new Usuario();
+                            usuario.setID(id);
+                            boolean eliminado=ControladorUsuario.eliminarUsuario(usuario);
+                    NotificationComponent panelComponent;
+                    if(eliminado){
+                        panelComponent = new NotificationComponent(
+                                parentFrame, NotificationComponent.Type.EXITO,
+                                NotificationComponent.Location.TOP_RIGHT,
+                                "Usuario eliminado");
+                        cargarDatosUsuarios();
+                    }else {
+                        panelComponent = new NotificationComponent(
+                                parentFrame, NotificationComponent.Type.ADVERTENCIA,
+                                NotificationComponent.Location.TOP_RIGHT,
+                                "Ocurrio un error");
+                    }
+                    panelComponent.showNotification();
+                });
+                ventanaEliminar.setVisible(true);
+                //acion de eliminar
+                //System.out.println("Eliminar fila: " + row+id);
             }
         };
         int colAcciones=tabla.getColumnCount()-1;
