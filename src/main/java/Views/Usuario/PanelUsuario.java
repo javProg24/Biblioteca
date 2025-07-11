@@ -1,6 +1,7 @@
 package main.java.Views.Usuario;
 
 import com.formdev.flatlaf.FlatLightLaf;
+import main.resources.Shared.Notification.NotificationComponent;
 import main.resources.Shared.Table.*;
 import main.resources.Utils.Column;
 import main.resources.Utils.ComponentFactory;
@@ -60,12 +61,24 @@ public class PanelUsuario extends JPanel {
         btnAgregar = ComponentFactory.crearBoton("Agregar", ComponentFactory.ruta("action-add"));
         panelIzquierdo.add(btnConsultar);
         panelDerecho.add(btnAgregar);
-
+        btnConsultar.addActionListener(e -> {
+//            Frame frame = (Frame) SwingUtilities.getWindowAncestor(this);
+//            if (frame != null) {
+//                NotificationComponent panelComponent = new NotificationComponent(
+//                        frame,
+//                        NotificationComponent.Type.SUCCESS,
+//                        NotificationComponent.Location.TOP_RIGHT,
+//                        "Message info notification type"
+//                );
+//                panelComponent.showNotification();
+//            } else {
+//                System.err.println("Frame is NULL! Notification cannot be shown.");
+//            }
+        });
         btnAgregar.addActionListener(e -> {
             Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(PanelUsuario.this);
-            UsuarioForm dialog = new UsuarioForm(parentFrame);
+            UsuarioForm dialog = new UsuarioForm(parentFrame, this::cargarDatosUsuarios);
             dialog.setVisible(true);
-            cargarDatosUsuarios();
         });
         // ---- GridBagConstraints para subpanel izquierdo ----
         GridBagConstraints gbcIzq = new GridBagConstraints();
@@ -117,14 +130,14 @@ public class PanelUsuario extends JPanel {
         cargarDatosUsuarios();
         TableActionEvent actionEvent=new TableActionEvent() {
             private int id=0;
-            private final Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(PanelUsuario.this);
+            //private final Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(PanelUsuario.this);
             @Override
             public void onEdit(int row) {
                 Usuario usuarioSeleccionado=modelUsuario.getRow(row);
                 this.id=usuarioSeleccionado.getID();
-                UsuarioForm dialog = new UsuarioForm(parentFrame,id,true);
+                Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(PanelUsuario.this);
+                UsuarioForm dialog = new UsuarioForm(parentFrame, id, true, ()-> cargarDatosUsuarios());
                 dialog.setVisible(true);
-                cargarDatosUsuarios();
                 System.out.println("Editar fila: " + row+id);
             }
             @Override

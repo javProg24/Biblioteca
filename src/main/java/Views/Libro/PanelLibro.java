@@ -81,16 +81,14 @@ public class PanelLibro extends JPanel {
         JScrollPane scrollPane = TableFactory.wrapWithRoundedBorder(tabla);
 
         List<Map<String, Object>> datosLibros = ControladorLibro.obtenerLibros(); //probando
-        List<Libro> libros = datosLibros.stream().map(row -> {
-            return Libro.builder()
-                    .ID((Integer) row.get("ID"))
-                    .Titulo((String) row.get("Titulo"))
-                    .Autor((String) row.get("Autor"))
-                    .AnioPublicacion((Integer) row.get("AnioPublicacion"))
-                    .Categoria(((String) row.get("Categoria")).charAt(0))
-                    .ISBN((String) row.get("ISBN"))
-                    .build();
-        }).toList();
+        List<Libro> libros = datosLibros.stream().map(row -> Libro.builder()
+                .ID((Integer) row.get("ID"))
+                .Titulo((String) row.get("Titulo"))
+                .Autor((String) row.get("Autor"))
+                .AnioPublicacion((Integer) row.get("AnioPublicacion"))
+                .Categoria(((String) row.get("Categoria")).charAt(0))
+                .ISBN((String) row.get("ISBN"))
+                .build()).toList();
 
         TableActionEvent actionEvent = new TableActionEvent() {
             @Override

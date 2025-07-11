@@ -3,6 +3,7 @@ package main.java.Views.Usuario;
 import com.formdev.flatlaf.FlatLightLaf;
 import main.java.Controllers.Operadores.Metodos.ControladorUsuario;
 import main.java.Models.Usuario;
+import main.resources.Shared.Notification.NotificationComponent;
 import main.resources.Utils.ComponentFactory;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -29,14 +30,16 @@ public class UsuarioForm extends JDialog {
     private int idUsuario;
     private final SimpleDateFormat dateFormat=new SimpleDateFormat("dd-MM-yyyy");
     private JPopupMenu popupCalendar;
+    private Runnable onUserSaved;
     private JDatePanelImpl datePanel;
-    public UsuarioForm(Frame parent){
+    public UsuarioForm(Frame parent,Runnable onUserSaved){
         super(parent, "Formulario de Usuario", true);
         try{
             UIManager.setLookAndFeel(new FlatLightLaf());
         }catch (Exception e){
             e.printStackTrace();
         }
+        this.onUserSaved = onUserSaved;
         isEdit=false;
         idUsuario=0;
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -45,13 +48,14 @@ public class UsuarioForm extends JDialog {
         setLocationRelativeTo(parent);
         setMinimumSize(new Dimension(450, 500));
     }
-    public UsuarioForm(Frame parent, int id, boolean isEdit){
+    public UsuarioForm(Frame parent, int id, boolean isEdit,Runnable onUserSaved){
         super(parent,"Formulario de Usuario",true);
         try{
             UIManager.setLookAndFeel(new FlatLightLaf());
         }catch (Exception e){
             e.printStackTrace();
         }
+        this.onUserSaved = onUserSaved;
         this.isEdit=isEdit;
         this.idUsuario=id;
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -167,19 +171,31 @@ public class UsuarioForm extends JDialog {
         btnCancelar.addActionListener(e -> dispose());
         panelBotones.add(btnGuardar);
         panelBotones.add(btnCancelar);
-        btnGuardar.addActionListener(e->{
-            Usuario usuario=crearUsuario();
-            boolean valido=isEdit? ControladorUsuario.actualizarUsuario(usuario):ControladorUsuario.crearUsuario(usuario);
-            if (valido){
-                JOptionPane.showMessageDialog(this,"Registro"+(isEdit?" actualizado":" guardado"));
-                limpiarCampos();
-            }
-            else {
-                JOptionPane.showMessageDialog(this,"Registro no"+(isEdit?" actualizado":" guardado"));
-            }
-            isEdit=false;
-        });
+        btnGuardar.addActionListener(e->guardarUsuario());
         return panelBotones;
+    }
+    private void guardarUsuario(){
+        Usuario usuario=crearUsuario();
+        Frame frame = (Frame) SwingUtilities.getWindowAncestor(this);
+        boolean valido=isEdit? ControladorUsuario.actualizarUsuario(usuario):ControladorUsuario.crearUsuario(usuario);
+        if (valido){
+            //JOptionPane.showMessageDialog(this,"Registro"+(isEdit?" actualizado":" guardado"));
+            NotificationComponent panelComponent = new NotificationComponent(
+                    frame,
+                    isEdit?NotificationComponent.Type.INFORMACION :NotificationComponent.Type.EXITO,
+                    NotificationComponent.Location.TOP_RIGHT,
+                    "Registro"+(isEdit?" actualizado":" guardado")
+            );
+            panelComponent.showNotification();
+            limpiarCampos();
+            if (onUserSaved != null) {
+                onUserSaved.run();  // <-- Ejecuta acción en el PanelUsuario
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(this,"Registro no"+(isEdit?" actualizado":" guardado"));
+        }
+        isEdit=false;
     }
     private JDatePanelImpl createDatePanel() {
         UtilDateModel model = new UtilDateModel();

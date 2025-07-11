@@ -59,6 +59,7 @@ public class ExecuteQuery {
                 }
                 tabla.add(datos);
             }
+            conexionDB.CerrarConexion(con);
             return tabla;
         }catch (SQLException e){
             System.err.println(e.getMessage());
