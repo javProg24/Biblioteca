@@ -67,7 +67,7 @@ public class PropiedadesCreator {
         try {
             Class<?> clase = entidad.getClass();
             for (String atributo: atributos){
-                String nombreGetter=metodo+atributo;
+                String nombreGetter=metodo+atributo; // get+NombreAtributo
                 Method getter=clase.getMethod(nombreGetter);
                 Object valor=getter.invoke(entidad);
                 lista.put(index++, tipoParametro(valor)); // agrega el valor a la lista con un índice incremental

@@ -1,5 +1,6 @@
 package main.java.Views;
 
+import com.formdev.flatlaf.FlatLightLaf;
 import main.resources.Utils.ComponentFactory;
 import main.java.Views.Libro.PanelLibro;
 import main.java.Views.Prestamo.PanelPrestamo;
@@ -7,7 +8,6 @@ import main.java.Views.Usuario.PanelUsuario;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
 
 public class BibliotecaPrincipal extends JFrame {
     private final CardLayout cardLayout;
@@ -19,6 +19,11 @@ public class BibliotecaPrincipal extends JFrame {
     private final JPanel panelDashboard;
 
     public BibliotecaPrincipal(){
+        try{
+            UIManager.setLookAndFeel(new FlatLightLaf());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         setTitle("Sistema de Biblioteca");
         setSize(1100, 600);
         setLocationRelativeTo(null);

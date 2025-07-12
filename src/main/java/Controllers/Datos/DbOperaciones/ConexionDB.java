@@ -11,7 +11,6 @@ public class ConexionDB {
     static {
         try {
             props.load(ConexionDB.class.getClassLoader().getResourceAsStream("config.properties"));
-            System.out.println("Propiedades de la conexion cargadas exitosamente");
         }catch (IOException e){
             System.out.println("Error al cargar las propiedades de la conexion: "+e.getMessage());
         }
@@ -21,10 +20,7 @@ public class ConexionDB {
             String url = props.getProperty("db.url");
             String user = props.getProperty("db.user");
             String password = props.getProperty("db.password");
-            Connection conexion= DriverManager.getConnection(url, user, password);
-            if (conexion!=null)
-                System.out.println("Conexion exitosa");
-            return conexion;
+            return DriverManager.getConnection(url, user, password);
         }catch (SQLException e){
             System.out.println("Error al abrir la conexion: "+e.getMessage());
             return null;
@@ -34,7 +30,6 @@ public class ConexionDB {
         try{
             if (conexion!= null && !conexion.isClosed()) {
                 conexion.close();
-                System.out.println("Conexion cerrada exitosamente");
             }
         }catch (SQLException e){
             System.out.println("Error al cerrar la conexion: "+e.getMessage());
