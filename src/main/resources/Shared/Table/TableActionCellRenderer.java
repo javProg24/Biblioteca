@@ -13,14 +13,7 @@ public class TableActionCellRenderer extends JPanel implements TableCellRenderer
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        PanelAction panel=new PanelAction();
-        panel.initEvent(event,row);
-        if(isSelected){
-            panel.setBackground(table.getSelectionBackground());
-        }
-        else {
-            panel.setBackground(table.getBackground());
-        }
-        return panel;
+        //panel.setBackground(table.getBackground());
+        return new PanelAction();
     }
 }

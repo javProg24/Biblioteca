@@ -115,6 +115,9 @@ public class PanelUsuario extends JPanel {
         //modelo de la tabla
         modelUsuario = getUsuarioTableComponent();
         JTable tabla = TableFactory.crearTablaEstilo(modelUsuario);
+        tabla.setRowSelectionAllowed(false);
+        tabla.setColumnSelectionAllowed(false);
+        tabla.setCellSelectionEnabled(false);
         JScrollPane scrollPane = TableFactory.wrapWithRoundedBorder(tabla);
         cargarDatosUsuarios();
         TableActionEvent actionEvent=new TableActionEvent() {
@@ -130,6 +133,9 @@ public class PanelUsuario extends JPanel {
             }
             @Override
             public void onDelete(int row) {
+                if (tabla.isEditing()) {
+                    tabla.getCellEditor().stopCellEditing();
+                }
                 Usuario usuarioSeleccionado=modelUsuario.getRow(row);
                 this.id=usuarioSeleccionado.getID();
                 Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(PanelUsuario.this);
@@ -143,6 +149,8 @@ public class PanelUsuario extends JPanel {
                             NotificationComponent panelComponent;
                             if (eliminado) {
                                 panelComponent = new NotificationComponent(parentFrame, NotificationComponent.Type.EXITO, NotificationComponent.Location.TOP_RIGHT, "Usuario eliminado");
+                                //modelUsuario.removeRow(row);
+                                //modelUsuario.fireTableRowsDeleted(row, row);
                                 cargarDatosUsuarios();
                             } else {
                                 panelComponent = new NotificationComponent(parentFrame, NotificationComponent.Type.ADVERTENCIA, NotificationComponent.Location.TOP_RIGHT, "Ocurrio un error");

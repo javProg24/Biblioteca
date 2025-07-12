@@ -38,8 +38,6 @@ public class TableComponent<T> implements TableModel {
         TableModelEvent e = new TableModelEvent(this);
         fireTableChanged(e);
     }
-
-
     public T getRow(int rowIndex){
         if(rowIndex<0||rowIndex>=data.size()){
             throw new IndexOutOfBoundsException("Row index out of range: " + rowIndex);
