@@ -177,10 +177,11 @@ public class UsuarioForm extends JDialog {
     private void guardarUsuario(){
         Usuario usuario=crearUsuario();
         Frame frame = (Frame) SwingUtilities.getWindowAncestor(this);
+        NotificationComponent panelComponent;
         boolean valido=isEdit? ControladorUsuario.actualizarUsuario(usuario):ControladorUsuario.crearUsuario(usuario);
         if (valido){
             //JOptionPane.showMessageDialog(this,"Registro"+(isEdit?" actualizado":" guardado"));
-            NotificationComponent panelComponent = new NotificationComponent(
+            panelComponent = new NotificationComponent(
                     frame,
                     isEdit?NotificationComponent.Type.INFORMACION :NotificationComponent.Type.EXITO,
                     NotificationComponent.Location.TOP_RIGHT,
@@ -193,7 +194,10 @@ public class UsuarioForm extends JDialog {
             }
         }
         else {
-            JOptionPane.showMessageDialog(this,"Registro no"+(isEdit?" actualizado":" guardado"));
+            panelComponent=new NotificationComponent(
+                    frame,NotificationComponent.Type.ADVERTENCIA,NotificationComponent.Location.TOP_RIGHT,"Registro no guardado"
+            );
+            panelComponent.showNotification();
         }
         isEdit=false;
     }
