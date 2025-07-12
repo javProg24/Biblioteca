@@ -235,17 +235,24 @@ public class UsuarioForm extends JDialog {
         usuario.setApellido(txtApellido.getText());
         usuario.setDirreccion(txtDireccion.getText());
         usuario.setTelefono(Integer.parseInt(txtTelefono.getText()));
-        String fechaCampo = txtFecha.getText();
+
+        String fechaCampo = txtFecha.getText().trim();
+        if (fechaCampo.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar una fecha de nacimiento.", "Error", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
         try {
-            // Usa el formato correcto según cómo ingresas la fecha
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Date fechaNacimiento = sdf.parse(fechaCampo);
+            // Usa el formato correcto de tu date picker (dd-MM-yyyy)
+            Date fechaNacimiento = dateFormat.parse(fechaCampo);
             usuario.setFecha_Nacimiento(fechaNacimiento);
         } catch (ParseException e) {
-            System.out.println("Error al parsear la fecha: " + e.getMessage());
-            usuario.setFecha_Nacimiento(null); // o maneja el error como prefieras
+            JOptionPane.showMessageDialog(this, "Formato de fecha inválido. Debe ser dd-MM-yyyy", "Error", JOptionPane.ERROR_MESSAGE);
+            return null;
         }
+
         return usuario;
     }
+
 
 }

@@ -173,4 +173,9 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE [dbo].[SP_OBTENER_ID_USUARIO]
+	@ID int
+AS
+	SELECT Nombre,Apellido,Direccion,Telefono,Fecha_Nacimiento FROM Usuario WHERE ID=@ID;
+
 execute SP_OBTENER_PRESTAMO;
