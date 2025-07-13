@@ -134,31 +134,7 @@ public class BibliotecaPrincipal extends JFrame {
         PanelPrestamo panelPrestamos = new PanelPrestamo();
         panelPrincipal.add(panelPrestamos, "Prestamos");
     }
-//    private JButton crearBotonMenu(String texto, String ruta){
-//        ImageIcon icono = new ImageIcon(ruta);
-//        Image imagen=icono.getImage().getScaledInstance(28,28,Image.SCALE_SMOOTH);
-//        icono = new ImageIcon(imagen);
-//        JButton boton = new JButton(texto, icono);
-//        boton.setMaximumSize(new Dimension(200, 40));
-//        boton.setAlignmentX(Component.CENTER_ALIGNMENT);
-//        boton.setBackground(ComponentFactory.COLOR_MENU);
-//        boton.setForeground(Color.WHITE);
-//        boton.setFont(new Font("Arial", Font.BOLD, 16));
-//        boton.setBorderPainted(false);
-//        boton.setFocusPainted(false);
-//        boton.setContentAreaFilled(true);
-//        boton.setHorizontalAlignment(SwingConstants.LEFT);
-//        boton.setIconTextGap(15);
-//        boton.addMouseListener(new java.awt.event.MouseAdapter() {
-//            public void mouseEntered(MouseEvent e){
-//                boton.setBackground(new Color(21, 101, 192));
-//            }
-//            public void mouseExited(MouseEvent e){
-//                boton.setBackground(ComponentFactory.COLOR_MENU);
-//            }
-//        });
-//        return boton;
-//    }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(()-> new BibliotecaPrincipal().setVisible(true));
     }

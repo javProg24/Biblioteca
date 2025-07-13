@@ -23,15 +23,13 @@ public class UsuarioForm extends JDialog {
             txtDireccion,
             txtTelefono,
             txtFecha;
-    private JButton btnCalendario,
-            btnGuardar,
-            btnCancelar;
+    private JButton btnCalendario;
     private boolean isEdit;
     private int idUsuario;
     private final SimpleDateFormat dateFormat=new SimpleDateFormat("dd-MM-yyyy");
     private JPopupMenu popupCalendar;
     private Runnable onUserSaved;
-    private JDatePanelImpl datePanel;
+
     public UsuarioForm(Frame parent,Runnable onUserSaved){
         super(parent, "Formulario de Usuario", true);
         try{
@@ -153,7 +151,7 @@ public class UsuarioForm extends JDialog {
         btnCalendario.setPreferredSize(new Dimension(40,30));
         fechaPanel.add(btnCalendario,BorderLayout.EAST);
         panelCampos.add(fechaPanel,gbc);
-        datePanel=createDatePanel();
+        JDatePanelImpl datePanel = createDatePanel();
         popupCalendar=new JPopupMenu();
         popupCalendar.setLayout(new BorderLayout());
         popupCalendar.add(datePanel,BorderLayout.CENTER);
@@ -163,11 +161,11 @@ public class UsuarioForm extends JDialog {
     private JPanel panelBotones(){
         JPanel panelBotones=new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
         //"Agregar",ComponentFactory.ruta("action-add")
-        btnGuardar=ComponentFactory.crearBoton(
-                isEdit?"Editar":"Agregar",
-                isEdit?ComponentFactory.ruta("editar"):ComponentFactory.ruta("action-add")
+        JButton btnGuardar = ComponentFactory.crearBoton(
+                isEdit ? "Editar" : "Agregar",
+                isEdit ? ComponentFactory.ruta("editar") : ComponentFactory.ruta("action-add")
         );
-        btnCancelar=ComponentFactory.crearBoton("Cancelar",ComponentFactory.ruta("action-cancel"));
+        JButton btnCancelar = ComponentFactory.crearBoton("Cancelar", ComponentFactory.ruta("action-cancel"));
         btnCancelar.addActionListener(e -> dispose());
         panelBotones.add(btnGuardar);
         panelBotones.add(btnCancelar);

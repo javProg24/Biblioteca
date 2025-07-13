@@ -53,6 +53,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="TimingFramework-0.55" level="project" />
+    <orderEntry type="library" name="TimingFramework-0.56" level="project" />
   </component>
 </module>
