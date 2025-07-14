@@ -6,17 +6,19 @@ import java.awt.*;
 
 public class TableActionCellEditor extends AbstractCellEditor implements TableCellEditor {
     private final TableActionEvent event;
+
     private PanelAction panel;
 
     public TableActionCellEditor(TableActionEvent event) {
+
         this.event = event;
     }
 
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
         panel = new PanelAction();
-        panel.initEvent(event, row);
-        panel.setBackground(table.getSelectionBackground());
+        panel.initEvent(event, table::getEditingRow);
+        //panel.setBackground(table.getSelectionBackground());
         return panel;
     }
 

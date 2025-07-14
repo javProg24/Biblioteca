@@ -63,20 +63,7 @@ public class PanelUsuario extends JPanel {
         btnAgregar = ComponentFactory.crearBoton("Agregar", ComponentFactory.ruta("action-add"));
         panelIzquierdo.add(btnConsultar);
         panelDerecho.add(btnAgregar);
-        btnConsultar.addActionListener(e -> {
-//            Frame frame = (Frame) SwingUtilities.getWindowAncestor(this);
-//            if (frame != null) {
-//                NotificationComponent panelComponent = new NotificationComponent(
-//                        frame,
-//                        NotificationComponent.Type.SUCCESS,
-//                        NotificationComponent.Location.TOP_RIGHT,
-//                        "Message info notification type"
-//                );
-//                panelComponent.showNotification();
-//            } else {
-//                System.err.println("Frame is NULL! Notification cannot be shown.");
-//            }
-        });
+        btnConsultar.addActionListener(e -> {});
         btnAgregar.addActionListener(e -> {
             Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(PanelUsuario.this);
             UsuarioForm dialog = new UsuarioForm(parentFrame, this::cargarDatosUsuarios);
@@ -128,11 +115,13 @@ public class PanelUsuario extends JPanel {
         //modelo de la tabla
         modelUsuario = getUsuarioTableComponent();
         JTable tabla = TableFactory.crearTablaEstilo(modelUsuario);
+        tabla.setRowSelectionAllowed(false);
+        tabla.setColumnSelectionAllowed(false);
+        tabla.setCellSelectionEnabled(false);
         JScrollPane scrollPane = TableFactory.wrapWithRoundedBorder(tabla);
         cargarDatosUsuarios();
         TableActionEvent actionEvent=new TableActionEvent() {
             private int id=0;
-            //private Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(PanelUsuario.this);
             @Override
             public void onEdit(int row) {
                 Usuario usuarioSeleccionado=modelUsuario.getRow(row);
@@ -140,34 +129,34 @@ public class PanelUsuario extends JPanel {
                 Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(PanelUsuario.this);
                 UsuarioForm dialog = new UsuarioForm(parentFrame, id, true, ()-> cargarDatosUsuarios());
                 dialog.setVisible(true);
-                //System.out.println("Editar fila: " + row+id);
+               //System.out.println("Editar fila: " + row+id);
             }
             @Override
             public void onDelete(int row) {
+                if (tabla.isEditing()) {
+                    tabla.getCellEditor().stopCellEditing();
+                }
                 Usuario usuarioSeleccionado=modelUsuario.getRow(row);
                 this.id=usuarioSeleccionado.getID();
                 Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(PanelUsuario.this);
                 DialogComponent ventanaEliminar = new DialogComponent(
                         parentFrame,
-                        E_ROL._USUARIO,()->{
+                        E_ROL._USUARIO,
+                        () -> {
                             Usuario usuario = new Usuario();
                             usuario.setID(id);
-                            boolean eliminado=ControladorUsuario.eliminarUsuario(usuario);
-                    NotificationComponent panelComponent;
-                    if(eliminado){
-                        panelComponent = new NotificationComponent(
-                                parentFrame, NotificationComponent.Type.EXITO,
-                                NotificationComponent.Location.TOP_RIGHT,
-                                "Usuario eliminado");
-                        cargarDatosUsuarios();
-                    }else {
-                        panelComponent = new NotificationComponent(
-                                parentFrame, NotificationComponent.Type.ADVERTENCIA,
-                                NotificationComponent.Location.TOP_RIGHT,
-                                "Ocurrio un error");
-                    }
-                    panelComponent.showNotification();
-                });
+                            boolean eliminado = ControladorUsuario.eliminarUsuario(usuario);
+                            NotificationComponent panelComponent;
+                            if (eliminado) {
+                                panelComponent = new NotificationComponent(parentFrame, NotificationComponent.Type.EXITO, NotificationComponent.Location.TOP_RIGHT, "Usuario eliminado");
+                                //modelUsuario.removeRow(row);
+                                //modelUsuario.fireTableRowsDeleted(row, row);
+                                cargarDatosUsuarios();
+                            } else {
+                                panelComponent = new NotificationComponent(parentFrame, NotificationComponent.Type.ADVERTENCIA, NotificationComponent.Location.TOP_RIGHT, "Ocurrio un error");
+                            }
+                            panelComponent.showNotification();
+                        });
                 ventanaEliminar.setVisible(true);
                 //acion de eliminar
                 //System.out.println("Eliminar fila: " + row+id);
@@ -184,16 +173,11 @@ public class PanelUsuario extends JPanel {
 
     private static TableComponent<Usuario> getUsuarioTableComponent() {
         List<Column<Usuario>>columns= List.of(
-                new Column<>("ID", Usuario::getID, (u, v) -> u.setID((Integer) v)
-                ),
-                new Column<>("Nombre", Usuario::getNombre, (u, v) -> u.setNombre((String) v)
-                ),
-                new Column<>("Apellido", Usuario::getApellido, (u, v) -> u.setApellido((String) v)
-                ),
-                new Column<>("Direccion", Usuario::getDirreccion, (u, v) -> u.setDirreccion((String) v)
-                ),
-                new Column<>("Telefono", Usuario::getTelefono, (u, v) -> u.setTelefono((Integer) v)
-                ),
+                new Column<>("ID", Usuario::getID, (u, v) -> u.setID((Integer) v)),
+                new Column<>("Nombre", Usuario::getNombre, (u, v) -> u.setNombre((String) v)),
+                new Column<>("Apellido", Usuario::getApellido, (u, v) -> u.setApellido((String) v)),
+                new Column<>("Direccion", Usuario::getDirreccion, (u, v) -> u.setDirreccion((String) v)),
+                new Column<>("Telefono", Usuario::getTelefono, (u, v) -> u.setTelefono((Integer) v)),
                 new Column<>("Fecha de Nacimiento",
                         usuario -> {
                             Date fecha = usuario.getFecha_Nacimiento();

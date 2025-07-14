@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="TimingFramework-0.55">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../swing-notification-main/dist/lib/TimingFramework-0.55.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

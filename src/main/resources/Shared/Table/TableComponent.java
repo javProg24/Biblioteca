@@ -38,8 +38,6 @@ public class TableComponent<T> implements TableModel {
         TableModelEvent e = new TableModelEvent(this);
         fireTableChanged(e);
     }
-
-
     public T getRow(int rowIndex){
         if(rowIndex<0||rowIndex>=data.size()){
             throw new IndexOutOfBoundsException("Row index out of range: " + rowIndex);
@@ -85,6 +83,14 @@ public class TableComponent<T> implements TableModel {
     }
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+        if (rowIndex < 0 ||  rowIndex >= data.size()) {
+            System.err.printf("setValueAt: Índice de fila inválido %d (data size %d)%n", rowIndex, data.size());
+            return;  // Evita error
+        }
+        if (columnIndex < 0|| columnIndex >= columns.size()) {
+            System.err.printf("setValueAt: Índice de columna inválido %d (columns size %d)%n", columnIndex, columns.size());
+            return;  // Evita error
+        }
         T row = data.get(rowIndex);
         columns.get(columnIndex).setter().accept(row, aValue);
         fireTableCellUpdated(rowIndex, columnIndex);

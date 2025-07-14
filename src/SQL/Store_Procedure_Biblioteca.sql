@@ -173,4 +173,28 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE [dbo].[SP_OBTENER_ID_USUARIO]
+	@ID int
+AS
+	SELECT Nombre,Apellido,Direccion,Telefono,Fecha_Nacimiento FROM Usuario WHERE ID=@ID;
+
 execute SP_OBTENER_PRESTAMO;
+
+GO
+CREATE PROCEDURE SP_OBTENER_BIBLIOTECARIO
+    @Usuario NVARCHAR(50),
+    @Contrasena NVARCHAR(50)
+AS
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM Bibliotecario WHERE Usuario = @Usuario AND Clave = @Contrasena
+    )
+        SELECT CAST(1 AS BIT) AS EsValido;
+    ELSE
+        SELECT CAST(0 AS BIT) AS EsValido;
+END
+
+
+INSERT INTO Bibliotecario(Usuario,Clave) values ('admin','sql123');
+
+execute SP_OBTENER_BIBLIOTECARIO 'admin','sql123';

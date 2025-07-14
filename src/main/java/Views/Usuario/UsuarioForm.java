@@ -23,15 +23,13 @@ public class UsuarioForm extends JDialog {
             txtDireccion,
             txtTelefono,
             txtFecha;
-    private JButton btnCalendario,
-            btnGuardar,
-            btnCancelar;
+    private JButton btnCalendario;
     private boolean isEdit;
     private int idUsuario;
     private final SimpleDateFormat dateFormat=new SimpleDateFormat("dd-MM-yyyy");
     private JPopupMenu popupCalendar;
     private Runnable onUserSaved;
-    private JDatePanelImpl datePanel;
+
     public UsuarioForm(Frame parent,Runnable onUserSaved){
         super(parent, "Formulario de Usuario", true);
         try{
@@ -153,7 +151,7 @@ public class UsuarioForm extends JDialog {
         btnCalendario.setPreferredSize(new Dimension(40,30));
         fechaPanel.add(btnCalendario,BorderLayout.EAST);
         panelCampos.add(fechaPanel,gbc);
-        datePanel=createDatePanel();
+        JDatePanelImpl datePanel = createDatePanel();
         popupCalendar=new JPopupMenu();
         popupCalendar.setLayout(new BorderLayout());
         popupCalendar.add(datePanel,BorderLayout.CENTER);
@@ -163,11 +161,11 @@ public class UsuarioForm extends JDialog {
     private JPanel panelBotones(){
         JPanel panelBotones=new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
         //"Agregar",ComponentFactory.ruta("action-add")
-        btnGuardar=ComponentFactory.crearBoton(
-                isEdit?"Editar":"Agregar",
-                isEdit?ComponentFactory.ruta("editar"):ComponentFactory.ruta("action-add")
+        JButton btnGuardar = ComponentFactory.crearBoton(
+                isEdit ? "Editar" : "Agregar",
+                isEdit ? ComponentFactory.ruta("editar") : ComponentFactory.ruta("action-add")
         );
-        btnCancelar=ComponentFactory.crearBoton("Cancelar",ComponentFactory.ruta("action-cancel"));
+        JButton btnCancelar = ComponentFactory.crearBoton("Cancelar", ComponentFactory.ruta("action-cancel"));
         btnCancelar.addActionListener(e -> dispose());
         panelBotones.add(btnGuardar);
         panelBotones.add(btnCancelar);
@@ -177,10 +175,11 @@ public class UsuarioForm extends JDialog {
     private void guardarUsuario(){
         Usuario usuario=crearUsuario();
         Frame frame = (Frame) SwingUtilities.getWindowAncestor(this);
+        NotificationComponent panelComponent;
         boolean valido=isEdit? ControladorUsuario.actualizarUsuario(usuario):ControladorUsuario.crearUsuario(usuario);
         if (valido){
             //JOptionPane.showMessageDialog(this,"Registro"+(isEdit?" actualizado":" guardado"));
-            NotificationComponent panelComponent = new NotificationComponent(
+            panelComponent = new NotificationComponent(
                     frame,
                     isEdit?NotificationComponent.Type.INFORMACION :NotificationComponent.Type.EXITO,
                     NotificationComponent.Location.TOP_RIGHT,
@@ -193,7 +192,10 @@ public class UsuarioForm extends JDialog {
             }
         }
         else {
-            JOptionPane.showMessageDialog(this,"Registro no"+(isEdit?" actualizado":" guardado"));
+            panelComponent=new NotificationComponent(
+                    frame,NotificationComponent.Type.ADVERTENCIA,NotificationComponent.Location.TOP_RIGHT,"Registro no guardado"
+            );
+            panelComponent.showNotification();
         }
         isEdit=false;
     }
@@ -235,17 +237,24 @@ public class UsuarioForm extends JDialog {
         usuario.setApellido(txtApellido.getText());
         usuario.setDirreccion(txtDireccion.getText());
         usuario.setTelefono(Integer.parseInt(txtTelefono.getText()));
-        String fechaCampo = txtFecha.getText();
+
+        String fechaCampo = txtFecha.getText().trim();
+        if (fechaCampo.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar una fecha de nacimiento.", "Error", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
         try {
-            // Usa el formato correcto según cómo ingresas la fecha
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Date fechaNacimiento = sdf.parse(fechaCampo);
+            // Usa el formato correcto de tu date picker (dd-MM-yyyy)
+            Date fechaNacimiento = dateFormat.parse(fechaCampo);
             usuario.setFecha_Nacimiento(fechaNacimiento);
         } catch (ParseException e) {
-            System.out.println("Error al parsear la fecha: " + e.getMessage());
-            usuario.setFecha_Nacimiento(null); // o maneja el error como prefieras
+            JOptionPane.showMessageDialog(this, "Formato de fecha inválido. Debe ser dd-MM-yyyy", "Error", JOptionPane.ERROR_MESSAGE);
+            return null;
         }
+
         return usuario;
     }
+
 
 }

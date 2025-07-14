@@ -106,6 +106,9 @@ public class PropiedadesCreator {
         if (parametro instanceof Integer || parametro instanceof String || parametro instanceof Boolean) { // Si es un tipo primitivo o String, lo devuelve directamente
             return parametro; // no es necesario formatear
         }
+        if(parametro instanceof Byte){
+            return parametro;
+        }
         if (parametro instanceof Date){ // Si es una fecha, la formatea a String
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // Formato de fecha
             return sdf.format((Date) parametro); // Convierte la fecha a String

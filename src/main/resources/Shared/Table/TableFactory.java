@@ -32,9 +32,7 @@ public class TableFactory {
         // 🌈 Renderer personalizado para estilo de celdas
         DefaultTableCellRenderer celdasCentradas = new DefaultTableCellRenderer() {
             @Override
-            public Component getTableCellRendererComponent(JTable tbl, Object value,
-                                                           boolean isSelected, boolean hasFocus,
-                                                           int row, int column) {
+            public Component getTableCellRendererComponent(JTable tbl, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 Component c = super.getTableCellRendererComponent(tbl, value, isSelected, hasFocus, row, column);
                 if (isSelected) {
                     c.setBackground(new Color(0xCC, 0xDD, 0xFF));
