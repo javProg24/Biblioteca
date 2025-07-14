@@ -66,4 +66,28 @@ public class ExecuteQuery {
             return null;
         }
     }
+    public boolean ExecuteSPOutput(String nombre_sp,Map<Integer,Object>parametros){
+        boolean resultado=false;
+//        Connection con = null;
+//        CallableStatement statement = null;
+//        try {
+//            con=conexionDB.AbrirConexion();
+//            int cantidad = parametros.size();
+//            String placeHolders=String.join(", ", Collections.nCopies(cantidad,"?"));
+//            String sql = String.format(llamada, nombre_sp, placeHolders);
+//            statement=con.prepareCall(sql);
+//            for(Map.Entry<Integer,Object>parametro:parametros.entrySet()){
+//                statement.setObject(parametro.getKey(),parametro.getValue());
+//            }
+//            statement.registerOutParameter(indexOutput, java.sql.Types.BIT);
+//            statement.execute();
+//            resultado = statement.getBoolean(indexOutput);
+//            statement.clearParameters();
+//        }catch (SQLException e){
+//            System.err.println("Error al ejecutar el procedimiento con OUTPUT: " + e.getMessage());
+//        }finally {
+//            conexionDB.CerrarConexion(con);
+//        }
+        return resultado;
+    }
 }

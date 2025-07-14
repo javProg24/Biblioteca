@@ -1,6 +1,7 @@
 package main.java.Views;
 
 import com.formdev.flatlaf.FlatLightLaf;
+import main.java.Views.Login.LoginPrincipal;
 import main.resources.Utils.ComponentFactory;
 import main.java.Views.Libro.PanelLibro;
 import main.java.Views.Prestamo.PanelPrestamo;
@@ -115,7 +116,10 @@ public class BibliotecaPrincipal extends JFrame {
         btnCerrarSesion.setForeground(Color.WHITE);
         btnCerrarSesion.setFont(new Font("Arial", Font.BOLD, 16));
         btnCerrarSesion.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnCerrarSesion.addActionListener(e -> System.exit(0));
+        btnCerrarSesion.addActionListener(e -> {
+            SwingUtilities.invokeLater(()-> new LoginPrincipal().setVisible(true));
+            this.dispose();
+        });
         logoutPanel.add(btnCerrarSesion);
     }
     private void initPanelPrincipal(){
@@ -133,9 +137,5 @@ public class BibliotecaPrincipal extends JFrame {
         panelPrincipal.add(panelLibros, "Libros");
         PanelPrestamo panelPrestamos = new PanelPrestamo();
         panelPrincipal.add(panelPrestamos, "Prestamos");
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(()-> new BibliotecaPrincipal().setVisible(true));
     }
 }

@@ -1,19 +1,23 @@
 package main.java.Views.Login;
 
 import com.formdev.flatlaf.FlatLightLaf;
+import main.java.Controllers.Operadores.Metodos.ControladorBiblioteca;
+import main.java.Models.Bibliotecario;
+import main.java.Views.BibliotecaPrincipal;
 import main.resources.Utils.ComponentFactory;
-import main.resources.Utils.FloatingLabelField;
+import main.resources.Utils.ImagePanel;
+import main.resources.Utils.LabelField;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
+import java.util.List;
+import java.util.Map;
 
 public class LoginPrincipal extends JFrame {
-    private JPanel panelLogin,
-                        panelPortada,
-                        camposPanel,
-                        botonesPanel;
+    private final JPanel panelLogin;
+    private JPanel panelPortada;
+    private JPanel camposPanel;
+    private JPanel botonesPanel;
     private JTextField campoUsuario;
     private JTextField campoContrasena;
     public LoginPrincipal(){
@@ -43,8 +47,8 @@ public class LoginPrincipal extends JFrame {
         camposPanel.setLayout(new BoxLayout(camposPanel, BoxLayout.Y_AXIS));
         camposPanel.setOpaque(false);
 
-        FloatingLabelField usuarioField = new FloatingLabelField("Usuario");
-        FloatingLabelField contrasenaField = new FloatingLabelField("Contraseña");
+        LabelField usuarioField = new LabelField("Usuario");
+        LabelField contrasenaField = new LabelField("Contraseña");
 
         campoUsuario = usuarioField.getTextField();
         campoContrasena = contrasenaField.getTextField();
@@ -66,9 +70,27 @@ public class LoginPrincipal extends JFrame {
         JButton btnIniciar = ComponentFactory.crearBoton("Iniciar Sesion",ComponentFactory.ruta("user"));
         botonesPanel.setMaximumSize(new Dimension(200, botonesPanel.getPreferredSize().height));
         botonesPanel.add(btnIniciar);
+        btnIniciar.addActionListener(e->{
+            Bibliotecario bibliotecario = crearBibliotecario();
+            List<Map<String,Object>> dato=ControladorBiblioteca.validarBibliotecario(bibliotecario);
+            boolean esValido=false;
+            if(dato!=null&&!dato.isEmpty()){
+                Object valor = dato.get(0).get("EsValido");
+                if(valor instanceof Boolean){
+                    esValido=(Boolean)valor;
+                }
+            }
+            if (esValido) {
+                SwingUtilities.invokeLater(()->new BibliotecaPrincipal().setVisible(true));
+                this.dispose();
+            } else {
+                System.out.println("❌ Usuario o contraseña incorrectos");
+            }
+        });
     }
     private void initPanelPortada() {
-        panelPortada.setBackground(ComponentFactory.COLOR_MENU);
+        Image img = new ImageIcon("src/main/resources/Images/login-background.png").getImage();
+        panelPortada = new ImagePanel(img);
     }
 
     private void initPanelLogin() {
@@ -106,7 +128,12 @@ public class LoginPrincipal extends JFrame {
 
         panelLogin.add(contentPanel, gbc);
     }
-
+    private Bibliotecario crearBibliotecario(){
+        Bibliotecario bibliotecario = new Bibliotecario();
+        bibliotecario.setUsuario(campoUsuario.getText());
+        bibliotecario.setContrasena(campoContrasena.getText());
+        return bibliotecario;
+    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(()->new LoginPrincipal().setVisible(true));

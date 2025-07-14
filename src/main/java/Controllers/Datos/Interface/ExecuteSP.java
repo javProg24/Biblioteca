@@ -37,4 +37,5 @@ public class ExecuteSP implements Acceso_DB{
     public boolean EliminarEntidad(String sp_query, Map<Integer, Object> parametros) {
         return obj_bd.ExecuteSPNo_Query(sp_query,parametros);
     }
+
 }
