@@ -56,7 +56,7 @@ public class PanelPrestamo extends JPanel {
 
         panelIzquierdo.add(btnConsultar);
         panelDerecho.add(btnAgregar);
-
+// hola
         // ---- GridBagConstraints para subpanel izquierdo ----
         GridBagConstraints gbcIzq = new GridBagConstraints();
         gbcIzq.gridx = 0;
