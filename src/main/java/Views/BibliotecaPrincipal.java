@@ -137,4 +137,8 @@ public class BibliotecaPrincipal extends JFrame {
         PanelPrestamo panelPrestamos = new PanelPrestamo();
         panelPrincipal.add(panelPrestamos, "Prestamos");
     }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(()->new BibliotecaPrincipal().setVisible(true));
+    }
 }

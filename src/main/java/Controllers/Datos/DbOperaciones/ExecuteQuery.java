@@ -141,7 +141,7 @@ public class ExecuteQuery {
             // int out=statement.getInt(indexOutput)
             // Obtiene el valor del parámetro de salida y lo asigna a la variable estática intOut
             intOut=statement.getInt(indexOutput);
-            System.out.println(statement.getInt(indexOutput));
+            //System.out.println(statement.getInt(indexOutput));
             // Limpia los parámetros del CallableStatement
             statement.clearParameters();
             // Devuelve true si el resultado es mayor a 0, indicando éxito

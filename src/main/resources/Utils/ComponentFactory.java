@@ -19,6 +19,9 @@ public class ComponentFactory {
         etiqueta.setFont(new Font("Segoe UI", Font.BOLD, 14));
         return etiqueta;
     }
+    public static String metodoTitulo(String titulo){
+        return titulo.replaceAll("\\s+","");
+    }
     public static JButton crearBoton(String texto, String ruta) {
         ImageIcon icono=new ImageIcon(ruta);
         Image image=icono.getImage().getScaledInstance(28,28,Image.SCALE_SMOOTH);

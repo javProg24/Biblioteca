@@ -2,6 +2,7 @@ package main.java.Views.Libro;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import main.java.Controllers.Datos.DbOperaciones.ExecuteQuery;
+import main.java.Controllers.Operadores.Metodos.ControladorEjemplar;
 import main.java.Controllers.Operadores.Metodos.ControladorLibro;
 import main.java.Models.Ejemplar;
 import main.java.Models.Libro;
@@ -15,11 +16,12 @@ import java.util.Map;
 import java.util.Objects;
 
 public class LibroForm extends JDialog {
-    private int ID_Libro;
+    private int ID_LibroOut;
     private JTextField txtISBN,
             txtTitulo,
             txtAnio,
-            txtAutor;
+            txtAutor,
+            txtCantidad;
     private JComboBox<String> comboCategoria;
     private JButton btnGuardar,
             btnCancelar;
@@ -104,6 +106,13 @@ public class LibroForm extends JDialog {
         comboCategoria = new JComboBox<>(new String[]{"Entretenimiento", "Informativo", "Deportivo", "Educativo", "Artistico", ""});
         panelCampos.add(comboCategoria, gbc);
 
+        // Ejemplares
+        gbc.gridx = 0; gbc.gridy++;
+        panelCampos.add(ComponentFactory.crearEtiqueta("Cantidad"),gbc);
+        gbc.gridx=1;
+        txtCantidad = ComponentFactory.crearCampoTexto();
+        panelCampos.add(txtCantidad,gbc);
+
         return panelCampos;
     }
 
@@ -137,17 +146,9 @@ public class LibroForm extends JDialog {
     private void guardarLibro() {
         try {
             Libro libro = crearLibro();
-//            libro.setID(isEdit ? idLibro : 0);
-//            libro.setISBN(Integer.parseInt(txtISBN.getText()));
-//            libro.setTitulo(txtTitulo.getText());
-//            libro.setAnioPublicacion(Integer.parseInt(txtAnio.getText()));
-//            libro.setAutor(txtAutor.getText());
-//            libro.setCategoria();
-
             boolean valido = isEdit
                     ? ControladorLibro.actualizarLibro(libro)
                     : ControladorLibro.crearLibro(libro,6);
-
             Frame frame = (Frame) SwingUtilities.getWindowAncestor(this);
             if (valido) {
                 NotificationComponent panelComponent = new NotificationComponent(
@@ -157,10 +158,11 @@ public class LibroForm extends JDialog {
                         "Libro " + (isEdit ? "actualizado" : "registrado")
                 );
                 panelComponent.showNotification();
-                ID_Libro=ExecuteQuery.intOut;
+                ID_LibroOut =ExecuteQuery.intOut;
+                obtenerLibro();
                 //System.out.println(ExecuteQuery.intOut);
                 if (onLibroSaved != null) onLibroSaved.run();
-                dispose();
+                //dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "No se pudo guardar el libro.");
             }
@@ -170,7 +172,8 @@ public class LibroForm extends JDialog {
             JOptionPane.showMessageDialog(this, "Error inesperado: " + e.getMessage());
         }
     }
-
+    private String titulo;
+    private int Anio;
     private void cargarDatosLibro() {
         Libro libro = new Libro();
         libro.setID(idLibro);
@@ -187,11 +190,59 @@ public class LibroForm extends JDialog {
             dispose();
         }
     }
-    private Ejemplar crearEjemplar(){
+    private Ejemplar crearEjemplar(String codigo){
         Ejemplar ejemplar = new Ejemplar();
+        ejemplar.setCodigo_Interno(codigo);
+        ejemplar.setEstado(true);
+
+        ejemplar.setIDLibro(ID_LibroOut);
         return ejemplar;
     }
-    private void guardarEjemplares(){
-
+    private void obtenerLibro(){
+        Libro libro = new Libro();
+        libro.setID(ID_LibroOut);
+        List<Map<String,Object>> datosLibro=ControladorLibro.obtenerLibroID(libro);
+        try {
+            if(!datosLibro.isEmpty()){
+                boolean valido=false;
+                Map<String,Object>libroData=datosLibro.get(0);
+                titulo= libroData.get("Titulo").toString();
+                Anio= (int) libroData.get("Anio_Publicacion");
+                int cantidad = Integer.parseInt(txtCantidad.getText());
+                for (int i = 1; i <= cantidad; i++) {
+                    String codigo = crearCodigo(ID_LibroOut,Anio,ComponentFactory.metodoTitulo(titulo),i);
+                    Ejemplar ejemplar = crearEjemplar(codigo);
+                    valido = ControladorEjemplar.crearEjemplar(ejemplar);
+                }
+                Frame frame = (Frame) SwingUtilities.getWindowAncestor(this);
+                if (valido){
+                    NotificationComponent panelComponent = new NotificationComponent(
+                            frame,
+                            NotificationComponent.Type.EXITO,
+                            NotificationComponent.Location.BOTTOM_RIGHT,
+                            cantidad+" Ejemplares guardados"
+                    );
+                    panelComponent.showNotification();
+                }
+                else {
+                    NotificationComponent panelComponent = new NotificationComponent(
+                            frame, NotificationComponent.Type.ADVERTENCIA , NotificationComponent.Location.BOTTOM_RIGHT,
+                            "Ocurrio un error");
+                    panelComponent.showNotification();
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    private String crearCodigo(int id,int Anio,String titulo,int incremento){
+        StringBuilder codigo = new StringBuilder();
+        String tituloNuevo=titulo.substring(0,4).toUpperCase();
+        String anioDigitos=String.format("%02d", Anio % 100);
+        codigo.append(id);
+        codigo.append(anioDigitos);
+        codigo.append(tituloNuevo);
+        codigo.append(incremento);
+        return codigo.toString();
     }
 }
