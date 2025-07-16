@@ -97,7 +97,7 @@ public class LibroForm extends JDialog {
         gbc.gridx = 0; gbc.gridy++;
         panelCampos.add(ComponentFactory.crearEtiqueta("Categoría"), gbc);
         gbc.gridx = 1;
-        comboCategoria = new JComboBox<>(new String[]{"A", "B", "C", "D", "E"});
+        comboCategoria = new JComboBox<>(new String[]{"Entretenimiento", "Informativo", "Deportivo", "Educativo", "Artistico", ""});
         panelCampos.add(comboCategoria, gbc);
 
         return panelCampos;
