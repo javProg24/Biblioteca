@@ -4,26 +4,21 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class ShadowRenderer {
-    private int size = 5;
-    private float opacity = 0.5f;
-    private Color color = Color.BLACK;
+    private int size;
+    private float opacity;
+    private Color color;
     public ShadowRenderer() {
         this(5, 0.5f, Color.BLACK);
+        size=5;
+        opacity=0.5f;
+        color=Color.BLACK;
     }
     public ShadowRenderer(final int size, final float opacity, final Color color) {
         this.size = size;
         this.opacity = opacity;
         this.color = color;
     }
-    public Color getColor() {
-        return color;
-    }
-    public float getOpacity() {
-        return opacity;
-    }
-    public int getSize() {
-        return size;
-    }
+
     public BufferedImage createShadow(final BufferedImage image) {
         int shadowSize = size * 2;
         int srcWidth = image.getWidth();
@@ -75,7 +70,7 @@ public class ShadowRenderer {
                 int a = hSumLookup[aSum];
                 dstBuffer[dstOffset++] = a << 24;
 
-                // substract the oldest pixel from the sum ... and nothing new to add !
+                // substract the oldest pixel from the sum ... and nothing new to add!
                 aSum -= aHistory[historyIdx];
 
                 if (++historyIdx >= shadowSize) {

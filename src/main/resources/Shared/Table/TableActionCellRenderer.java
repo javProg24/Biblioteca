@@ -5,10 +5,8 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 
 public class TableActionCellRenderer extends JPanel implements TableCellRenderer {
-    private final TableActionEvent event;
 
     public TableActionCellRenderer(TableActionEvent event) {
-        this.event = event;
     }
 
     @Override

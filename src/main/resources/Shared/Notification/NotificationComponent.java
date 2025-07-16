@@ -9,21 +9,19 @@ import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 
 public class NotificationComponent extends JComponent {
-    private JButton cmdClose;
     private JLabel lblIcon;
     private JLabel lblMessage;
     private JLabel lblMessageText;
-    private JPanel panel;
     private JDialog dialog;
     private Animator animator;
     private final Frame frame;
     private boolean showing;
     private Thread thread;
-    private int animate=10;
+    private final int animate=10;
     private BufferedImage imageShadow;
-    private int shadowsSize=6;
-    private Type type;
-    private Location location;
+    private final int shadowsSize=6;
+    private final Type type;
+    private final Location location;
     public NotificationComponent(Frame frame, Type type,Location location,String message){
         this.frame=frame;
         this.type=type;
@@ -216,8 +214,8 @@ public class NotificationComponent extends JComponent {
         lblIcon = new JLabel(); // <-- FALTABA ESTO
         lblMessage = new JLabel(); // <-- También inicializa estos si aún no lo haces
         lblMessageText = new JLabel();
-        cmdClose = new JButton();
-        panel = new JPanel();
+        JButton cmdClose = new JButton();
+        JPanel panel = new JPanel();
         lblIcon.setHorizontalAlignment(SwingConstants.CENTER);
         lblIcon.setIcon(new ImageIcon(ComponentFactory.ruta("success")));
 

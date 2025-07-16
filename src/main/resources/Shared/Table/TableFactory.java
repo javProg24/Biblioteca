@@ -15,7 +15,7 @@ public class TableFactory {
             }
         };
 
-        // 🟦 Estilo del encabezado
+        // Estilo del encabezado
         JTableHeader header = tabla.getTableHeader();
         header.setFont(new Font("Segoe UI", Font.BOLD, 14));
         header.setBackground(new Color(0x00, 0x33, 0x66)); // azul marino
@@ -29,7 +29,7 @@ public class TableFactory {
         tabla.setShowGrid(false);
         tabla.setIntercellSpacing(new Dimension(0, 0));
 
-        // 🌈 Renderer personalizado para estilo de celdas
+        // Renderer personalizado para estilo de celdas
         DefaultTableCellRenderer celdasCentradas = new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable tbl, Object value, boolean isSelected, boolean hasFocus, int row, int column) {

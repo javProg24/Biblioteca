@@ -45,11 +45,7 @@ public class TableComponent<T> implements TableModel {
         System.out.println(data.get(rowIndex));
         return data.get(rowIndex);
     }
-    public void addRow(T row) {
-        int index = data.size();
-        data.add(row);
-        fireTableRowsInserted(index, index);
-    }
+
     @Override
     public int getRowCount() {
         return data.size();

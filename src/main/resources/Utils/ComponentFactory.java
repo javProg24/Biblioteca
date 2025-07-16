@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 
 public class ComponentFactory {
-    // Crear un campos de texto con un tamaño de fuente específico
+    // Crear campos de texto con un tamaño de fuente específico
     public static JTextField crearCampoTexto(){
         JTextField campo= new JTextField();
         Dimension campoDimension = new Dimension(200, 30);
