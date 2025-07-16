@@ -230,6 +230,7 @@ public class UsuarioForm extends JDialog {
         txtDireccion.setText("");
         txtFecha.setText("");
     }
+    // crear usuario
     private Usuario crearUsuario(){
         Usuario usuario = new Usuario();
         usuario.setID(isEdit?idUsuario:0);

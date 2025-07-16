@@ -205,3 +205,9 @@ CREATE PROCEDURE SP_OBTENER_NOMBRE_USUARIO
 as
 	select ID,Nombre,Apellido,Direccion,Telefono,Fecha_Nacimiento FROM Usuario WHERE Nombre=@Nombre;
 go
+
+create procedure SP_OBTENER_ID_LIBRO
+	@ID int
+as
+	SELECT ISBN,Titulo,Anio_Publicacion,Autor,Categoria FROM Libro WHERE ID=@ID;
+go
