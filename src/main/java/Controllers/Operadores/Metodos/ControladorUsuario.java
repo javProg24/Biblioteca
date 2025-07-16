@@ -10,6 +10,7 @@ import java.util.Map;
 public class ControladorUsuario {
     private final static String id= "ID"; // Nombre de la propiedad que se usa para identificar al usuario
     private final static String cedula="Cedula"; // Nombre de la propiedad que se usa para identificar al usuario por cedula
+    private final static String nombre="Nombre";
 
     public static <T extends Entidad> boolean crearUsuario(T entidad){ // Metodo para crear un usuario
         return ControladorGeneral.crearEntidad(entidad, E_ROL._USUARIO);
@@ -31,8 +32,8 @@ public class ControladorUsuario {
         List<String>parametro= List.of(id);
         return ControladorGeneral.obtenerEntidadParametro(entidad, E_ROL._USUARIO, E_PARAMETRO._ID, parametro);
     }
-    public static  <T extends Entidad>List<Map<String,Object>>obtenerUsuarioCedula(T entidad){ // Metodo para obtener un usuario por cedula
-        List<String>parametro = List.of(cedula);
-        return ControladorGeneral.obtenerEntidadParametro(entidad, E_ROL._USUARIO, E_PARAMETRO._CEDULA, parametro);
+    public static  <T extends Entidad>List<Map<String,Object>>obtenerUsuarioNombre(T entidad){ // Metodo para obtener un usuario por cedula
+        List<String>parametro = List.of(nombre);
+        return ControladorGeneral.obtenerEntidadParametro(entidad, E_ROL._USUARIO, E_PARAMETRO._NOMBRE, parametro);
     }
 }

@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 public class PanelUsuario extends JPanel {
-    private JTextField txtCedula;
+    private JTextField txtNombre;
     private JButton btnConsultar,
             btnAgregar;
     private TableComponent<Usuario> modelUsuario;
@@ -49,11 +49,11 @@ public class PanelUsuario extends JPanel {
         panelIzquierdo.setBackground(ComponentFactory.COLOR_FONDO);
 
         JLabel lblCedula = ComponentFactory.crearEtiqueta("Cédula:");
-        txtCedula = ComponentFactory.crearCampoTexto();
-        txtCedula.setColumns(15);
+        txtNombre = ComponentFactory.crearCampoTexto();
+        txtNombre.setColumns(15);
 
         panelIzquierdo.add(lblCedula);
-        panelIzquierdo.add(txtCedula);
+        panelIzquierdo.add(txtNombre);
 
         // ---- Subpanel derecho: botones ----
         JPanel panelDerecho = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
@@ -63,7 +63,7 @@ public class PanelUsuario extends JPanel {
         btnAgregar = ComponentFactory.crearBoton("Agregar", ComponentFactory.ruta("action-add"));
         panelIzquierdo.add(btnConsultar);
         panelDerecho.add(btnAgregar);
-        btnConsultar.addActionListener(e -> {});
+        btnConsultar.addActionListener(e -> consultarUsuario());
         btnAgregar.addActionListener(e -> {
             Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(PanelUsuario.this);
             UsuarioForm dialog = new UsuarioForm(parentFrame, this::cargarDatosUsuarios);
@@ -108,6 +108,33 @@ public class PanelUsuario extends JPanel {
         modelUsuario.clearRows();
         modelUsuario.fireTableDataChanged();
         modelUsuario.addRows(usuarios);
+    }
+    private void consultarUsuario(){
+        String nombre=txtNombre.getText().trim();
+        if(nombre.isEmpty()){
+            cargarDatosUsuarios();
+            return;
+        }
+        Usuario usuario = new Usuario();
+        usuario.setNombre(nombre);
+        List<Map<String,Object>> datosUsuarios=ControladorUsuario.obtenerUsuarioNombre(usuario);
+        List<Usuario> usuariosFiltrados = datosUsuarios.stream()
+                .map(row -> {
+                    Usuario u = new Usuario();
+                    u.setID((Integer) row.get("ID"));
+                    u.setNombre((String) row.get("Nombre"));
+                    u.setApellido((String) row.get("Apellido"));
+                    u.setDirreccion((String) row.get("Direccion"));
+                    u.setTelefono((Integer) row.get("Telefono"));
+                    u.setFecha_Nacimiento((Date) row.get("Fecha_Nacimiento"));
+                    return u;
+                })
+                .filter(u -> u.getNombre() != null &&u.getNombre().toLowerCase().contains(nombre.toLowerCase()))
+                .toList();
+
+        modelUsuario.clearRows();
+        modelUsuario.fireTableDataChanged();
+        modelUsuario.addRows(usuariosFiltrados);
     }
     private JPanel panelTabla(){
         JPanel panel = new JPanel(new BorderLayout());

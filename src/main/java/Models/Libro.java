@@ -8,11 +8,11 @@ import lombok.*;
 @Getter @Setter
 public class Libro implements Entidad{
     private int ID;
-    private String Titulo;
-    private String Autor;
-    private int AnioPublicacion;
-    private String Categoria;
     private int ISBN;
+    private String Titulo;
+    private int Anio_Publicacion;
+    private String Autor;
+    private String Categoria;
 //    public Libro() {
 //        this.ID = 0;
 //        this.Titulo = "";

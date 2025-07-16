@@ -7,4 +7,5 @@ public enum E_PARAMETRO {
     _FECHA_DEVOLUCION,
     _FECHA_PRESTAMO,
     _LIBRO_ID,
+    _NOMBRE
 }

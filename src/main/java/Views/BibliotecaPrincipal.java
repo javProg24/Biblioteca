@@ -112,8 +112,7 @@ public class BibliotecaPrincipal extends JFrame {
         logoutPanel.setBackground(ComponentFactory.COLOR_MENU);
         logoutPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         JButton btnCerrarSesion = ComponentFactory.crearBoton("Cerrar Sesión", ComponentFactory.ruta("menu-logout"));
-        btnCerrarSesion.setBackground(new Color(211, 47, 47)); // Rojo para el botón de cerrar sesión
-        btnCerrarSesion.setForeground(Color.WHITE);
+        btnCerrarSesion.setBackground(new Color(231, 10, 10)); // Rojo para el botón de cerrar sesión
         btnCerrarSesion.setFont(new Font("Arial", Font.BOLD, 16));
         btnCerrarSesion.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnCerrarSesion.addActionListener(e -> {

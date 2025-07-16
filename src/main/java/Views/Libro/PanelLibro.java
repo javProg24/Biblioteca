@@ -226,7 +226,7 @@ public class PanelLibro extends JPanel {
             Integer id = (Integer) row.get("ID");
             String titulo = (String) row.get("Titulo");
             String autor = (String) row.get("Autor");
-            Integer anio = (Integer) row.get("AnioPublicacion");
+            Integer anio = (Integer) row.get("Anio_Publicacion");
             String categoria = (String) row.get("Categoria");
 
             Number isbnNumber = (Number) row.get("ISBN");
@@ -236,7 +236,7 @@ public class PanelLibro extends JPanel {
                     .ID(id != null ? id : 0)
                     .Titulo(titulo != null ? titulo : "")
                     .Autor(autor != null ? autor : "")
-                    .AnioPublicacion(anio != null ? anio : 0)
+                    .Anio_Publicacion(anio != null ? anio : 0)
                     .Categoria(categoria != null ? categoria : "")
                     .ISBN(isbn)
                     .build();
@@ -332,7 +332,7 @@ public class PanelLibro extends JPanel {
                 new Column<>("ID", Libro::getID, (l, v) -> l.setID((Integer) v)),
                 new Column<>("ISBN", Libro::getISBN, (l, v) -> l.setISBN((Integer) v)),
                 new Column<>("Título", Libro::getTitulo, (l, v) -> l.setTitulo((String) v)),
-                new Column<>("Año", Libro::getAnioPublicacion, (l, v) -> l.setAnioPublicacion((Integer) v)),
+                new Column<>("Año", Libro::getAnio_Publicacion, (l, v) -> l.setAnio_Publicacion((Integer) v)),
                 new Column<>("Autor", Libro::getAutor, (l, v) -> l.setAutor((String) v)),
                 new Column<>("Categoría", Libro::getCategoria, (l, v) -> l.setCategoria((String) v)),
                 new Column<>("Acciones", l -> null, (l, v) -> {})

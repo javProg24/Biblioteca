@@ -190,12 +190,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class LibroForm extends JDialog {
-
-    private JTextField txtISBN, txtTitulo, txtAnio, txtAutor;
+    private JTextField txtISBN,
+            txtTitulo,
+            txtAnio,
+            txtAutor;
     private JComboBox<String> comboCategoria;
-    private JButton btnGuardar, btnCancelar;
+    private JButton btnGuardar,
+            btnCancelar;
 
     private boolean isEdit;
     private int idLibro;
@@ -297,16 +301,25 @@ public class LibroForm extends JDialog {
 
         return panel;
     }
-
+    private Libro crearLibro(){
+        Libro libro = new Libro();
+        libro.setID(isEdit?idLibro:0);
+        libro.setISBN(Integer.parseInt(txtISBN.getText()));
+        libro.setTitulo(txtTitulo.getText());
+        libro.setAnio_Publicacion(Integer.parseInt(txtAnio.getText()));
+        libro.setAutor(txtAutor.getText());
+        libro.setCategoria(comboCategoria.getSelectedItem().toString());
+        return libro;
+    }
     private void guardarLibro() {
         try {
-            Libro libro = new Libro();
-            libro.setID(isEdit ? idLibro : 0);
-            libro.setISBN(Integer.parseInt(txtISBN.getText()));
-            libro.setTitulo(txtTitulo.getText());
-            libro.setAnioPublicacion(Integer.parseInt(txtAnio.getText()));
-            libro.setAutor(txtAutor.getText());
-            libro.setCategoria(comboCategoria.getSelectedItem().toString());
+            Libro libro = crearLibro();
+//            libro.setID(isEdit ? idLibro : 0);
+//            libro.setISBN(Integer.parseInt(txtISBN.getText()));
+//            libro.setTitulo(txtTitulo.getText());
+//            libro.setAnioPublicacion(Integer.parseInt(txtAnio.getText()));
+//            libro.setAutor(txtAutor.getText());
+//            libro.setCategoria();
 
             boolean valido = isEdit
                     ? ControladorLibro.actualizarLibro(libro)

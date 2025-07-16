@@ -198,3 +198,10 @@ END
 INSERT INTO Bibliotecario(Usuario,Clave) values ('admin','sql123');
 
 execute SP_OBTENER_BIBLIOTECARIO 'admin','sql123';
+
+go
+CREATE PROCEDURE SP_OBTENER_NOMBRE_USUARIO
+	@Nombre varchar(50)
+as
+	select ID,Nombre,Apellido,Direccion,Telefono,Fecha_Nacimiento FROM Usuario WHERE Nombre=@Nombre;
+go
