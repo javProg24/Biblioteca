@@ -24,6 +24,11 @@ public class ControladorGeneral {
         String procedimiento=cadenaSP.crearCadenaCompleta(E_CODIGO_SP.SP_INSERTAR,rol);
         return accesoDb.CrearEntidad(procedimiento,lista);
     }
+    protected static <T extends Entidad>boolean crearEntidad(T entidad,E_ROL rol, int indexOutput){
+        Map<Integer, Object> lista = propiedadesEntidad.crearPropiedadesNoID(entidad);
+        String procedimiento=cadenaSP.crearCadenaCompleta(E_CODIGO_SP.SP_INSERTAR,rol);
+        return accesoDb.CrearEntidad(procedimiento,lista,indexOutput);
+    }
     //validar
     protected static <T extends Entidad> List<Map<String,Object>> validarEntidad(T entidad, E_ROL rol){
         Map<Integer, Object> lista = propiedadesEntidad.crearPropiedadesNoID(entidad);

@@ -27,6 +27,9 @@ public class ExecuteSP implements Acceso_DB{
     public boolean CrearEntidad(String sp_query, Map<Integer, Object> parametros) {
         return obj_bd.ExecuteSPNo_Query(sp_query,parametros);
     }
+    public boolean CrearEntidad(String sp_query, Map<Integer, Object> parametros,int indexOutput){
+        return obj_bd.ExecuteSPNo_Query(sp_query,parametros,indexOutput);
+    }
 
     @Override
     public boolean ActualizarEntidad(String sp_query, Map<Integer, Object> parametros) {

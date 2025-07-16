@@ -1,14 +1,19 @@
 package main.java.Controllers.Datos.DbOperaciones;
 
+import lombok.Getter;
+import main.java.Models.Libro;
+
 import java.sql.*;
 import java.util.*;
-
+@Getter
 public class ExecuteQuery {
     private final ConexionDB conexionDB;
+    public static int intOut;
     private static final String llamada= "{call %s(%s)}";
     public ExecuteQuery(){
         conexionDB = new ConexionDB();
     }
+
     // metodo que devuelve una tabla de datos
     // este metodo recibe un string (nombre_sp), Lista de parametros
     //public ExecuteQuery(string nombre_sp, lista de parametros)
@@ -66,28 +71,44 @@ public class ExecuteQuery {
             return null;
         }
     }
-    public boolean ExecuteSPOutput(String nombre_sp,Map<Integer,Object>parametros){
-        boolean resultado=false;
-//        Connection con = null;
-//        CallableStatement statement = null;
-//        try {
-//            con=conexionDB.AbrirConexion();
-//            int cantidad = parametros.size();
-//            String placeHolders=String.join(", ", Collections.nCopies(cantidad,"?"));
-//            String sql = String.format(llamada, nombre_sp, placeHolders);
-//            statement=con.prepareCall(sql);
-//            for(Map.Entry<Integer,Object>parametro:parametros.entrySet()){
-//                statement.setObject(parametro.getKey(),parametro.getValue());
-//            }
-//            statement.registerOutParameter(indexOutput, java.sql.Types.BIT);
-//            statement.execute();
-//            resultado = statement.getBoolean(indexOutput);
-//            statement.clearParameters();
-//        }catch (SQLException e){
-//            System.err.println("Error al ejecutar el procedimiento con OUTPUT: " + e.getMessage());
-//        }finally {
-//            conexionDB.CerrarConexion(con);
-//        }
-        return resultado;
+    public boolean ExecuteSPNo_Query(String nombre_sp,Map<Integer,Object>parametros,int indexOutput){
+        Connection con = null;
+        CallableStatement statement;
+        try {
+            con = conexionDB.AbrirConexion();
+            con = conexionDB.AbrirConexion();
+
+            int cantidad = parametros.size();
+            String placeHolders = String.join(", ", Collections.nCopies(cantidad + 1, "?"));
+            String sql = String.format(llamada, nombre_sp, placeHolders);
+
+            statement = con.prepareCall(sql);
+
+            // Parametros de entrada
+            for (Map.Entry<Integer, Object> parametro : parametros.entrySet()) {
+                statement.setObject(parametro.getKey(), parametro.getValue());
+            }
+
+            // Parametro OUTPUT (BIT)
+            statement.registerOutParameter(indexOutput,Types.INTEGER);
+            int resultado=statement.executeUpdate();
+            //opcion 1
+            //Libro libro = new Libro();
+            //libro.setID(statement.getInt(indexOutput));
+            //opcion 2
+            // int out=statement.getInt(indexOutput)
+            intOut=statement.getInt(indexOutput);
+            System.out.println(statement.getInt(indexOutput));
+            statement.clearParameters();
+            conexionDB.CerrarConexion(con);
+
+            return resultado>0;
+        }catch (SQLException e) {
+            System.err.println("Error al ejecutar el procedimiento con OUTPUT: " + e.getMessage());
+            return false;
+        } finally {
+            conexionDB.CerrarConexion(con);
+        }
+
     }
 }

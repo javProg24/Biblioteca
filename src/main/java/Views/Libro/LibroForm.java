@@ -1,7 +1,9 @@
 package main.java.Views.Libro;
 
 import com.formdev.flatlaf.FlatLightLaf;
+import main.java.Controllers.Datos.DbOperaciones.ExecuteQuery;
 import main.java.Controllers.Operadores.Metodos.ControladorLibro;
+import main.java.Models.Ejemplar;
 import main.java.Models.Libro;
 import main.resources.Shared.Notification.NotificationComponent;
 import main.resources.Utils.ComponentFactory;
@@ -10,8 +12,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class LibroForm extends JDialog {
+    private int ID_Libro;
     private JTextField txtISBN,
             txtTitulo,
             txtAnio,
@@ -122,12 +126,12 @@ public class LibroForm extends JDialog {
     }
     private Libro crearLibro(){
         Libro libro = new Libro();
-        libro.setID(isEdit?idLibro:0);
+        libro.setID(isEdit?idLibro:0); // aqui es el problema
         libro.setISBN(Integer.parseInt(txtISBN.getText()));
         libro.setTitulo(txtTitulo.getText());
         libro.setAnio_Publicacion(Integer.parseInt(txtAnio.getText()));
         libro.setAutor(txtAutor.getText());
-        libro.setCategoria(comboCategoria.getSelectedItem().toString());
+        libro.setCategoria(Objects.requireNonNull(comboCategoria.getSelectedItem()).toString());
         return libro;
     }
     private void guardarLibro() {
@@ -142,7 +146,7 @@ public class LibroForm extends JDialog {
 
             boolean valido = isEdit
                     ? ControladorLibro.actualizarLibro(libro)
-                    : ControladorLibro.crearLibro(libro);
+                    : ControladorLibro.crearLibro(libro,6);
 
             Frame frame = (Frame) SwingUtilities.getWindowAncestor(this);
             if (valido) {
@@ -153,6 +157,8 @@ public class LibroForm extends JDialog {
                         "Libro " + (isEdit ? "actualizado" : "registrado")
                 );
                 panelComponent.showNotification();
+                ID_Libro=ExecuteQuery.intOut;
+                //System.out.println(ExecuteQuery.intOut);
                 if (onLibroSaved != null) onLibroSaved.run();
                 dispose();
             } else {
@@ -180,5 +186,12 @@ public class LibroForm extends JDialog {
             JOptionPane.showMessageDialog(this, "No se encontró el libro.");
             dispose();
         }
+    }
+    private Ejemplar crearEjemplar(){
+        Ejemplar ejemplar = new Ejemplar();
+        return ejemplar;
+    }
+    private void guardarEjemplares(){
+
     }
 }

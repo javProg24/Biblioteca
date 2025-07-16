@@ -211,3 +211,22 @@ create procedure SP_OBTENER_ID_LIBRO
 as
 	SELECT ISBN,Titulo,Anio_Publicacion,Autor,Categoria FROM Libro WHERE ID=@ID;
 go
+
+--Nuevo codigo para insertar libro y que me devuelva el id creado de ese libro
+GO
+CREATE PROCEDURE SP_INSERTAR_LIBRO
+	@ISBN int,
+	@Titulo varchar(25),
+	@Anio_Publicacion int,
+	@Autor varchar(25),
+	@Categoria varchar(25),
+	@ID_Libro int OUTPUT -- parámetro de salida
+AS
+BEGIN
+	INSERT INTO Libro(ISBN, Titulo, Anio_Publicacion, Autor, Categoria)
+	VALUES(@ISBN, @Titulo, @Anio_Publicacion, @Autor, @Categoria);
+
+	-- Obtiene el último IDENTITY del mismo scope
+	SET @ID_Libro = SCOPE_IDENTITY();
+END
+GO
