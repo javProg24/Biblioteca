@@ -74,14 +74,28 @@ public class LoginPrincipal extends JFrame {
             Bibliotecario bibliotecario = crearBibliotecario();
             List<Map<String,Object>> dato=ControladorBiblioteca.validarBibliotecario(bibliotecario);
             boolean esValido=false;
+            String nombreUsuario = campoUsuario.getText(); // Usar el nombre ingresado en lugar de "Admin"
+
             if(dato!=null&&!dato.isEmpty()){
                 Object valor = dato.get(0).get("EsValido");
                 if(valor instanceof Boolean){
                     esValido=(Boolean)valor;
                 }
+
+                // Obtener el nombre del usuario desde la respuesta de la validación
+                if(esValido) {
+                    Object usuario = dato.get(0).get("Usuario");
+                    if(usuario != null) {
+                        nombreUsuario = usuario.toString();
+                    }
+                    // Si no se encuentra en la respuesta, mantener el nombre ingresado
+                }
             }
+
+            final String nombreUsuarioFinal = nombreUsuario; // Variable final para usar en el lambda
+
             if (esValido) {
-                SwingUtilities.invokeLater(()->new BibliotecaPrincipal().setVisible(true));
+                SwingUtilities.invokeLater(()->new BibliotecaPrincipal(nombreUsuarioFinal).setVisible(true));
                 this.dispose();
             } else {
                 System.out.println("❌ Usuario o contraseña incorrectos");

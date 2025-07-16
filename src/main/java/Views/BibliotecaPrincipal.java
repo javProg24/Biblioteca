@@ -18,8 +18,14 @@ public class BibliotecaPrincipal extends JFrame {
     private final JPanel botonesPanel;
     private final JPanel logoutPanel;
     private final JPanel panelDashboard;
+    private String nombreUsuario; // Campo para almacenar el nombre del usuario
 
     public BibliotecaPrincipal(){
+        this("Admin"); // Constructor por defecto
+    }
+
+    public BibliotecaPrincipal(String nombreUsuario){
+        this.nombreUsuario = nombreUsuario;
         try{
             UIManager.setLookAndFeel(new FlatLightLaf());
         }catch (Exception e){
@@ -71,7 +77,7 @@ public class BibliotecaPrincipal extends JFrame {
         lbl_titulo.setForeground(Color.WHITE);
         lbl_titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
         // Información de usuario
-        JLabel lblUsuario = new JLabel("<html><center><b>Usuario:</b> Admin<br><b>Rol:</b> Bibliotecario</center></html>");
+        JLabel lblUsuario = new JLabel("<html><center><b>Usuario:</b> " + nombreUsuario);
         lblUsuario.setForeground(Color.WHITE);
         lblUsuario.setFont(new Font("Arial", Font.PLAIN, 14));
         lblUsuario.setAlignmentX(Component.CENTER_ALIGNMENT);
