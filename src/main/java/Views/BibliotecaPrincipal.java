@@ -19,11 +19,9 @@ public class BibliotecaPrincipal extends JFrame {
     private final JPanel botonesPanel;
     private final JPanel logoutPanel;
     private final JPanel panelDashboard;
-    private String nombreUsuario; // Campo para almacenar el nombre del usuario
+    private String nombreUsuario;
 
-    public BibliotecaPrincipal(){
-        this("Admin"); // Constructor por defecto
-    }
+
 
     public BibliotecaPrincipal(String nombreUsuario){
         this.nombreUsuario = nombreUsuario;
@@ -151,7 +149,7 @@ public class BibliotecaPrincipal extends JFrame {
         panelPrincipal.add(panelEjemplar,"Copias");
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(()->new BibliotecaPrincipal().setVisible(true));
-    }
+//    public static void main(String[] args) {
+//        SwingUtilities.invokeLater(()->new BibliotecaPrincipal().setVisible(true));
+//    }
 }

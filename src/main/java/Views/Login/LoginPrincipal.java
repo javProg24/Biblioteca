@@ -74,7 +74,7 @@ public class LoginPrincipal extends JFrame {
             Bibliotecario bibliotecario = crearBibliotecario();
             List<Map<String,Object>> dato=ControladorBiblioteca.validarBibliotecario(bibliotecario);
             boolean esValido=false;
-            String nombreUsuario = campoUsuario.getText(); // Usar el nombre ingresado en lugar de "Admin"
+            String nombreUsuario = campoUsuario.getText(); // Usar el nombre ingresado
 
             if(dato!=null&&!dato.isEmpty()){
                 Object valor = dato.get(0).get("EsValido");
