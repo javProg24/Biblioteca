@@ -9,10 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class DialogComponent extends JDialog {
-    private JLabel etiqueta;
     private String entidad;
-    private JButton btnAceptar,
-            btnCancelar;
     private Runnable onAccept;
     public DialogComponent(Frame parent,  E_ROL rol,Runnable onAccept){
         super(parent,"",true);
@@ -47,7 +44,7 @@ public class DialogComponent extends JDialog {
         // Etiqueta principal: Eliminar (entidad)
         gbc.gridx = 0;
         gbc.gridy = 0;
-        etiqueta = ComponentFactory.crearEtiqueta("Eliminar " + entidad);
+        JLabel etiqueta = ComponentFactory.crearEtiqueta("Eliminar " + entidad);
 
         // Aumentar tamaño de fuente (sin perder estilo)
         etiqueta.setFont(etiqueta.getFont().deriveFont(Font.BOLD, etiqueta.getFont().getSize() + 2));
@@ -67,8 +64,8 @@ public class DialogComponent extends JDialog {
     }
     private JPanel panelBotones(){
         JPanel panelBotones=new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
-        btnAceptar=ComponentFactory.crearBoton("Aceptar",ComponentFactory.ruta("success"));
-        btnCancelar=ComponentFactory.crearBoton("Cancelar",ComponentFactory.ruta("action-cancel"));
+        JButton btnAceptar = ComponentFactory.crearBoton("Aceptar", ComponentFactory.ruta("success"));
+        JButton btnCancelar = ComponentFactory.crearBoton("Cancelar", ComponentFactory.ruta("action-cancel"));
         panelBotones.add(btnAceptar);
         panelBotones.add(btnCancelar);
         btnAceptar.addActionListener(e->{

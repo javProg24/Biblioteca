@@ -1,7 +1,10 @@
 package main.java.Views.Libro;
 
 import com.formdev.flatlaf.FlatLightLaf;
+import main.java.Controllers.Datos.DbOperaciones.ExecuteQuery;
+import main.java.Controllers.Operadores.Metodos.ControladorEjemplar;
 import main.java.Controllers.Operadores.Metodos.ControladorLibro;
+import main.java.Models.Ejemplar;
 import main.java.Models.Libro;
 import main.resources.Shared.Notification.NotificationComponent;
 import main.resources.Utils.ComponentFactory;
@@ -10,15 +13,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class LibroForm extends JDialog {
+    private int ID_LibroOut;
     private JTextField txtISBN,
             txtTitulo,
             txtAnio,
-            txtAutor;
+            txtAutor,
+            txtCantidad;
     private JComboBox<String> comboCategoria;
-    private JButton btnGuardar,
-            btnCancelar;
 
     private boolean isEdit;
     private int idLibro;
@@ -100,17 +104,24 @@ public class LibroForm extends JDialog {
         comboCategoria = new JComboBox<>(new String[]{"Entretenimiento", "Informativo", "Deportivo", "Educativo", "Artistico", ""});
         panelCampos.add(comboCategoria, gbc);
 
+        // Ejemplares
+        gbc.gridx = 0; gbc.gridy++;
+        panelCampos.add(ComponentFactory.crearEtiqueta("Cantidad"),gbc);
+        gbc.gridx=1;
+        txtCantidad = ComponentFactory.crearCampoTexto();
+        panelCampos.add(txtCantidad,gbc);
+
         return panelCampos;
     }
 
     private JPanel panelBotones() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
 
-        btnGuardar = ComponentFactory.crearBoton(
+        JButton btnGuardar = ComponentFactory.crearBoton(
                 isEdit ? "Editar" : "Agregar",
                 isEdit ? ComponentFactory.ruta("editar") : ComponentFactory.ruta("action-add")
         );
-        btnCancelar = ComponentFactory.crearBoton("Cancelar", ComponentFactory.ruta("action-cancel"));
+        JButton btnCancelar = ComponentFactory.crearBoton("Cancelar", ComponentFactory.ruta("action-cancel"));
 
         btnGuardar.addActionListener(e -> guardarLibro());
         btnCancelar.addActionListener(e -> dispose());
@@ -122,28 +133,20 @@ public class LibroForm extends JDialog {
     }
     private Libro crearLibro(){
         Libro libro = new Libro();
-        libro.setID(isEdit?idLibro:0);
+        libro.setID(isEdit?idLibro:0); // aqui es el problema
         libro.setISBN(Integer.parseInt(txtISBN.getText()));
         libro.setTitulo(txtTitulo.getText());
         libro.setAnio_Publicacion(Integer.parseInt(txtAnio.getText()));
         libro.setAutor(txtAutor.getText());
-        libro.setCategoria(comboCategoria.getSelectedItem().toString());
+        libro.setCategoria(Objects.requireNonNull(comboCategoria.getSelectedItem()).toString());
         return libro;
     }
     private void guardarLibro() {
         try {
             Libro libro = crearLibro();
-//            libro.setID(isEdit ? idLibro : 0);
-//            libro.setISBN(Integer.parseInt(txtISBN.getText()));
-//            libro.setTitulo(txtTitulo.getText());
-//            libro.setAnioPublicacion(Integer.parseInt(txtAnio.getText()));
-//            libro.setAutor(txtAutor.getText());
-//            libro.setCategoria();
-
             boolean valido = isEdit
                     ? ControladorLibro.actualizarLibro(libro)
-                    : ControladorLibro.crearLibro(libro);
-
+                    : ControladorLibro.crearLibro(libro,6);
             Frame frame = (Frame) SwingUtilities.getWindowAncestor(this);
             if (valido) {
                 NotificationComponent panelComponent = new NotificationComponent(
@@ -153,8 +156,11 @@ public class LibroForm extends JDialog {
                         "Libro " + (isEdit ? "actualizado" : "registrado")
                 );
                 panelComponent.showNotification();
+                ID_LibroOut =ExecuteQuery.intOut;
+                obtenerLibro();
+                //System.out.println(ExecuteQuery.intOut);
                 if (onLibroSaved != null) onLibroSaved.run();
-                dispose();
+                //dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "No se pudo guardar el libro.");
             }
@@ -180,5 +186,60 @@ public class LibroForm extends JDialog {
             JOptionPane.showMessageDialog(this, "No se encontró el libro.");
             dispose();
         }
+    }
+    private Ejemplar crearEjemplar(String codigo){
+        Ejemplar ejemplar = new Ejemplar();
+        ejemplar.setCodigo_Interno(codigo);
+        ejemplar.setEstado(true);
+
+        ejemplar.setID_Libro(ID_LibroOut);
+        return ejemplar;
+    }
+    private void obtenerLibro(){
+        Libro libro = new Libro();
+        libro.setID(ID_LibroOut);
+        List<Map<String,Object>> datosLibro=ControladorLibro.obtenerLibroID(libro);
+        try {
+            if(!datosLibro.isEmpty()){
+                boolean valido=false;
+                Map<String,Object>libroData=datosLibro.get(0);
+                String titulo = libroData.get("Titulo").toString();
+                int anio = (int) libroData.get("Anio_Publicacion");
+                int cantidad = Integer.parseInt(txtCantidad.getText());
+                for (int i = 1; i <= cantidad; i++) {
+                    String codigo = crearCodigo(ID_LibroOut, anio,ComponentFactory.metodoTitulo(titulo),i);
+                    Ejemplar ejemplar = crearEjemplar(codigo);
+                    valido = ControladorEjemplar.crearEjemplar(ejemplar);
+                }
+                Frame frame = (Frame) SwingUtilities.getWindowAncestor(this);
+                if (valido){
+                    NotificationComponent panelComponent = new NotificationComponent(
+                            frame,
+                            NotificationComponent.Type.EXITO,
+                            NotificationComponent.Location.BOTTOM_RIGHT,
+                            cantidad+" Ejemplares guardados"
+                    );
+                    panelComponent.showNotification();
+                }
+                else {
+                    NotificationComponent panelComponent = new NotificationComponent(
+                            frame, NotificationComponent.Type.ADVERTENCIA , NotificationComponent.Location.BOTTOM_RIGHT,
+                            "Ocurrio un error");
+                    panelComponent.showNotification();
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    private String crearCodigo(int id,int Anio,String titulo,int incremento){
+        StringBuilder codigo = new StringBuilder();
+        String tituloNuevo=titulo.substring(0,4).toUpperCase();
+        String anioDigitos=String.format("%02d", Anio % 100);
+        codigo.append(id);
+        codigo.append(anioDigitos);
+        codigo.append(tituloNuevo);
+        codigo.append(incremento);
+        return codigo.toString();
     }
 }

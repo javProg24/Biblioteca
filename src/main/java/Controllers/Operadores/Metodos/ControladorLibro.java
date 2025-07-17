@@ -11,8 +11,8 @@ public class ControladorLibro {
     private final static String id = "ID"; // Nombre de la propiedad que se usa para identificar al libro
     private final static String titulo = "Titulo"; // Nombre de la propiedad que se usa para identificar al libro por titulo
 
-    public static <T extends Entidad> boolean crearLibro(T entidad) { // Metodo para crear un libro
-        return ControladorGeneral.crearEntidad(entidad, E_ROL._LIBRO);
+    public static <T extends Entidad> boolean crearLibro(T entidad,int indexOutput) { // Metodo para crear un libro
+        return ControladorGeneral.crearEntidad(entidad, E_ROL._LIBRO,indexOutput);
     }
     public static <T extends Entidad> boolean actualizarLibro(T entidad) { // Metodo para actualizar un libro
         return ControladorGeneral.actualizarEntidad(entidad, E_ROL._LIBRO);

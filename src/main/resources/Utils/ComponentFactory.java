@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 
 public class ComponentFactory {
-    // Crear un campos de texto con un tamaño de fuente específico
+    // Crear campos de texto con un tamaño de fuente específico
     public static JTextField crearCampoTexto(){
         JTextField campo= new JTextField();
         Dimension campoDimension = new Dimension(200, 30);
@@ -18,6 +18,9 @@ public class ComponentFactory {
         JLabel etiqueta = new JLabel(texto);
         etiqueta.setFont(new Font("Segoe UI", Font.BOLD, 14));
         return etiqueta;
+    }
+    public static String metodoTitulo(String titulo){
+        return titulo.replaceAll("\\s+","");
     }
     public static JButton crearBoton(String texto, String ruta) {
         ImageIcon icono=new ImageIcon(ruta);

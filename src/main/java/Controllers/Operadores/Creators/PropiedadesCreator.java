@@ -18,9 +18,16 @@ public class PropiedadesCreator {
     public PropiedadesCreator(){
         lista=new LinkedHashMap<>();
         esPrimerCampo=false;
-        //index=1; // Inicializa el índice en 1 para evitar el ID
     }
     //SIRVE PARA LOS METODOS INSERT, UPDATE Y DELETE
+    /**
+     * Crea un mapa de propiedades de una entidad, excluyendo el ID, para operaciones como creación.
+     *
+     * @param <T> El tipo de la entidad que extiende de la clase `Entidad`.
+     * @param entidad La entidad de la cual se extraerán las propiedades.
+     * @return Un mapa donde las claves son índices incrementales y los valores son las propiedades de la entidad,
+     *         formateadas según su tipo.
+     */
     public <T extends Entidad> Map<Integer, Object> crearPropiedadesNoID(T entidad){// para crear
         lista.clear();
         index=1;
@@ -44,23 +51,18 @@ public class PropiedadesCreator {
         }
         return lista;
     }
-    // para eliminar y consultas de 1 parametro
-    // tiene que ser para n parametros
-//    public  <T extends Entidad> Map<Integer, Object> listarPropiedad(T entidad,String atributo){
-//        lista.clear();
-//        index=1;
-//        try {
-//            Class<?> clase = entidad.getClass(); // obtiene la clase de la entidad
-//            String nombreGetter = metodo  + atributo; // construye el nombre del metodo getter correspondiente al atributo
-//            Method getter = clase.getMethod(nombreGetter); // obtiene el metodo getter de la clase
-//            Object valor = getter.invoke(entidad);// invoca el metodo getter para obtener el valor del atributo
-//            lista.put(index, tipoParametro(valor));// agrega el valor a la lista con un índice fijo (1)
-//        }catch (Exception e){
-//            System.err.println(e.getMessage());
-//        }
-//        return lista;
-//    }
+    // para eliminar y consultas de n parametros
     // Este metodo crea un mapa de propiedades de una entidad, incluyendo el ID
+    /**
+     * Crea un mapa de propiedades de una entidad utilizando una lista de atributos especificados.
+     * Este metodo incluye el ID de la entidad y es útil para operaciones que requieren parámetros personalizados.
+     *
+     * @param <T> El tipo de la entidad que extiende de la clase `Entidad`.
+     * @param entidad La entidad de la cual se extraerán las propiedades.
+     * @param atributos Una lista de nombres de atributos que se utilizarán para construir las propiedades de la entidad.
+     * @return Un mapa donde las claves son índices incrementales y los valores son las propiedades de la entidad,
+     *         formateadas según su tipo.
+     */
     public <T extends Entidad> Map<Integer,Object>listarPropiedades(T entidad, List<String>atributos){
         lista.clear();
         index=1;
@@ -77,8 +79,17 @@ public class PropiedadesCreator {
         }
         return lista;
     }
-    // para actualizar y consultas de 2 parametros
-    // Este metodo crea un mapa de propiedades de una entidad, incluyendo el ID
+
+
+    /**
+     * Crea un mapa de propiedades de una entidad, incluyendo el ID, para operaciones como actualización.
+     * Para actualizar y consultas de 2 parametros.
+     * Este metodo crea un mapa de propiedades de una entidad, incluyendo el ID
+     * @param <T> El tipo de la entidad que extiende de la clase `Entidad`.
+     * @param entidad La entidad de la cual se extraerán las propiedades.
+     * @return Un mapa donde las claves son índices incrementales y los valores son las propiedades de la entidad,
+     *         formateadas según su tipo.
+     */
     public <T extends Entidad> Map<Integer, Object> crearPropiedades(T entidad){
         lista.clear(); // limpia la lista antes de agregar nuevos valores
         index=1;
@@ -102,6 +113,14 @@ public class PropiedadesCreator {
 //                && !metodo.getName().equals("getClass")
 //                && metodo.getParameterCount() == 0;
 //    }
+    /**
+     * Formatea un parámetro dependiendo de su tipo.
+     *
+     * @param parametro El objeto que se desea formatear. Puede ser de tipo Integer, String, Boolean, Byte o Date.
+     * @return El parámetro formateado. Si es un tipo primitivo o String, se devuelve directamente.
+     *         Si es una fecha, se convierte a un String con el formato "yyyy-MM-dd".
+     * @throws IllegalArgumentException Si el tipo del parámetro no es soportado.
+     */
     private Object tipoParametro(Object parametro){ // Formatea el parametro dependiendo de su tipo
         if (parametro instanceof Integer || parametro instanceof String || parametro instanceof Boolean) { // Si es un tipo primitivo o String, lo devuelve directamente
             return parametro; // no es necesario formatear
