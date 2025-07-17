@@ -6,6 +6,8 @@ import main.java.Controllers.Operadores.Metodos.ControladorLibro;
 import main.java.Models.Ejemplar;
 import main.java.Models.EjemplarDTO;
 import main.java.Models.Libro;
+import main.java.Views.Prestamo.PrestamoForm;
+import main.java.Views.Usuario.PanelUsuario;
 import main.resources.Shared.Table.*;
 import main.resources.Utils.Column;
 import main.resources.Utils.ComponentFactory;
@@ -88,14 +90,21 @@ public class PanelEjemplar extends JPanel {
         JScrollPane scrollPane = TableFactory.wrapWithRoundedBorder(tabla);
         cargarDatosEjemplares();
         TableActionEvent actionEvent = new TableActionEvent() {
+            private int id=0;
             @Override
             public void onEdit(int row) {
-
+                EjemplarDTO ejemplarSeleccionado=modelEjemplar.getRow(row);
+                this.id=ejemplarSeleccionado.getID_Libro();
+                Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(PanelEjemplar.this);
+                PrestamoForm dialog=new PrestamoForm(parentFrame,()->cargarDatosEjemplares());
+                dialog.setVisible(true);
             }
 
             @Override
             public void onDelete(int row) {
-
+                if (tabla.isEditing()) {
+                    tabla.getCellEditor().stopCellEditing();
+                }
             }
         };
         int colAcciones=tabla.getColumnCount()-1;
