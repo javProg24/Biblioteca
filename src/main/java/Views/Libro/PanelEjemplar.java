@@ -32,6 +32,10 @@ public class PanelEjemplar extends JPanel {
         setBackground(ComponentFactory.COLOR_FONDO);
         setBorder(BorderFactory.createTitledBorder("Gestion Prestamos"));
         initComponents();
+
+        //Filtrar
+        comboBox.addActionListener(e -> cargarDatosEjemplares());
+
         addAncestorListener(new AncestorListener() {
             @Override
             public void ancestorAdded(AncestorEvent event) {
@@ -113,6 +117,33 @@ public class PanelEjemplar extends JPanel {
         }
     }
     private void cargarDatosEjemplares(){
+        String libroSeleccionado = (String) comboBox.getSelectedItem();
+
+        if (libroSeleccionado == null) {
+            return;
+        }
+
+        List<Map<String,Object>> datosEjemplares = ControladorEjemplar.obtenerEjemplares();
+
+        // Filtrar por el título del libro seleccionado
+        List<EjemplarDTO> ejemplaresFiltrados = datosEjemplares.stream()
+                .filter(row -> libroSeleccionado.equals(row.get("Nombre_Libro")))
+                .map(row -> {
+                    EjemplarDTO ejemplar = new EjemplarDTO();
+                    ejemplar.setID((Integer) row.get("ID"));
+                    ejemplar.setCodigo_Interno((String) row.get("Codigo_Interno"));
+                    ejemplar.setNombreLibro((String) row.get("Nombre_Libro"));
+                    ejemplar.setEstado((boolean) row.get("Estado"));
+                    return ejemplar;
+                })
+                .toList();
+
+        modelEjemplar.clearRows();
+        modelEjemplar.fireTableDataChanged();
+        modelEjemplar.addRows(ejemplaresFiltrados);
+    }
+ /*
+    private void cargarDatosEjemplares(){
         List<Map<String,Object>> datosEjemplares= ControladorEjemplar.obtenerEjemplares();
         List<EjemplarDTO> ejemplares = datosEjemplares.stream().map(
                 row->{
@@ -128,7 +159,7 @@ public class PanelEjemplar extends JPanel {
         modelEjemplar.clearRows();
         modelEjemplar.fireTableDataChanged();
         modelEjemplar.addRows(ejemplares);
-    }
+    }*/
     private static TableComponent<EjemplarDTO> getEjemplarTableComponent() {
         List<Column<EjemplarDTO>> columns = List.of(
                 new Column<>(

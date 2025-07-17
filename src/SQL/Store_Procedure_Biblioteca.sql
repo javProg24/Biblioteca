@@ -216,7 +216,7 @@ go
 GO
 CREATE PROCEDURE SP_INSERTAR_LIBRO
 	@ISBN int,
-	@Titulo varchar(25),
+	@Titulo varchar(50),
 	@Anio_Publicacion int,
 	@Autor varchar(25),
 	@Categoria varchar(25),
