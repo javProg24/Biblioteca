@@ -66,6 +66,7 @@ AS
 		Anio_Publicacion=@Anio_Publicacion,
 		Autor=@Autor,
 		Categoria=@Categoria;
+	WHERE ID=@ID;
 GO
 
 CREATE PROCEDURE SP_ELIMINAR_LIBRO
@@ -231,8 +232,9 @@ BEGIN
 END
 GO
 
-GO
-ALTER procedure [dbo].[SP_OBTENER_TITULO_LIBRO]
+go
+create procedure SP_OBTENER_TITULO_LIBRO
 	@Titulo varchar(50)
 as
 	select ID,ISBN,Titulo,Anio_Publicacion,Autor,Categoria FROM Libro WHERE Titulo=@Titulo;
+go
