@@ -190,7 +190,7 @@ public class LibroForm extends JDialog {
     private Ejemplar crearEjemplar(String codigo){
         Ejemplar ejemplar = new Ejemplar();
         ejemplar.setCodigo_Interno(codigo);
-        ejemplar.setEstado(true);
+//        ejemplar.setEstado(false);
 
         ejemplar.setID_Libro(ID_LibroOut);
         return ejemplar;
@@ -232,6 +232,7 @@ public class LibroForm extends JDialog {
             System.out.println(e.getMessage());
         }
     }
+    //crear Codigo
     private String crearCodigo(int id,int Anio,String titulo,int incremento){
         StringBuilder codigo = new StringBuilder();
         String tituloFormateado = titulo.toUpperCase();

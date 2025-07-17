@@ -30,7 +30,7 @@ public class PanelEjemplar extends JPanel {
         comboBox.setBounds(50, 30, 180, 25);
         setLayout(new BorderLayout());
         setBackground(ComponentFactory.COLOR_FONDO);
-        setBorder(BorderFactory.createTitledBorder("Gestion"));//nuevo
+        setBorder(BorderFactory.createTitledBorder("Gestion"));
         initComponents();
 
         //Filtrar SOLO si hay selección
