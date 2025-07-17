@@ -20,6 +20,7 @@ import java.util.Map;
 public class PanelEjemplar extends JPanel {
     private TableComponent<EjemplarDTO> modelEjemplar;
     JComboBox<String> comboBox;
+    JComboBox<String> comboEstado;
     public PanelEjemplar(){
         try {
             UIManager.setLookAndFeel(new FlatLightLaf());
@@ -28,25 +29,21 @@ public class PanelEjemplar extends JPanel {
         }
         comboBox = new JComboBox<>();
         comboBox.setBounds(50, 30, 180, 25);
+        comboEstado = new JComboBox<>(new String[]{"-- Estado --", "Disponible", "No disponible"});
+        comboEstado.setBounds(250, 30, 180, 25);
         setLayout(new BorderLayout());
         setBackground(ComponentFactory.COLOR_FONDO);
         setBorder(BorderFactory.createTitledBorder("Gestion"));
         initComponents();
 
-        //Filtrar SOLO si hay selección
-        comboBox.addActionListener(e -> {
-            if (comboBox.getSelectedIndex() > 0) {
-                cargarDatosEjemplares();
-            } else {
-                cargarTodosEjemplares();
-            }
-        });
+        comboBox.addActionListener(e -> filtrarEjemplares());
+        comboEstado.addActionListener(e -> filtrarEjemplares());
 
         addAncestorListener(new AncestorListener() {
             @Override
             public void ancestorAdded(AncestorEvent event) {
-                obtenerTitulosLibros(); // ← Cargar títulos al mostrarse
-                cargarTodosEjemplares();
+                obtenerTitulosLibros();
+                filtrarEjemplares();
             }
             @Override public void ancestorRemoved(AncestorEvent event) {}
             @Override public void ancestorMoved(AncestorEvent event) {}
@@ -65,18 +62,17 @@ public class PanelEjemplar extends JPanel {
         JPanel panelIzquierdo = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         panelIzquierdo.setBackground(ComponentFactory.COLOR_FONDO);
         JLabel lblTitulo = ComponentFactory.crearEtiqueta("Titulo: ");
-
-//        obtenerTitulosLibros();
         panelIzquierdo.add(lblTitulo);
         panelIzquierdo.add(comboBox);
-
+        JLabel lblEstado = ComponentFactory.crearEtiqueta("Estado: ");
+        panelIzquierdo.add(lblEstado);
+        panelIzquierdo.add(comboEstado);
         GridBagConstraints gbcIzq = new GridBagConstraints();
         gbcIzq.gridx = 0;
         gbcIzq.gridy = 0;
-        gbcIzq.weightx = 1.0;      // Para ocupar espacio disponible
-        gbcIzq.anchor = GridBagConstraints.WEST; // Alinear a la izquierda
+        gbcIzq.weightx = 1.0;
+        gbcIzq.anchor = GridBagConstraints.WEST;
         gbcIzq.insets = new Insets(10, 10, 10, 10);
-
         panel.add(panelIzquierdo,gbcIzq);
         return panel;
     }
@@ -124,32 +120,19 @@ public class PanelEjemplar extends JPanel {
         }
         comboBox.setSelectedIndex(0); // No seleccionado
     }
-    private void cargarDatosEjemplares(){
+    private void filtrarEjemplares() {
         String libroSeleccionado = (String) comboBox.getSelectedItem();
-        if (libroSeleccionado == null || comboBox.getSelectedIndex() == 0) {
-            cargarTodosEjemplares();
-            return;
-        }
-        List<Map<String,Object>> datosEjemplares = ControladorEjemplar.obtenerEjemplares();
-        // Filtrar por el título del libro seleccionado
-        List<EjemplarDTO> ejemplaresFiltrados = datosEjemplares.stream()
-                .filter(row -> libroSeleccionado.equals(row.get("Nombre_Libro")))
-                .map(row -> {
-                    EjemplarDTO ejemplar = new EjemplarDTO();
-                    ejemplar.setID((Integer) row.get("ID"));
-                    ejemplar.setCodigo_Interno((String) row.get("Codigo_Interno"));
-                    ejemplar.setNombreLibro((String) row.get("Nombre_Libro"));
-                    ejemplar.setEstado((boolean) row.get("Estado"));
-                    return ejemplar;
-                })
-                .toList();
-        modelEjemplar.clearRows();
-        modelEjemplar.fireTableDataChanged();
-        modelEjemplar.addRows(ejemplaresFiltrados);
-    }
-    private void cargarTodosEjemplares(){
+        String estadoSeleccionado = (String) comboEstado.getSelectedItem();
         List<Map<String,Object>> datosEjemplares = ControladorEjemplar.obtenerEjemplares();
         List<EjemplarDTO> ejemplares = datosEjemplares.stream()
+                .filter(row -> {
+                    boolean libroOk = comboBox.getSelectedIndex() == 0
+                            || (libroSeleccionado != null && libroSeleccionado.equals(row.get("Nombre_Libro")));
+                    boolean estadoOk = comboEstado.getSelectedIndex() == 0
+                            || ("Disponible".equals(estadoSeleccionado) && !(boolean)row.get("Estado"))
+                            || ("No disponible".equals(estadoSeleccionado) && (boolean)row.get("Estado"));
+                    return libroOk && estadoOk;
+                })
                 .map(row -> {
                     EjemplarDTO ejemplar = new EjemplarDTO();
                     ejemplar.setID((Integer) row.get("ID"));
@@ -162,6 +145,12 @@ public class PanelEjemplar extends JPanel {
         modelEjemplar.clearRows();
         modelEjemplar.fireTableDataChanged();
         modelEjemplar.addRows(ejemplares);
+    }
+    private void cargarDatosEjemplares(){
+        filtrarEjemplares();
+    }
+    private void cargarTodosEjemplares(){
+        filtrarEjemplares();
     }
 
     private static TableComponent<EjemplarDTO> getEjemplarTableComponent() {
@@ -181,15 +170,10 @@ public class PanelEjemplar extends JPanel {
                         EjemplarDTO::getNombreLibro,
                         (e,v)->e.setNombreLibro((String) v)
                 ),
-//                new Column<>(
-//                        "ID Libro",
-//                        EjemplarDTO::getID_Libro,
-//                        (e,v)->e.setID_Libro((Integer)v)
-//                ),
                 new Column<>(
                         "Estado",
-                        EjemplarDTO::getEstado,
-                        (e,v)->e.setEstado((boolean) v)
+                        e -> e.getEstado() ? "No disponible" : "Disponible",
+                        (e,v) -> e.setEstado("No disponible".equals(v))
                 ),
                 new Column<>(
                         "Acciones",

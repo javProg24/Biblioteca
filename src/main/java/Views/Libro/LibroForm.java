@@ -190,7 +190,7 @@ public class LibroForm extends JDialog {
     private Ejemplar crearEjemplar(String codigo){
         Ejemplar ejemplar = new Ejemplar();
         ejemplar.setCodigo_Interno(codigo);
-//        ejemplar.setEstado(false);
+        ejemplar.setEstado(false);
 
         ejemplar.setID_Libro(ID_LibroOut);
         return ejemplar;
