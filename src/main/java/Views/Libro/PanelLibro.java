@@ -11,6 +11,8 @@ import main.resources.Utils.Column;
 import main.resources.Utils.ComponentFactory;
 
 import javax.swing.*;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +31,14 @@ public class PanelLibro extends JPanel {
         setBackground(ComponentFactory.COLOR_FONDO);
         setBorder(BorderFactory.createTitledBorder("Gestión de Libros"));
         initComponents();
+        addAncestorListener(new AncestorListener() {
+            @Override
+            public void ancestorAdded(AncestorEvent event) {
+                cargarDatosLibros();
+            }
+            @Override public void ancestorRemoved(AncestorEvent event) {}
+            @Override public void ancestorMoved(AncestorEvent event) {}
+        });
     }
 
     private void initComponents() {

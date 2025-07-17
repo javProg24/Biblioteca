@@ -30,17 +30,23 @@ public class PanelEjemplar extends JPanel {
         comboBox.setBounds(50, 30, 180, 25);
         setLayout(new BorderLayout());
         setBackground(ComponentFactory.COLOR_FONDO);
-        setBorder(BorderFactory.createTitledBorder("Gestion Prestamos"));
+        setBorder(BorderFactory.createTitledBorder("Gestion"));
         initComponents();
 
-        //Filtrar
-        comboBox.addActionListener(e -> cargarDatosEjemplares());
+        //Filtrar SOLO si hay selección
+        comboBox.addActionListener(e -> {
+            if (comboBox.getSelectedIndex() > 0) {
+                cargarDatosEjemplares();
+            } else {
+                cargarTodosEjemplares();
+            }
+        });
 
         addAncestorListener(new AncestorListener() {
             @Override
             public void ancestorAdded(AncestorEvent event) {
                 obtenerTitulosLibros(); // ← Cargar títulos al mostrarse
-                cargarDatosEjemplares();
+                cargarTodosEjemplares();
             }
             @Override public void ancestorRemoved(AncestorEvent event) {}
             @Override public void ancestorMoved(AncestorEvent event) {}
@@ -108,6 +114,7 @@ public class PanelEjemplar extends JPanel {
         List<Map<String, Object>> datosTitulo = ControladorLibro.obtenerLibros();
 
         comboBox.removeAllItems(); // Limpia si ya tenía datos
+        comboBox.addItem("-- Selecciona un libro --"); // Opción por defecto
 
         for (Map<String, Object> fila : datosTitulo) {
             String titulo = (String) fila.get("Titulo"); // Asegúrate que la clave es exacta
@@ -115,16 +122,15 @@ public class PanelEjemplar extends JPanel {
                 comboBox.addItem(titulo); // Añade solo el título al combo
             }
         }
+        comboBox.setSelectedIndex(0); // No seleccionado
     }
     private void cargarDatosEjemplares(){
         String libroSeleccionado = (String) comboBox.getSelectedItem();
-
-        if (libroSeleccionado == null) {
+        if (libroSeleccionado == null || comboBox.getSelectedIndex() == 0) {
+            cargarTodosEjemplares();
             return;
         }
-
         List<Map<String,Object>> datosEjemplares = ControladorEjemplar.obtenerEjemplares();
-
         // Filtrar por el título del libro seleccionado
         List<EjemplarDTO> ejemplaresFiltrados = datosEjemplares.stream()
                 .filter(row -> libroSeleccionado.equals(row.get("Nombre_Libro")))
@@ -137,29 +143,27 @@ public class PanelEjemplar extends JPanel {
                     return ejemplar;
                 })
                 .toList();
-
         modelEjemplar.clearRows();
         modelEjemplar.fireTableDataChanged();
         modelEjemplar.addRows(ejemplaresFiltrados);
     }
- /*
-    private void cargarDatosEjemplares(){
-        List<Map<String,Object>> datosEjemplares= ControladorEjemplar.obtenerEjemplares();
-        List<EjemplarDTO> ejemplares = datosEjemplares.stream().map(
-                row->{
+    private void cargarTodosEjemplares(){
+        List<Map<String,Object>> datosEjemplares = ControladorEjemplar.obtenerEjemplares();
+        List<EjemplarDTO> ejemplares = datosEjemplares.stream()
+                .map(row -> {
                     EjemplarDTO ejemplar = new EjemplarDTO();
-                    ejemplar.setID((Integer)row.get("ID"));
+                    ejemplar.setID((Integer) row.get("ID"));
                     ejemplar.setCodigo_Interno((String) row.get("Codigo_Interno"));
                     ejemplar.setNombreLibro((String) row.get("Nombre_Libro"));
-//                    ejemplar.setID_Libro((Integer)row.get("ID_Libro"));
                     ejemplar.setEstado((boolean) row.get("Estado"));
                     return ejemplar;
-                }
-        ).toList();
+                })
+                .toList();
         modelEjemplar.clearRows();
         modelEjemplar.fireTableDataChanged();
         modelEjemplar.addRows(ejemplares);
-    }*/
+    }
+
     private static TableComponent<EjemplarDTO> getEjemplarTableComponent() {
         List<Column<EjemplarDTO>> columns = List.of(
                 new Column<>(
