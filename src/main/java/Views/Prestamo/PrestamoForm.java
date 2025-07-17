@@ -329,7 +329,7 @@ public class PrestamoForm extends JDialog {
             JOptionPane.showMessageDialog(this, "Formato de fecha inválido. Debe ser dd-MM-yyyy", "Error", JOptionPane.ERROR_MESSAGE);
             return null;
         }
-        prestamo.setEstado(estadoEjemplar);
+        prestamo.setEstado(estadoPrestamo);
         prestamo.setID_Usuario(idUsuario);
         prestamo.setID_Ejemplar(ID_Ejemplar);
         return prestamo;
