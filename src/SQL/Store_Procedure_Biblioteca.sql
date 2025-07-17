@@ -255,6 +255,7 @@ create procedure SP_OBTENER_ID_PRESTAMO
 	@ID int
 as
 	SELECT
+		p.ID,
 		U.ID AS ID_Usuario,
 		U.Nombre + ' ' + U.Apellido AS Usuario,
 		E.ID AS ID_Ejemplar,
