@@ -32,28 +32,18 @@ public class PrestamoForm extends JDialog {
         this.onUserSaved = onUserSaved;
         this.isEdit=false;
         this.idUsuario=0;
+        //Centrar
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         initComponents();
         pack(); // Primero empaca el contenido
-        setLocationRelativeTo(parent);
         setMinimumSize(new Dimension(450, 400));
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension dialogSize = getSize();
+        int x = (screenSize.width - dialogSize.width) / 2;
+        int y = (screenSize.height - dialogSize.height) / 2;
+        setLocation(x, y);
     }
-    public PrestamoForm(Frame parent,int id,boolean isEdit,Runnable onUserSaved){
-        super(parent,"Formulario de Prestamo",true);
-        try {
-            UIManager.setLookAndFeel(new FlatLightLaf());
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        this.onUserSaved = onUserSaved;
-        this.isEdit=isEdit;
-        this.idUsuario=id;
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        initComponents();
-        pack(); // Primero empaca el contenido
-        setLocationRelativeTo(parent);
-        setMinimumSize(new Dimension(450, 500));
-    }
+
     private void initComponents() {
         JPanel mainPanel = new JPanel(new BorderLayout(0, 20));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(30,30,30,30));
@@ -64,65 +54,65 @@ public class PrestamoForm extends JDialog {
 
     private JPanel camposPrestamo() {
         JPanel panelCampos = new JPanel(new GridBagLayout());
-//        GridBagConstraints gbc = new GridBagConstraints();
-//        gbc.insets = new Insets(10, 10, 10, 10);
-//        gbc.anchor = GridBagConstraints.WEST;
-//        gbc.fill = GridBagConstraints.HORIZONTAL;
-//
-//        // Fecha de Préstamo
-//        gbc.gridx = 0;
-//        gbc.gridy = 0;
-//        JLabel lblFechaPrestamo = ComponentFactory.crearEtiqueta("Fecha de Préstamo");
-//        panelCampos.add(lblFechaPrestamo, gbc);
-//
-//        gbc.gridx = 1;
-//        JPanel fechaPanelPrestamo = new JPanel(new BorderLayout());
-//        txtFechaPrestamo = ComponentFactory.crearCampoTexto();
-//        txtFechaPrestamo.setEnabled(false);
-//        fechaPanelPrestamo.add(txtFechaPrestamo, BorderLayout.CENTER);
-//
-//        btnFechaPrestamo = new JButton();
-//        btnFechaPrestamo.setIcon(UIManager.getIcon("FileView.directoryIcon"));
-//        btnFechaPrestamo.setPreferredSize(new Dimension(40, 30));
-//        fechaPanelPrestamo.add(btnFechaPrestamo, BorderLayout.EAST);
-//
-//        panelCampos.add(fechaPanelPrestamo, gbc);
-//
-//        JPopupMenu popupPrestamo = new JPopupMenu();
-//        popupPrestamo.setLayout(new BorderLayout());
-//
-//        JDatePanelImpl datePanelPrestamo = createDatePanel(txtFechaPrestamo, popupPrestamo);
-//        popupPrestamo.add(datePanelPrestamo, BorderLayout.CENTER);
-//
-//        btnFechaPrestamo.addActionListener(e -> toggleCalendar(popupPrestamo, btnFechaPrestamo));
-//
-//
-//        // Fecha de Devolución
-//        gbc.gridx = 0;
-//        gbc.gridy++;
-//        JLabel lblFechaDevolucion = ComponentFactory.crearEtiqueta("Fecha de Devolución");
-//        panelCampos.add(lblFechaDevolucion, gbc);
-//
-//        gbc.gridx = 1;
-//        JPanel fechaPanelDevolucion = new JPanel(new BorderLayout());
-//        txtFechaDevolucion = ComponentFactory.crearCampoTexto();
-//        txtFechaDevolucion.setEnabled(false);
-//        fechaPanelDevolucion.add(txtFechaDevolucion, BorderLayout.CENTER);
-//
-//        btnFechaDevolucion = new JButton();
-//        btnFechaDevolucion.setIcon(UIManager.getIcon("FileView.directoryIcon"));
-//        btnFechaDevolucion.setPreferredSize(new Dimension(40, 30));
-//        fechaPanelDevolucion.add(btnFechaDevolucion, BorderLayout.EAST);
-//
-//        panelCampos.add(fechaPanelDevolucion, gbc);
-//
-//        JPopupMenu popupDevolucion = new JPopupMenu();
-//        popupDevolucion.setLayout(new BorderLayout());
-//
-//        JDatePanelImpl datePanelDevolucion = createDatePanel(txtFechaDevolucion, popupDevolucion);
-//        popupDevolucion.add(datePanelDevolucion, BorderLayout.CENTER);
-//
-//        btnFechaDevolucion.addActionListener(e -> toggleCalendar(popupDevolucion, btnFechaDevolucion));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        // Fecha de Préstamo
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        JLabel lblFechaPrestamo = ComponentFactory.crearEtiqueta("Fecha de Préstamo");
+        panelCampos.add(lblFechaPrestamo, gbc);
+
+        gbc.gridx = 1;
+        JPanel fechaPanelPrestamo = new JPanel(new BorderLayout());
+        txtFechaPrestamo = ComponentFactory.crearCampoTexto();
+        txtFechaPrestamo.setEnabled(false);
+        fechaPanelPrestamo.add(txtFechaPrestamo, BorderLayout.CENTER);
+
+        btnFechaPrestamo = new JButton();
+        btnFechaPrestamo.setIcon(UIManager.getIcon("FileView.directoryIcon"));
+        btnFechaPrestamo.setPreferredSize(new Dimension(40, 30));
+        fechaPanelPrestamo.add(btnFechaPrestamo, BorderLayout.EAST);
+
+        panelCampos.add(fechaPanelPrestamo, gbc);
+
+       JPopupMenu popupPrestamo = new JPopupMenu();
+        popupPrestamo.setLayout(new BorderLayout());
+
+        JDatePanelImpl datePanelPrestamo = createDatePanel(txtFechaPrestamo, popupPrestamo);
+        popupPrestamo.add(datePanelPrestamo, BorderLayout.CENTER);
+
+        btnFechaPrestamo.addActionListener(e -> toggleCalendar(popupPrestamo, btnFechaPrestamo));
+
+
+        // Fecha de Devolución
+        gbc.gridx = 0;
+        gbc.gridy++;
+        JLabel lblFechaDevolucion = ComponentFactory.crearEtiqueta("Fecha de Devolución");
+        panelCampos.add(lblFechaDevolucion, gbc);
+
+        gbc.gridx = 1;
+        JPanel fechaPanelDevolucion = new JPanel(new BorderLayout());
+        txtFechaDevolucion = ComponentFactory.crearCampoTexto();
+        txtFechaDevolucion.setEnabled(false);
+        fechaPanelDevolucion.add(txtFechaDevolucion, BorderLayout.CENTER);
+
+        btnFechaDevolucion = new JButton();
+        btnFechaDevolucion.setIcon(UIManager.getIcon("FileView.directoryIcon"));
+        btnFechaDevolucion.setPreferredSize(new Dimension(40, 30));
+        fechaPanelDevolucion.add(btnFechaDevolucion, BorderLayout.EAST);
+
+        panelCampos.add(fechaPanelDevolucion, gbc);
+
+        JPopupMenu popupDevolucion = new JPopupMenu();
+        popupDevolucion.setLayout(new BorderLayout());
+
+        JDatePanelImpl datePanelDevolucion = createDatePanel(txtFechaDevolucion, popupDevolucion);
+        popupDevolucion.add(datePanelDevolucion, BorderLayout.CENTER);
+
+        btnFechaDevolucion.addActionListener(e -> toggleCalendar(popupDevolucion, btnFechaDevolucion));
 
         return panelCampos;
     }

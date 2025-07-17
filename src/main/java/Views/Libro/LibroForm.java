@@ -46,8 +46,12 @@ public class LibroForm extends JDialog {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         initComponents();
         pack();
-        setLocationRelativeTo(parent);
         setMinimumSize(new Dimension(450, 400));
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension dialogSize = getSize();
+        int x = (screenSize.width - dialogSize.width) / 2;
+        int y = (screenSize.height - dialogSize.height) / 2;
+        setLocation(x, y);
 
         if (isEdit) {
             cargarDatosLibro();
