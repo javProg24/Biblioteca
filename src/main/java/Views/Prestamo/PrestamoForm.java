@@ -32,7 +32,7 @@ public class PrestamoForm extends JDialog {
         this.onUserSaved = onUserSaved;
         this.isEdit=false;
         this.idUsuario=0;
-        //Centrar
+        //Centradoooo
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         initComponents();
         pack(); // Primero empaca el contenido
