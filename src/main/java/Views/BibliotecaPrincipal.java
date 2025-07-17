@@ -94,7 +94,7 @@ public class BibliotecaPrincipal extends JFrame {
         JButton btnDashboard = ComponentFactory.crearBoton("Dashboard", ComponentFactory.ruta("menu-dashboard"));
         JButton btnLibros = ComponentFactory.crearBoton("Libros", ComponentFactory.ruta("menu-books"));
         JButton btnUsuarios = ComponentFactory.crearBoton("Usuarios", ComponentFactory.ruta("menu-users"));
-        JButton btnCopias = ComponentFactory.crearBoton("Copias",ComponentFactory.ruta("ejemplo"));
+        JButton btnCopias = ComponentFactory.crearBoton("Ejemplares",ComponentFactory.ruta("ejemplo"));
         JButton btnPrestamos = ComponentFactory.crearBoton("Préstamos", ComponentFactory.ruta("menu-loans"));
         // Agregar botones con espaciado
         botonesPanel.add(Box.createVerticalStrut(10));
@@ -113,7 +113,7 @@ public class BibliotecaPrincipal extends JFrame {
         btnLibros.addActionListener(e -> cardLayout.show(panelPrincipal, "Libros"));
         btnUsuarios.addActionListener(e -> cardLayout.show(panelPrincipal, "Usuarios"));
         btnPrestamos.addActionListener(e -> cardLayout.show(panelPrincipal, "Prestamos"));
-        btnCopias.addActionListener(e->cardLayout.show(panelPrincipal,"Copias"));
+        btnCopias.addActionListener(e->cardLayout.show(panelPrincipal,"Ejemplares"));
     }
     private void initLogoutPanel(){
         // Botón cerrar sesión en panel separado
@@ -146,7 +146,7 @@ public class BibliotecaPrincipal extends JFrame {
         PanelPrestamo panelPrestamos = new PanelPrestamo();
         panelPrincipal.add(panelPrestamos, "Prestamos");
         PanelEjemplar panelEjemplar = new PanelEjemplar();
-        panelPrincipal.add(panelEjemplar,"Copias");
+        panelPrincipal.add(panelEjemplar,"Ejemplares");
     }
 
 //    public static void main(String[] args) {

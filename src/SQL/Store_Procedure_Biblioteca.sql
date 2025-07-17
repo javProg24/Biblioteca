@@ -230,3 +230,9 @@ BEGIN
 	SET @ID_Libro = SCOPE_IDENTITY();
 END
 GO
+
+GO
+ALTER procedure [dbo].[SP_OBTENER_TITULO_LIBRO]
+	@Titulo varchar(50)
+as
+	select ID,ISBN,Titulo,Anio_Publicacion,Autor,Categoria FROM Libro WHERE Titulo=@Titulo;
