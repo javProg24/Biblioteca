@@ -119,7 +119,7 @@ public class PanelLibro extends JPanel {
         }).toList();
 
         modelLibro.clearRows();
-        modelLibro.fireTableDataChanged();
+        //modelLibro.fireTableDataChanged();
         modelLibro.addRows(libros);
     }
 
@@ -128,10 +128,9 @@ public class PanelLibro extends JPanel {
         panel.setBackground(ComponentFactory.COLOR_FONDO);
 
         modelLibro = getLibroTableComponent();
+        cargarDatosLibros();
         JTable tabla = TableFactory.crearTablaEstilo(modelLibro);
         JScrollPane scrollPane = TableFactory.wrapWithRoundedBorder(tabla);
-
-        cargarDatosLibros();
 
         TableActionEvent actionEvent = new TableActionEvent() {
             private int id = 0;
@@ -147,6 +146,9 @@ public class PanelLibro extends JPanel {
 
             @Override
             public void onDelete(int row) {
+                if (tabla.isEditing()) {
+                    tabla.getCellEditor().stopCellEditing();
+                }
                 Libro libroSeleccionado = modelLibro.getRow(row);
                 this.id = libroSeleccionado.getID();
                 Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(PanelLibro.this);

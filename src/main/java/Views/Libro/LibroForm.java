@@ -42,7 +42,7 @@ public class LibroForm extends JDialog {
         this.isEdit = isEdit;
         this.idLibro = id;
         this.onLibroSaved = onLibroSaved;
-
+        //CENTRADO
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         initComponents();
         pack();
