@@ -418,7 +418,11 @@ public class LibroForm extends JDialog {
     }
     private String crearCodigo(int id,int Anio,String titulo,int incremento){
         StringBuilder codigo = new StringBuilder();
-        String tituloNuevo=titulo.substring(0,4).toUpperCase();
+        String tituloFormateado = titulo.toUpperCase();
+        if (tituloFormateado.length() < 4) {
+            tituloFormateado = String.format("%-4s", tituloFormateado).replace(' ', 'X');
+        }
+        String tituloNuevo = tituloFormateado.substring(0, 4);
         String anioDigitos=String.format("%02d", Anio % 100);
         codigo.append(id);
         codigo.append(anioDigitos);
