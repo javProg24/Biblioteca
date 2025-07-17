@@ -19,8 +19,6 @@ import java.util.Map;
 
 public class PanelUsuario extends JPanel {
     private JTextField txtNombre;
-    private JButton btnConsultar,
-            btnAgregar;
     private TableComponent<Usuario> modelUsuario;
     public PanelUsuario() {
         try{
@@ -59,8 +57,8 @@ public class PanelUsuario extends JPanel {
         JPanel panelDerecho = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         panelDerecho.setBackground(ComponentFactory.COLOR_FONDO);
 
-        btnConsultar = ComponentFactory.crearBoton("Buscar", ComponentFactory.ruta("action-search"));
-        btnAgregar = ComponentFactory.crearBoton("Agregar", ComponentFactory.ruta("action-add"));
+        JButton btnConsultar = ComponentFactory.crearBoton("Buscar", ComponentFactory.ruta("action-search"));
+        JButton btnAgregar = ComponentFactory.crearBoton("Agregar", ComponentFactory.ruta("action-add"));
         panelIzquierdo.add(btnConsultar);
         panelDerecho.add(btnAgregar);
         btnConsultar.addActionListener(e -> consultarUsuario());
@@ -91,7 +89,7 @@ public class PanelUsuario extends JPanel {
 
         return panel;
     }
-    public void cargarDatosUsuarios(){
+    private void cargarDatosUsuarios(){
         List<Map<String,Object>> datosUsuarios= ControladorUsuario.obtenerUsuarios();
         List<Usuario>usuarios=datosUsuarios.stream().map(
                 row->{
@@ -200,7 +198,11 @@ public class PanelUsuario extends JPanel {
 
     private static TableComponent<Usuario> getUsuarioTableComponent() {
         List<Column<Usuario>>columns= List.of(
-                new Column<>("ID", Usuario::getID, (u, v) -> u.setID((Integer) v)),
+                new Column<>(
+                        "ID",
+                        Usuario::getID,
+                        (u, v) -> u.setID((Integer) v)
+                ),
                 new Column<>("Nombre", Usuario::getNombre, (u, v) -> u.setNombre((String) v)),
                 new Column<>("Apellido", Usuario::getApellido, (u, v) -> u.setApellido((String) v)),
                 new Column<>("Direccion", Usuario::getDirreccion, (u, v) -> u.setDirreccion((String) v)),

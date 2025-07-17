@@ -17,8 +17,6 @@ import java.util.Map;
 
 public class PanelLibro extends JPanel {
 
-    private JTextField txtTitulo;
-    private JButton btnConsultar, btnAgregar, btnEjemplares;
     private TableComponent<Libro> modelLibro;
 
     public PanelLibro() {
@@ -46,7 +44,7 @@ public class PanelLibro extends JPanel {
         panelIzquierdo.setBackground(ComponentFactory.COLOR_FONDO);
 
         JLabel lblTitulo = ComponentFactory.crearEtiqueta("Título:");
-        txtTitulo = ComponentFactory.crearCampoTexto();
+        JTextField txtTitulo = ComponentFactory.crearCampoTexto();
         txtTitulo.setColumns(20);
         panelIzquierdo.add(lblTitulo);
         panelIzquierdo.add(txtTitulo);
@@ -54,13 +52,13 @@ public class PanelLibro extends JPanel {
         JPanel panelDerecho = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         panelDerecho.setBackground(ComponentFactory.COLOR_FONDO);
 
-        btnConsultar = ComponentFactory.crearBoton("Buscar", ComponentFactory.ruta("action-search"));
-        btnAgregar = ComponentFactory.crearBoton("Agregar", ComponentFactory.ruta("action-add"));
-        btnEjemplares = ComponentFactory.crearBoton("Ejemplares", ComponentFactory.ruta("archivo")); // ícono arbitrario
+        JButton btnConsultar = ComponentFactory.crearBoton("Buscar", ComponentFactory.ruta("action-search"));
+        JButton btnAgregar = ComponentFactory.crearBoton("Agregar", ComponentFactory.ruta("action-add"));
+//        JButton btnEjemplares = ComponentFactory.crearBoton("Ejemplares", ComponentFactory.ruta("archivo")); // ícono arbitrario
 
         panelIzquierdo.add(btnConsultar);
         panelDerecho.add(btnAgregar);
-        panelDerecho.add(btnEjemplares);
+//        panelDerecho.add(btnEjemplares);
 
         btnConsultar.addActionListener(e -> cargarDatosLibros()); // O filtrado en futuro
         btnAgregar.addActionListener(e -> {

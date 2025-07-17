@@ -23,8 +23,6 @@ public class LibroForm extends JDialog {
             txtAutor,
             txtCantidad;
     private JComboBox<String> comboCategoria;
-    private JButton btnGuardar,
-            btnCancelar;
 
     private boolean isEdit;
     private int idLibro;
@@ -119,11 +117,11 @@ public class LibroForm extends JDialog {
     private JPanel panelBotones() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
 
-        btnGuardar = ComponentFactory.crearBoton(
+        JButton btnGuardar = ComponentFactory.crearBoton(
                 isEdit ? "Editar" : "Agregar",
                 isEdit ? ComponentFactory.ruta("editar") : ComponentFactory.ruta("action-add")
         );
-        btnCancelar = ComponentFactory.crearBoton("Cancelar", ComponentFactory.ruta("action-cancel"));
+        JButton btnCancelar = ComponentFactory.crearBoton("Cancelar", ComponentFactory.ruta("action-cancel"));
 
         btnGuardar.addActionListener(e -> guardarLibro());
         btnCancelar.addActionListener(e -> dispose());
@@ -172,8 +170,7 @@ public class LibroForm extends JDialog {
             JOptionPane.showMessageDialog(this, "Error inesperado: " + e.getMessage());
         }
     }
-    private String titulo;
-    private int Anio;
+
     private void cargarDatosLibro() {
         Libro libro = new Libro();
         libro.setID(idLibro);
@@ -195,7 +192,7 @@ public class LibroForm extends JDialog {
         ejemplar.setCodigo_Interno(codigo);
         ejemplar.setEstado(true);
 
-        ejemplar.setIDLibro(ID_LibroOut);
+        ejemplar.setID_Libro(ID_LibroOut);
         return ejemplar;
     }
     private void obtenerLibro(){
@@ -206,11 +203,11 @@ public class LibroForm extends JDialog {
             if(!datosLibro.isEmpty()){
                 boolean valido=false;
                 Map<String,Object>libroData=datosLibro.get(0);
-                titulo= libroData.get("Titulo").toString();
-                Anio= (int) libroData.get("Anio_Publicacion");
+                String titulo = libroData.get("Titulo").toString();
+                int anio = (int) libroData.get("Anio_Publicacion");
                 int cantidad = Integer.parseInt(txtCantidad.getText());
                 for (int i = 1; i <= cantidad; i++) {
-                    String codigo = crearCodigo(ID_LibroOut,Anio,ComponentFactory.metodoTitulo(titulo),i);
+                    String codigo = crearCodigo(ID_LibroOut, anio,ComponentFactory.metodoTitulo(titulo),i);
                     Ejemplar ejemplar = crearEjemplar(codigo);
                     valido = ControladorEjemplar.crearEjemplar(ejemplar);
                 }
