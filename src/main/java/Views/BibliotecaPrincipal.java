@@ -94,7 +94,7 @@ public class BibliotecaPrincipal extends JFrame {
         JButton btnDashboard = ComponentFactory.crearBoton("Dashboard", ComponentFactory.ruta("menu-dashboard"));
         JButton btnLibros = ComponentFactory.crearBoton("Libros", ComponentFactory.ruta("menu-books"));
         JButton btnUsuarios = ComponentFactory.crearBoton("Usuarios", ComponentFactory.ruta("menu-users"));
-        JButton btnCopias = ComponentFactory.crearBoton("Ejemplares",ComponentFactory.ruta("ejemplo"));
+        JButton btnCopias = ComponentFactory.crearBoton("Gestion",ComponentFactory.ruta("ejemplo"));
         JButton btnPrestamos = ComponentFactory.crearBoton("Préstamos", ComponentFactory.ruta("menu-loans"));
         // Agregar botones con espaciado
         botonesPanel.add(Box.createVerticalStrut(10));
@@ -136,7 +136,7 @@ public class BibliotecaPrincipal extends JFrame {
         panelPrincipal.setBackground(ComponentFactory.COLOR_FONDO);
         // Crear instancias de los formularios
         panelDashboard.setBackground(ComponentFactory.COLOR_FONDO);
-        panelDashboard.add(new JLabel("Dashboard - En construccion"));
+
         panelPrincipal.add(panelDashboard, "Dashboard");
         //Panel para los botones del menú
         PanelUsuario panelUsuarios = new PanelUsuario();
