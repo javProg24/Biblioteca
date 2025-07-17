@@ -36,6 +36,7 @@ public class PanelEjemplar extends JPanel {
             @Override
             public void ancestorAdded(AncestorEvent event) {
                 obtenerTitulosLibros(); // ← Cargar títulos al mostrarse
+                cargarDatosEjemplares();
             }
             @Override public void ancestorRemoved(AncestorEvent event) {}
             @Override public void ancestorMoved(AncestorEvent event) {}

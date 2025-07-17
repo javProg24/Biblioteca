@@ -13,7 +13,6 @@ public class Libro implements Entidad{
     private int Anio_Publicacion;
     private String Autor;
     private String Categoria;
-    private Libro libro;
 //    public Libro() {
 //        this.ID = 0;
 //        this.Titulo = "";
