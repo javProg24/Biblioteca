@@ -1,5 +1,7 @@
 package main.java.Views.Prestamo;
 
+import main.java.Models.EjemplarDTO;
+import main.java.Models.PrestamoDTO;
 import main.resources.Shared.Table.*;
 import main.resources.Utils.Column;
 import main.resources.Utils.ComponentFactory;
@@ -83,21 +85,21 @@ public class PanelPrestamo extends JPanel {
     private JPanel panelTabla(){
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(ComponentFactory.COLOR_FONDO);
-        TableComponent<Prestamo> model = getPrestamoTableComponent();
+        TableComponent<PrestamoDTO> model = getPrestamoTableComponent();
         JTable tabla = TableFactory.crearTablaEstilo(model);
         JScrollPane scrollPane = TableFactory.wrapWithRoundedBorder(tabla);
         List<Map<String,Object>> datosPrestamos = ControladorPrestamo.obtenerPrestamos();
-        List<Prestamo> prestamos = datosPrestamos.stream().map(
-                row -> {
-                    Prestamo prestamo = new Prestamo();
-                    prestamo.setID((Integer) row.get("ID"));
-                    prestamo.setFechaPrestamo((Date) row.get("Fecha_Prestamo"));
-                    prestamo.setFechaDevolucion((Date) row.get("Fecha_Devolucion"));
-                    prestamo.setEstado((Boolean) row.get("Estado"));
-                    prestamo.setID_Bibliotecario((Integer) row.get("ID_Bibliotecario"));
-                    prestamo.setID_Usuario((Integer) row.get("ID_Usuario"));
-                    prestamo.setID_Ejemplar((Integer) row.get("ID_Ejemplar"));
-                    return prestamo;
+        List<PrestamoDTO> prestamos = datosPrestamos.stream().map(
+                row->{
+                    PrestamoDTO prestamoDTO = new PrestamoDTO();
+                    prestamoDTO.setID((Integer)row.get("ID"));
+                    prestamoDTO.setUsuario((String) row.get("Usuario"));
+                    prestamoDTO.setLibro((String) row.get("Libro"));
+                    prestamoDTO.setCodigo_Ejemplar((String) row.get("Codigo_Ejemplar"));
+                    prestamoDTO.setFechaPrestamo((Date) row.get("Fecha_Pretamo"));
+                    prestamoDTO.setFechaDevolucion((Date) row.get("Fecha_Devolucion"));
+                    prestamoDTO.setEstado((boolean) row.get("Estado"));
+                    return prestamoDTO;
                 }
         ).toList();
         TableActionEvent actionEvent = new TableActionEvent() {
@@ -123,11 +125,27 @@ public class PanelPrestamo extends JPanel {
         return panel;
     }
 
-    private static TableComponent<Prestamo> getPrestamoTableComponent() {
-        List<Column<Prestamo>> columns = List.of(
-                new Column<>("ID",
-                        Prestamo::getID,
-                        (p, v) -> p.setID((Integer) v)
+    private static TableComponent<PrestamoDTO> getPrestamoTableComponent() {
+        List<Column<PrestamoDTO>> columns = List.of(
+                new Column<>(
+                        "ID",
+                        PrestamoDTO::getID,
+                        (p,v)->p.setID((Integer)v)
+                ),
+                new Column<>(
+                        "Usuario",
+                        PrestamoDTO::getUsuario,
+                        (p,v)->p.setUsuario((String) v)
+                ),
+                new Column<>(
+                        "Libro",
+                        PrestamoDTO::getLibro,
+                        (p,v)->p.setLibro((String) v)
+                ),
+                new Column<>(
+                        "Codigo",
+                        PrestamoDTO::getCodigo_Ejemplar,
+                        (p,v)->p.setCodigo_Ejemplar((String) v)
                 ),
                 new Column<>("Fecha Préstamo",
                         prestamo -> {
@@ -168,20 +186,8 @@ public class PanelPrestamo extends JPanel {
                         }
                 ),
                 new Column<>("Estado",
-                        prestamo -> prestamo.isEstado() ? "Activo" : "Devuelto",
-                        (p, v) -> p.setEstado("Activo".equals(v))
-                ),
-                new Column<>("ID Bibliotecario",
-                        Prestamo::getID_Bibliotecario,
-                        (p, v) -> p.setID_Bibliotecario((Integer) v)
-                ),
-                new Column<>("ID Usuario",
-                        Prestamo::getID_Usuario,
-                        (p, v) -> p.setID_Usuario((Integer) v)
-                ),
-                new Column<>("ID Ejemplar",
-                        Prestamo::getID_Ejemplar,
-                        (p, v) -> p.setID_Ejemplar((Integer) v)
+                        prestamo -> prestamo.isEstado() ? "Prestado" : "Devuelto",
+                        (p, v) -> p.setEstado("Prestado".equals(v))
                 ),
                 new Column<>("Acciones", p -> null, (p, v) -> {})
         );

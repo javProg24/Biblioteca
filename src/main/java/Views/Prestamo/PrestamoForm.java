@@ -2,10 +2,10 @@ package main.java.Views.Prestamo;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import main.java.Controllers.Operadores.Metodos.ControladorEjemplar;
-import main.java.Controllers.Operadores.Metodos.ControladorLibro;
 import main.java.Controllers.Operadores.Metodos.ControladorPrestamo;
 import main.java.Controllers.Operadores.Metodos.ControladorUsuario;
 import main.java.Models.Ejemplar;
+import main.java.Models.EjemplarDTO;
 import main.java.Models.Prestamo;
 import main.resources.Shared.Notification.NotificationComponent;
 import main.resources.Utils.ComponentFactory;
@@ -22,18 +22,19 @@ import java.util.List;
 public class PrestamoForm extends JDialog {
     private JTextField txtFechaPrestamo,
             txtFechaDevolucion;
-    private JCheckBox checkEstado;
+    private JComboBox<String> comboEstado_Libro,
+                            comboEstado_Prestamo;
     private JButton btnFechaDevolucion,
             btnFechaPrestamo;
-    private JPopupMenu popupCalendar;
     private final SimpleDateFormat dateFormat=new SimpleDateFormat("dd-MM-yyyy");
     private Runnable onPrestamoSaved;
     private boolean isEdit;
     private int ID_Ejemplar;
     private int ID_Prestamo;
-    private static boolean estaSeleccionado = false;
+    private static boolean estadoEjemplar = false;
+    private static boolean estadoPrestamo = false;
     private JComboBox<String> comboUsuarios;
-    public PrestamoForm (Frame parent, int ID_Prestamo, boolean isEdit,Runnable onPrestamoSaved){
+    public PrestamoForm (Frame parent, int ID_Prestamo, int ID_Ejemplar,boolean isEdit,Runnable onPrestamoSaved){
         super(parent,"Formulario de Prestamo",true);
         try {
             UIManager.setLookAndFeel(new FlatLightLaf());
@@ -43,6 +44,7 @@ public class PrestamoForm extends JDialog {
         this.onPrestamoSaved = onPrestamoSaved;
         this.isEdit=isEdit;
         this.ID_Prestamo=ID_Prestamo;
+        this.ID_Ejemplar=ID_Ejemplar;
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         initComponents();
         pack(); // Primero empaca el contenido
@@ -58,6 +60,7 @@ public class PrestamoForm extends JDialog {
             editarPrestamo();
         }
     }
+    // Crear prestamo
     public PrestamoForm(Frame parent, int ID_Ejemplar, Runnable onPrestamoSaved){
         super(parent,"Formulario de Prestamo",true);
         try {
@@ -91,10 +94,14 @@ public class PrestamoForm extends JDialog {
     private void editarPrestamo() {
         Prestamo prestamo = new Prestamo();
         prestamo.setID(ID_Prestamo);
+        Ejemplar ejemplar = new Ejemplar();
+        prestamo.setID(ID_Ejemplar);
         List<Map<String,Object>> datosPrestamo=ControladorPrestamo.obtenerPrestamoID(prestamo);
+        List<Map<String,Object>> datosEjemplar=ControladorEjemplar.obtenerEjemplarID(ejemplar);
         try {
             if (!datosPrestamo.isEmpty()){
                 Map<String,Object> prestamoData=datosPrestamo.get(0);
+                Map<String,Object> ejemplarData=datosEjemplar.get(0);
                 String campoPrestamo=String.valueOf(prestamoData.get("Fecha_Prestamo"));
                 String campoDevolucion=String.valueOf(prestamoData.get("Fecha_Devolucion"));
                 SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -103,8 +110,11 @@ public class PrestamoForm extends JDialog {
                 SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy");
                 txtFechaPrestamo.setText(outputFormat.format(fechaPrestamo));
                 txtFechaDevolucion.setText(outputFormat.format(fechaDevolucion));
-                boolean estado = Boolean.parseBoolean(String.valueOf(prestamoData.get("Estado")));
-                checkEstado.setSelected(estado);
+                boolean estadoPrestamo = Boolean.parseBoolean(String.valueOf(prestamoData.get("Estado")));
+                boolean estadoEjemplar= Boolean.parseBoolean(String.valueOf(ejemplarData.get("Estado")));
+//                checkEstado.setSelected(estado);
+                comboEstado_Prestamo.setSelectedItem(estadoPrestamo?"Prestado":"Devuelto");
+                comboEstado_Libro.setSelectedItem(estadoEjemplar?"Disponible":"Reservado");
                 int idUsuario = (int) prestamoData.get("ID_Usuario");
                 for (Map.Entry<String, Integer> entry : mapaNombreId.entrySet()) {
                     if (entry.getValue() == idUsuario) {
@@ -126,7 +136,6 @@ public class PrestamoForm extends JDialog {
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-
         // Fecha de Préstamo
         gbc.gridx = 0; gbc.gridy = 0;
         JLabel lblFechaPrestamo = ComponentFactory.crearEtiqueta("Fecha de Préstamo");
@@ -146,7 +155,6 @@ public class PrestamoForm extends JDialog {
         JDatePanelImpl datePanelPrestamo = createDatePanel(txtFechaPrestamo, popupPrestamo);
         popupPrestamo.add(datePanelPrestamo, BorderLayout.CENTER);
         btnFechaPrestamo.addActionListener(e -> toggleCalendar(popupPrestamo, btnFechaPrestamo));
-
         // Fecha de Devolución
         gbc.gridx = 0; gbc.gridy++;
         JLabel lblFechaDevolucion = ComponentFactory.crearEtiqueta("Fecha de Devolución");
@@ -166,14 +174,33 @@ public class PrestamoForm extends JDialog {
         JDatePanelImpl datePanelDevolucion = createDatePanel(txtFechaDevolucion, popupDevolucion);
         popupDevolucion.add(datePanelDevolucion, BorderLayout.CENTER);
         btnFechaDevolucion.addActionListener(e -> toggleCalendar(popupDevolucion, btnFechaDevolucion));
-        // Estado
+        // Estado del ejemplar
         gbc.gridx = 0; gbc.gridy++;
-        JLabel lblEstado = ComponentFactory.crearEtiqueta("Reservado: ");
+        JLabel lblEstado = ComponentFactory.crearEtiqueta("Estado del Ejemplar: ");
         panelCampos.add(lblEstado,gbc);
         gbc.gridx = 1;
-        checkEstado=new JCheckBox();
-        checkEstado.addItemListener(e -> estaSeleccionado=checkEstado.isSelected());
-        panelCampos.add(checkEstado,gbc);
+        comboEstado_Libro = new JComboBox<>();
+        comboEstado_Libro.removeAllItems();
+        comboEstado_Libro.addItem("--Seleccione--");
+        comboEstado_Libro.setSelectedIndex(0);
+        comboEstado_Libro.addItem("Disponible"); // Representa true
+        comboEstado_Libro.addItem("Reservado");  // Representa false
+        String seleccionado = (String) comboEstado_Libro.getSelectedItem();
+        estadoEjemplar = "Disponible".equals(seleccionado); // true si es Disponible, false si es Reservado
+        panelCampos.add(comboEstado_Libro,gbc);
+        // Combo Estado del Prestamo (Prestado - Devuelto)
+        gbc.gridx = 0; gbc.gridy++;
+        JLabel lblEstadoPrestamo = ComponentFactory.crearEtiqueta("Estado del Prestamo: ");
+        panelCampos.add(lblEstadoPrestamo,gbc);
+        gbc.gridx = 1;
+        comboEstado_Prestamo=new JComboBox<>();
+        comboEstado_Prestamo.removeAllItems();
+        comboEstado_Prestamo.addItem("--Seleccione--");
+        comboEstado_Prestamo.setSelectedIndex(0);
+        comboEstado_Prestamo.addItem("Prestado");
+        comboEstado_Prestamo.addItem("Devuelto");
+        String selecEstPres=(String) comboEstado_Prestamo.getSelectedItem();
+        estadoPrestamo="Reservado".equals(selecEstPres);
         //Combo de Usuarios
         gbc.gridx = 0; gbc.gridy++;
         JLabel lblUsuarios = ComponentFactory.crearEtiqueta("Usuarios: ");
@@ -246,7 +273,7 @@ public class PrestamoForm extends JDialog {
         if (valido){
             Ejemplar ejemplar = new Ejemplar();
             ejemplar.setID(ID_Ejemplar);
-            ejemplar.setEstado(true);
+            ejemplar.setEstado(estadoEjemplar);
             boolean editado = ControladorEjemplar.actualizarEstadoEjemplar(ejemplar);
             if(editado){
                 System.out.println("Editado");
@@ -279,18 +306,15 @@ public class PrestamoForm extends JDialog {
         txtFechaPrestamo.setText("");
         txtFechaDevolucion.setText("");
         comboUsuarios.setSelectedIndex(0);
-        checkEstado.setSelected(false);
-//        comboUsuarios
-//        checkEstado
+        comboEstado_Libro.setSelectedIndex(0);
     }
 
     private Prestamo crearPrestamo(){
         Prestamo prestamo = new Prestamo();
         prestamo.setID(isEdit?ID_Prestamo:0);
         String campoPrestamo=txtFechaPrestamo.getText().trim();
-        String campoDevolucion=isEdit?txtFechaDevolucion.getText().trim():null;
+        String campoDevolucion=txtFechaDevolucion.getText().trim();
         if (campoPrestamo.isEmpty()) {
-            assert campoDevolucion != null;
             if (campoDevolucion.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Debe seleccionar una fecha de Prestamo y fecha de Devolucion", "Error", JOptionPane.ERROR_MESSAGE);
                 return null;
@@ -305,7 +329,7 @@ public class PrestamoForm extends JDialog {
             JOptionPane.showMessageDialog(this, "Formato de fecha inválido. Debe ser dd-MM-yyyy", "Error", JOptionPane.ERROR_MESSAGE);
             return null;
         }
-        prestamo.setEstado(estaSeleccionado);
+        prestamo.setEstado(estadoEjemplar);
         prestamo.setID_Usuario(idUsuario);
         prestamo.setID_Ejemplar(ID_Ejemplar);
         return prestamo;

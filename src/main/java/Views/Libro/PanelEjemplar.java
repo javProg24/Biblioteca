@@ -156,9 +156,6 @@ public class PanelEjemplar extends JPanel {
     private void cargarDatosEjemplares(){
         filtrarEjemplares();
     }
-    private void cargarTodosEjemplares(){
-        filtrarEjemplares();
-    }
 
     private static TableComponent<EjemplarDTO> getEjemplarTableComponent() {
         List<Column<EjemplarDTO>> columns = List.of(
