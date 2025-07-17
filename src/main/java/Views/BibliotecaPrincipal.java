@@ -19,7 +19,7 @@ public class BibliotecaPrincipal extends JFrame {
     private final JPanel botonesPanel;
     private final JPanel logoutPanel;
     private final JPanel panelDashboard;
-    private String nombreUsuario;
+    private String nombreUsuario; // nombre usuasrio
 
 
 

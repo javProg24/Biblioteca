@@ -88,7 +88,7 @@ public class LoginPrincipal extends JFrame {
                     if(usuario != null) {
                         nombreUsuario = usuario.toString();
                     }
-                    // Si no se encuentra en la respuesta, mantener el nombre ingresado
+                    // Si no se encuentra en la respuesta, mantener el nombre
                 }
             }
 
