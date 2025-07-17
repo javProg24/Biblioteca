@@ -93,6 +93,7 @@ public class PanelEjemplar extends JPanel {
             private int id=0;
             @Override
             public void onEdit(int row) {
+                // hola
                 EjemplarDTO ejemplarSeleccionado=modelEjemplar.getRow(row);
                 this.id=ejemplarSeleccionado.getID_Libro();
                 Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(PanelEjemplar.this);
