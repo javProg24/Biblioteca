@@ -1,5 +1,6 @@
 package main.java.Controllers.Operadores.Metodos;
 
+import main.java.Controllers.Operadores.Enums.E_CODIGO_SP;
 import main.java.Controllers.Operadores.Enums.E_PARAMETRO;
 import main.java.Controllers.Operadores.Enums.E_ROL;
 import main.java.Models.Entidad;
@@ -12,8 +13,9 @@ public class ControladorEjemplar {
     public static <T extends Entidad> boolean crearEjemplar(T entidad) {
         return ControladorGeneral.crearEntidad(entidad, E_ROL._EJEMPLAR);
     }
-    public static <T extends Entidad> boolean actualizarEjemplar(T entidad) {
-        return ControladorGeneral.actualizarEntidad(entidad, E_ROL._EJEMPLAR);
+    public static <T extends Entidad> boolean actualizarEstadoEjemplar(T entidad) {
+        //Object spNombre= E_ROL._EJEMPLAR.name() + E_PARAMETRO._ESTADO.name();
+        return ControladorGeneral.actualizarEntidadParametro(entidad, E_ROL._EJEMPLAR,E_PARAMETRO._ESTADO);
     }
     public static <T extends Entidad> boolean eliminarEjemplar(T entidad) {
         List<String> parametro = List.of(id);

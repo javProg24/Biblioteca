@@ -84,7 +84,13 @@ public class ControladorGeneral {
      * @return Una lista de mapas donde cada mapa representa una fila del resultado,
      *         con las claves como nombres de columnas y los valores como datos correspondientes.
      */
-    protected static <T extends Entidad>List<Map<String,Object>> obtenerEntidadParametro(T entidad, E_ROL rol, E_PARAMETRO parametro,List<String>atributos) {
+    protected static <T extends Entidad>List<Map<String,Object>> obtenerEntidadParametro
+    (
+            T entidad,
+            E_ROL rol,
+            E_PARAMETRO parametro,
+            List<String>atributos
+    ) {
         //lista=propiedadesEntidad.listarPropiedad(entidad,nombre);
         //lista= PropiedadesCreator.listarPropiedad(entidad, nombre);
         Map<Integer,Object> lista = propiedadesEntidad.listarPropiedades(entidad, atributos);
@@ -105,6 +111,16 @@ public class ControladorGeneral {
         //lista= PropiedadesCreator.crearPropiedades(entidad);
         Map<Integer,Object> lista = propiedadesEntidad.crearPropiedades(entidad);
         String procedimiento=cadenaSP.crearCadenaCompleta(E_CODIGO_SP.SP_ACTUALIZAR,rol);
+        return accesoDb.ActualizarEntidad(procedimiento,lista);
+    }
+    protected static <T extends Entidad> boolean actualizarEntidadParametro(
+            T entidad,
+            E_ROL rol,
+            E_PARAMETRO parametro
+    ){
+        Map<Integer,Object> lista = propiedadesEntidad.crearPropiedades(entidad);
+        String spNombre = E_CODIGO_SP.SP_OBTENER + parametro.name(); // Nombre del procedimiento almacenado
+        String procedimiento = spNombre + rol.name();
         return accesoDb.ActualizarEntidad(procedimiento,lista);
     }
     /**

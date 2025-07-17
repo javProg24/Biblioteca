@@ -147,6 +147,7 @@ AS
 	ID_Bibliotecario=@ID_Bibliotecario,
 	ID_Usuario=@ID_Usuario,
 	ID_Ejemplar=@ID_Ejemplar;
+	WHERE ID=@ID;
 GO
 
 CREATE PROCEDURE SP_ELIMINAR_PRESTAMO
@@ -237,4 +238,35 @@ create procedure SP_OBTENER_TITULO_LIBRO
 	@Titulo varchar(50)
 as
 	select ID,ISBN,Titulo,Anio_Publicacion,Autor,Categoria FROM Libro WHERE Titulo=@Titulo;
+go
+
+GO
+CREATE PROCEDURE SP_ACTUALIZAR_ESTADO_EJEMPLAR
+	@ID int,
+	@Estado bit
+AS
+	UPDATE Ejemplar SET
+	Estado=@Estado
+	WHERE ID=@ID;
+go
+
+go
+create procedure SP_OBTENER_ID_PRESTAMO
+	@ID int
+as
+	SELECT
+		U.ID AS ID_Usuario,
+		U.Nombre + ' ' + U.Apellido AS Usuario,
+		E.ID AS ID_Ejemplar,
+		E.Codigo_Interno AS Codigo_Ejemplar,
+		L.ID as ID_Libro,
+		L.Titulo AS Libro,
+		P.Fecha_Prestamo,
+		P.Fecha_Devolucion,
+		P.Estado
+	FROM Prestamo P
+	INNER JOIN Usuario U ON P.ID_Usuario = U.ID
+	INNER JOIN Ejemplar E ON P.ID_Ejemplar = E.ID
+	INNER JOIN Libro L ON E.ID_Libro = L.ID
+	WHERE p.ID=@ID;
 go

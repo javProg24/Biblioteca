@@ -13,7 +13,6 @@ public class Prestamo implements Entidad{
     private Date FechaPrestamo;
     private Date FechaDevolucion;
     private boolean Estado;
-    private int ID_Bibliotecario;
     private int ID_Usuario;
     private int ID_Ejemplar;
 //    public Prestamo() {

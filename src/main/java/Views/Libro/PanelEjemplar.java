@@ -3,11 +3,8 @@ package main.java.Views.Libro;
 import com.formdev.flatlaf.FlatLightLaf;
 import main.java.Controllers.Operadores.Metodos.ControladorEjemplar;
 import main.java.Controllers.Operadores.Metodos.ControladorLibro;
-import main.java.Models.Ejemplar;
 import main.java.Models.EjemplarDTO;
-import main.java.Models.Libro;
 import main.java.Views.Prestamo.PrestamoForm;
-import main.java.Views.Usuario.PanelUsuario;
 import main.resources.Shared.Table.*;
 import main.resources.Utils.Column;
 import main.resources.Utils.ComponentFactory;
@@ -21,7 +18,7 @@ import java.util.Map;
 
 public class PanelEjemplar extends JPanel {
     private TableComponent<EjemplarDTO> modelEjemplar;
-    JComboBox<String> comboBox;
+    JComboBox<String> comboTitulos;
     JComboBox<String> comboEstado;
     public PanelEjemplar(){
         try {
@@ -29,17 +26,11 @@ public class PanelEjemplar extends JPanel {
         }catch (Exception e){
             e.printStackTrace();
         }
-        comboBox = new JComboBox<>();
-        comboBox.setBounds(50, 30, 180, 25);
-        comboEstado = new JComboBox<>(new String[]{"-- Estado --", "Disponible", "No disponible"});
-        comboEstado.setBounds(250, 30, 180, 25);
+
         setLayout(new BorderLayout());
         setBackground(ComponentFactory.COLOR_FONDO);
         setBorder(BorderFactory.createTitledBorder("Gestion"));
         initComponents();
-
-        comboBox.addActionListener(e -> filtrarEjemplares());
-        comboEstado.addActionListener(e -> filtrarEjemplares());
 
         addAncestorListener(new AncestorListener() {
             @Override
@@ -53,19 +44,25 @@ public class PanelEjemplar extends JPanel {
     }
 
     private void initComponents() {
+        comboTitulos = new JComboBox<>();
+        comboTitulos.setBounds(50, 30, 180, 25);
+        comboEstado = new JComboBox<>(new String[]{"-- Estado --", "Disponible", "No disponible"});
+        comboEstado.setBounds(250, 30, 180, 25);
+        comboTitulos.addActionListener(e -> filtrarEjemplares());
+        comboEstado.addActionListener(e -> filtrarEjemplares());
         add(panelSuperior(),BorderLayout.NORTH);
         add(panelTabla(),BorderLayout.CENTER);
 //        obtenerTitulosLibros();
     }
 
     private JPanel panelSuperior() {
-        JPanel panel = new JPanel();
+        JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(ComponentFactory.COLOR_FONDO);
         JPanel panelIzquierdo = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         panelIzquierdo.setBackground(ComponentFactory.COLOR_FONDO);
         JLabel lblTitulo = ComponentFactory.crearEtiqueta("Titulo: ");
         panelIzquierdo.add(lblTitulo);
-        panelIzquierdo.add(comboBox);
+        panelIzquierdo.add(comboTitulos);
         JLabel lblEstado = ComponentFactory.crearEtiqueta("Estado: ");
         panelIzquierdo.add(lblEstado);
         panelIzquierdo.add(comboEstado);
@@ -73,7 +70,7 @@ public class PanelEjemplar extends JPanel {
         gbcIzq.gridx = 0;
         gbcIzq.gridy = 0;
         gbcIzq.weightx = 1.0;
-        gbcIzq.anchor = GridBagConstraints.WEST;
+        gbcIzq.anchor = GridBagConstraints.EAST;
         gbcIzq.insets = new Insets(10, 10, 10, 10);
         panel.add(panelIzquierdo,gbcIzq);
         return panel;
@@ -90,14 +87,14 @@ public class PanelEjemplar extends JPanel {
         JScrollPane scrollPane = TableFactory.wrapWithRoundedBorder(tabla);
         cargarDatosEjemplares();
         TableActionEvent actionEvent = new TableActionEvent() {
-            private int id=0;
+            private int ID_Ejemplar =0;
             @Override
             public void onEdit(int row) {
                 // hola
                 EjemplarDTO ejemplarSeleccionado=modelEjemplar.getRow(row);
-                this.id=ejemplarSeleccionado.getID_Libro();
+                this.ID_Ejemplar =ejemplarSeleccionado.getID();
                 Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(PanelEjemplar.this);
-                PrestamoForm dialog=new PrestamoForm(parentFrame,()->cargarDatosEjemplares());
+                PrestamoForm dialog=new PrestamoForm(parentFrame, ID_Ejemplar,()->cargarDatosEjemplares());
                 dialog.setVisible(true);
             }
 
@@ -119,24 +116,24 @@ public class PanelEjemplar extends JPanel {
     private void obtenerTitulosLibros(){
         List<Map<String, Object>> datosTitulo = ControladorLibro.obtenerLibros();
 
-        comboBox.removeAllItems(); // Limpia si ya tenía datos
-        comboBox.addItem("-- Selecciona un libro --"); // Opción por defecto
+        comboTitulos.removeAllItems(); // Limpia si ya tenía datos
+        comboTitulos.addItem("-- Selecciona un libro --"); // Opción por defecto
 
         for (Map<String, Object> fila : datosTitulo) {
             String titulo = (String) fila.get("Titulo"); // Asegúrate que la clave es exacta
             if (titulo != null) {
-                comboBox.addItem(titulo); // Añade solo el título al combo
+                comboTitulos.addItem(titulo); // Añade solo el título al combo
             }
         }
-        comboBox.setSelectedIndex(0); // No seleccionado
+        comboTitulos.setSelectedIndex(0); // No seleccionado
     }
     private void filtrarEjemplares() {
-        String libroSeleccionado = (String) comboBox.getSelectedItem();
+        String libroSeleccionado = (String) comboTitulos.getSelectedItem();
         String estadoSeleccionado = (String) comboEstado.getSelectedItem();
         List<Map<String,Object>> datosEjemplares = ControladorEjemplar.obtenerEjemplares();
         List<EjemplarDTO> ejemplares = datosEjemplares.stream()
                 .filter(row -> {
-                    boolean libroOk = comboBox.getSelectedIndex() == 0
+                    boolean libroOk = comboTitulos.getSelectedIndex() == 0
                             || (libroSeleccionado != null && libroSeleccionado.equals(row.get("Nombre_Libro")));
                     boolean estadoOk = comboEstado.getSelectedIndex() == 0
                             || ("Disponible".equals(estadoSeleccionado) && !(boolean)row.get("Estado"))
