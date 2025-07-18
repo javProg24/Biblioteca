@@ -5,7 +5,6 @@ import main.java.Controllers.Operadores.Metodos.ControladorEjemplar;
 import main.java.Controllers.Operadores.Metodos.ControladorPrestamo;
 import main.java.Controllers.Operadores.Metodos.ControladorUsuario;
 import main.java.Models.Ejemplar;
-import main.java.Models.EjemplarDTO;
 import main.java.Models.Prestamo;
 import main.resources.Shared.Notification.NotificationComponent;
 import main.resources.Utils.ComponentFactory;

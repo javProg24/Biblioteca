@@ -2,7 +2,9 @@ package main.java.Views.Libro;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import main.java.Controllers.Operadores.Enums.E_ROL;
+import main.java.Controllers.Operadores.Metodos.ControladorEjemplar;
 import main.java.Controllers.Operadores.Metodos.ControladorLibro;
+import main.java.Controllers.Operadores.Metodos.ControladorUsuario;
 import main.java.Models.Libro;
 import main.resources.Shared.Dialog.DialogComponent;
 import main.resources.Shared.Notification.NotificationComponent;
@@ -13,6 +15,8 @@ import main.resources.Utils.ComponentFactory;
 import javax.swing.*;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +24,7 @@ import java.util.Map;
 public class PanelLibro extends JPanel {
 
     private TableComponent<Libro> modelLibro;
+    private JTextField txtTitulo;
 
     public PanelLibro() {
         try {
@@ -35,6 +40,7 @@ public class PanelLibro extends JPanel {
             @Override
             public void ancestorAdded(AncestorEvent event) {
                 cargarDatosLibros();
+                filtrarLibro();
             }
             @Override public void ancestorRemoved(AncestorEvent event) {}
             @Override public void ancestorMoved(AncestorEvent event) {}
@@ -54,11 +60,26 @@ public class PanelLibro extends JPanel {
         panelIzquierdo.setBackground(ComponentFactory.COLOR_FONDO);
 
         JLabel lblTitulo = ComponentFactory.crearEtiqueta("Título:");
-        JTextField txtTitulo = ComponentFactory.crearCampoTexto();
+        txtTitulo = ComponentFactory.crearCampoTexto();
         txtTitulo.setColumns(20);
         panelIzquierdo.add(lblTitulo);
         panelIzquierdo.add(txtTitulo);
+        //txtTitulo.addActionListener(e ->filtrarLibro() );
+        txtTitulo.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                filtrarLibro();
+            }
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                filtrarLibro();
+            }
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                filtrarLibro();
 
+            }
+        });
         JPanel panelDerecho = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         panelDerecho.setBackground(ComponentFactory.COLOR_FONDO);
 
@@ -70,7 +91,7 @@ public class PanelLibro extends JPanel {
         panelDerecho.add(btnAgregar);
 //        panelDerecho.add(btnEjemplares);
 
-        btnConsultar.addActionListener(e -> cargarDatosLibros()); // O filtrado en futuro
+        btnConsultar.addActionListener(e -> {}); // O filtrado en futuro
         btnAgregar.addActionListener(e -> {
             Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(PanelLibro.this);
             LibroForm dialog = new LibroForm(parentFrame, this::cargarDatosLibros);
@@ -96,31 +117,97 @@ public class PanelLibro extends JPanel {
 
         return panel;
     }
-    public void cargarDatosLibros() {
-        List<Map<String, Object>> datosLibros = ControladorLibro.obtenerLibros();
-        List<Libro> libros = datosLibros.stream().map(row -> {
-            Integer id = (Integer) row.get("ID");
-            String titulo = (String) row.get("Titulo");
-            String autor = (String) row.get("Autor");
-            Integer anio = (Integer) row.get("Anio_Publicacion");
-            String categoria = (String) row.get("Categoria");
+    private void filtrarLibro() {
+        String libroSeleccionado = txtTitulo.getText().trim();
+        List<Map<String, Object>> datosLibro = ControladorLibro.obtenerLibros();
 
-            Number isbnNumber = (Number) row.get("ISBN");
-            int isbn = (isbnNumber != null) ? isbnNumber.intValue() : 0;
+        List<Libro> libros = datosLibro.stream()
+                .filter(row -> {
+                    String nombreLibro = (String) row.get("Titulo");
 
-            return Libro.builder()
-                    .ID(id != null ? id : 0)
-                    .Titulo(titulo != null ? titulo : "")
-                    .Autor(autor != null ? autor : "")
-                    .Anio_Publicacion(anio != null ? anio : 0)
-                    .Categoria(categoria != null ? categoria : "")
-                    .ISBN(isbn)
-                    .build();
-        }).toList();
+                    // Si el campo está vacío, mostrar todo
+                    if (libroSeleccionado.isEmpty()) return true;
+
+                    // Filtrar por coincidencias parciales (tipo buscador moderno)
+                    return nombreLibro != null &&
+                            nombreLibro.toLowerCase().contains(libroSeleccionado.toLowerCase());
+                })
+                .map(row -> {
+                    Libro libro = new Libro();
+                    libro.setID((Integer) row.get("ID"));
+                    libro.setISBN((Integer) row.get("ISBN"));
+                    libro.setTitulo((String) row.get("Titulo"));
+                    libro.setAnio_Publicacion((Integer) row.get("Anio_Publicacion"));
+                    libro.setAutor((String) row.get("Autor"));
+                    libro.setCategoria((String) row.get("Categoria"));
+                    return libro;
+                })
+                .toList();
 
         modelLibro.clearRows();
-        //modelLibro.fireTableDataChanged();
         modelLibro.addRows(libros);
+    }
+
+
+//    private void filtrarLibro() {
+//        String libroSeleccionado = txtTitulo.getText();
+//        if(libroSeleccionado.isEmpty()){
+//            cargarDatosLibros();
+//            return;
+//        }
+//        Libro libro = new Libro();
+//        libro.setTitulo(libroSeleccionado);
+//        List<Map<String, Object>> datosLibro = ControladorLibro.obtenerLibroTitulo(libro);
+//        List<Libro>libroFiltrado=datosLibro.stream()
+//                        .map(row->{
+//                            Integer id = (Integer) row.get("ID");
+//                            String titulo = (String) row.get("Titulo");
+//                            String autor = (String) row.get("Autor");
+//                            Integer anio = (Integer) row.get("Anio_Publicacion");
+//                            String categoria = (String) row.get("Categoria");
+//
+//                            Number isbnNumber = (Number) row.get("ISBN");
+//                            int isbn = (isbnNumber != null) ? isbnNumber.intValue() : 0;
+//
+//                            return Libro.builder()
+//                                    .ID(id != null ? id : 0)
+//                                    .Titulo(titulo != null ? titulo : "")
+//                                    .Autor(autor != null ? autor : "")
+//                                    .Anio_Publicacion(anio != null ? anio : 0)
+//                                    .Categoria(categoria != null ? categoria : "")
+//                                    .ISBN(isbn)
+//                                    .build();
+//                        }).toList();
+//        modelLibro.clearRows();
+//        modelLibro.addRows(libroFiltrado);
+//    }
+
+    public void cargarDatosLibros() {
+        filtrarLibro();
+//        List<Map<String, Object>> datosLibros = ControladorLibro.obtenerLibros();
+//        List<Libro> libros = datosLibros.stream().map(row -> {
+//            Integer id = (Integer) row.get("ID");
+//            String titulo = (String) row.get("Titulo");
+//            String autor = (String) row.get("Autor");
+//            Integer anio = (Integer) row.get("Anio_Publicacion");
+//            String categoria = (String) row.get("Categoria");
+//
+//            Number isbnNumber = (Number) row.get("ISBN");
+//            int isbn = (isbnNumber != null) ? isbnNumber.intValue() : 0;
+//
+//            return Libro.builder()
+//                    .ID(id != null ? id : 0)
+//                    .Titulo(titulo != null ? titulo : "")
+//                    .Autor(autor != null ? autor : "")
+//                    .Anio_Publicacion(anio != null ? anio : 0)
+//                    .Categoria(categoria != null ? categoria : "")
+//                    .ISBN(isbn)
+//                    .build();
+//        }).toList();
+//
+//        modelLibro.clearRows();
+//        //modelLibro.fireTableDataChanged();
+//        modelLibro.addRows(libros);
     }
 
     private JPanel panelTabla() {
