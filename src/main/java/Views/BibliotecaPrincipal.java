@@ -21,8 +21,6 @@ public class BibliotecaPrincipal extends JFrame {
     private final JPanel panelDashboard;
     private String nombreUsuario; // nombre usuasrio
 
-
-
     public BibliotecaPrincipal(String nombreUsuario){
         this.nombreUsuario = nombreUsuario;
         try{
@@ -94,8 +92,8 @@ public class BibliotecaPrincipal extends JFrame {
         JButton btnDashboard = ComponentFactory.crearBoton("Dashboard", ComponentFactory.ruta("menu-dashboard"));
         JButton btnLibros = ComponentFactory.crearBoton("Libros", ComponentFactory.ruta("menu-books"));
         JButton btnUsuarios = ComponentFactory.crearBoton("Usuarios", ComponentFactory.ruta("menu-users"));
-        JButton btnCopias = ComponentFactory.crearBoton("Gestion",ComponentFactory.ruta("ejemplo"));
-        JButton btnPrestamos = ComponentFactory.crearBoton("Préstamos", ComponentFactory.ruta("menu-loans"));
+        JButton btnCopias = ComponentFactory.crearBoton("Prestamos",ComponentFactory.ruta("menu-loans"));
+        JButton btnPrestamos = ComponentFactory.crearBoton("Inventario", ComponentFactory.ruta("ejemplo"));
         // Agregar botones con espaciado
         botonesPanel.add(Box.createVerticalStrut(10));
         botonesPanel.add(btnDashboard);
@@ -113,7 +111,7 @@ public class BibliotecaPrincipal extends JFrame {
         btnLibros.addActionListener(e -> cardLayout.show(panelPrincipal, "Libros"));
         btnUsuarios.addActionListener(e -> cardLayout.show(panelPrincipal, "Usuarios"));
         btnPrestamos.addActionListener(e -> cardLayout.show(panelPrincipal, "Prestamos"));
-        btnCopias.addActionListener(e->cardLayout.show(panelPrincipal,"Ejemplares"));
+        btnCopias.addActionListener(e->cardLayout.show(panelPrincipal,"Inventario"));
     }
     private void initLogoutPanel(){
         // Botón cerrar sesión en panel separado
@@ -146,10 +144,10 @@ public class BibliotecaPrincipal extends JFrame {
         PanelPrestamo panelPrestamos = new PanelPrestamo();
         panelPrincipal.add(panelPrestamos, "Prestamos");
         PanelEjemplar panelEjemplar = new PanelEjemplar();
-        panelPrincipal.add(panelEjemplar,"Ejemplares");
+        panelPrincipal.add(panelEjemplar,"Inventario");
     }
 
-//    public static void main(String[] args) {
-//        SwingUtilities.invokeLater(()->new BibliotecaPrincipal().setVisible(true));
-//    }
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(()->new BibliotecaPrincipal("hola").setVisible(true));
+    }
 }
