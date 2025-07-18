@@ -28,7 +28,7 @@ GO
 CREATE TABLE [Ejemplar] (
   [ID] int PRIMARY KEY NOT NULL IDENTITY(1, 1),
   [Codigo_Interno] nvarchar(255) NOT NULL,
-  [Estado] bool NOT NULL,
+  [Estado] bit NOT NULL,
   [ID_Libro] int NOT NULL
 )
 GO
@@ -37,7 +37,7 @@ CREATE TABLE [Prestamo] (
   [ID] int PRIMARY KEY NOT NULL IDENTITY(1, 1),
   [Fecha_Prestamo] date NOT NULL,
   [Fecha_Devolucion] date NOT NULL,
-  [Estado] bool NOT NULL,
+  [Estado] bit NOT NULL,
   [ID_Bibliotecario] int NOT NULL,
   [ID_Usuario] int NOT NULL,
   [ID_Ejemplar] int NOT NULL
