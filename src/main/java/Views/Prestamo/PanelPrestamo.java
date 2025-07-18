@@ -1,9 +1,11 @@
 package main.java.Views.Prestamo;
 
+import main.java.Controllers.Operadores.Enums.E_ROL;
 import main.java.Controllers.Operadores.Metodos.ControladorPrestamo;
-import main.java.Models.EjemplarDTO;
 import main.java.Models.Prestamo;
 import main.java.Models.PrestamoDTO;
+import main.resources.Shared.Dialog.DialogComponent;
+import main.resources.Shared.Notification.NotificationComponent;
 import main.resources.Shared.Table.*;
 import main.resources.Utils.Column;
 import main.resources.Utils.ComponentFactory;
@@ -115,17 +117,17 @@ public class PanelPrestamo extends JPanel {
         JScrollPane scrollPane = TableFactory.wrapWithRoundedBorder(tabla);
 
         TableActionEvent actionEvent = new TableActionEvent() {
-            private int Prestamo = 0;
+            private int ID_Prestamo = 0;
             private int Ejemplar = 0;
             @Override
             public void onEdit(int row) {
                 PrestamoDTO prestamoSeleccionado=tablaComponent.getRow(row);
-                this.Prestamo=prestamoSeleccionado.getID();
+                this.ID_Prestamo =prestamoSeleccionado.getID();
                 this.Ejemplar=prestamoSeleccionado.getID_Ejemplar();
                 Frame parent = (Frame) SwingUtilities.getWindowAncestor(PanelPrestamo.this);
                 PrestamoForm dialog = new PrestamoForm(
                         parent,
-                        Prestamo,
+                        ID_Prestamo,
                         Ejemplar,true,
                         ()->cargarPrestamos()
                 );
@@ -134,7 +136,28 @@ public class PanelPrestamo extends JPanel {
 
             @Override
             public void onDelete(int row) {
-                System.out.println("Eliminar fila: " + row);
+                PrestamoDTO prestamoSeleccionado=tablaComponent.getRow(row);
+                this.ID_Prestamo =prestamoSeleccionado.getID();
+                Frame parent = (Frame) SwingUtilities.getWindowAncestor(PanelPrestamo.this);
+                DialogComponent ventana=new DialogComponent(
+                        parent,
+                        E_ROL._PRESTAMO,
+                        ()->{
+                            Prestamo prestamo=new Prestamo();
+                            prestamo.setID(ID_Prestamo);
+                            boolean eliminado=ControladorPrestamo.eliminarPrestamo(prestamo);
+                            NotificationComponent notification;
+                            if(eliminado){
+                                notification=new NotificationComponent(parent,NotificationComponent.Type.EXITO,NotificationComponent.Location.TOP_RIGHT,"Prestamo eliminado");
+                                cargarPrestamos();
+                            }else {
+                                notification=new NotificationComponent(parent,NotificationComponent.Type.EXITO,NotificationComponent.Location.TOP_RIGHT,"Prestamo eliminado");
+                            }
+                            notification.showNotification();
+                        }
+                );
+                ventana.setVisible(true);
+//                System.out.println("Eliminar fila: " + row);
             }
         };
 
