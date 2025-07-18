@@ -110,7 +110,7 @@ public class PanelEjemplar extends JPanel {
         };
         int colAcciones=tabla.getColumnCount()-1;
         tabla.getColumnModel().getColumn(colAcciones).setCellRenderer(new TableActionCellRenderer(actionEvent));
-        tabla.getColumnModel().getColumn(colAcciones).setCellEditor(new TableActionCellEditor(actionEvent));
+        tabla.getColumnModel().getColumn(colAcciones).setCellEditor(new TableActionCellEditor(actionEvent,3));
         tabla.setRowHeight(40);
         //modelUsuario.addRows(usuarios);
         panel.add(scrollPane, BorderLayout.CENTER);
