@@ -56,6 +56,7 @@ public class PrestamoForm extends JDialog {
         //obtener el ID del usuario cuando seleccione la fila en la tabla de prestamo
         // con el ID del usuario se seleccione automáticamente en el comboUsuarios
         if(isEdit){
+            obtenerNombresUsuarios();
             editarPrestamo();
         }
     }
@@ -112,8 +113,8 @@ public class PrestamoForm extends JDialog {
                 boolean estadoPrestamo = Boolean.parseBoolean(String.valueOf(prestamoData.get("Estado")));
                 boolean estadoEjemplar= Boolean.parseBoolean(String.valueOf(ejemplarData.get("Estado")));
 //                checkEstado.setSelected(estado);
-                comboEstado_Prestamo.setSelectedItem(estadoPrestamo?"Prestado":"Devuelto");
                 comboEstado_Libro.setSelectedItem(estadoEjemplar ? "No disponible" : "Disponible");
+                comboEstado_Prestamo.setSelectedItem(estadoPrestamo?"Prestado":"Devuelto");
                 int idUsuario = (int) prestamoData.get("ID_Usuario");
                 for (Map.Entry<String, Integer> entry : mapaNombreId.entrySet()) {
                     if (entry.getValue() == idUsuario) {

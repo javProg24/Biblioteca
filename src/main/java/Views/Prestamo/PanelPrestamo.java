@@ -2,6 +2,7 @@ package main.java.Views.Prestamo;
 
 import main.java.Controllers.Operadores.Metodos.ControladorPrestamo;
 import main.java.Models.EjemplarDTO;
+import main.java.Models.Prestamo;
 import main.java.Models.PrestamoDTO;
 import main.resources.Shared.Table.*;
 import main.resources.Utils.Column;
@@ -114,9 +115,21 @@ public class PanelPrestamo extends JPanel {
         JScrollPane scrollPane = TableFactory.wrapWithRoundedBorder(tabla);
 
         TableActionEvent actionEvent = new TableActionEvent() {
+            private int Prestamo = 0;
+            private int Ejemplar = 0;
             @Override
             public void onEdit(int row) {
-                System.out.println("Editar fila: " + row);
+                PrestamoDTO prestamoSeleccionado=tablaComponent.getRow(row);
+                this.Prestamo=prestamoSeleccionado.getID();
+                this.Ejemplar=prestamoSeleccionado.getID_Ejemplar();
+                Frame parent = (Frame) SwingUtilities.getWindowAncestor(PanelPrestamo.this);
+                PrestamoForm dialog = new PrestamoForm(
+                        parent,
+                        Prestamo,
+                        Ejemplar,true,
+                        ()->cargarPrestamos()
+                );
+                dialog.setVisible(true);
             }
 
             @Override
@@ -223,6 +236,7 @@ public class PanelPrestamo extends JPanel {
                     p.setID((Integer)row.get("ID"));
                     p.setUsuario((String) row.get("Usuario"));
                     p.setLibro((String) row.get("Libro"));
+                    p.setID_Ejemplar((Integer)row.get("ID_Ejemplar"));
                     p.setCodigo_Ejemplar((String) row.get("Codigo_Ejemplar"));
                     p.setFechaPrestamo((Date) row.get("Fecha_Prestamo"));
                     p.setFechaDevolucion((Date) row.get("Fecha_Devolucion"));

@@ -15,5 +15,6 @@ public class PrestamoDTO {
     private Date FechaPrestamo;
     private Date FechaDevolucion;
     private String Codigo_Ejemplar;
+    private int ID_Ejemplar;
     private boolean Estado;
 }
