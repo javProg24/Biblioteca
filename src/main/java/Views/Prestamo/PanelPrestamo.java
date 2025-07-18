@@ -118,17 +118,16 @@ public class PanelPrestamo extends JPanel {
 
         TableActionEvent actionEvent = new TableActionEvent() {
             private int ID_Prestamo = 0;
-            private int Ejemplar = 0;
             @Override
             public void onEdit(int row) {
                 PrestamoDTO prestamoSeleccionado=tablaComponent.getRow(row);
                 this.ID_Prestamo =prestamoSeleccionado.getID();
-                this.Ejemplar=prestamoSeleccionado.getID_Ejemplar();
+                int ejemplar = prestamoSeleccionado.getID_Ejemplar();
                 Frame parent = (Frame) SwingUtilities.getWindowAncestor(PanelPrestamo.this);
                 PrestamoForm dialog = new PrestamoForm(
                         parent,
                         ID_Prestamo,
-                        Ejemplar,true,
+                        ejemplar,true,
                         ()->cargarPrestamos()
                 );
                 dialog.setVisible(true);
