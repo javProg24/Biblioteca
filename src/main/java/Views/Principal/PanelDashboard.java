@@ -20,28 +20,28 @@ import java.util.Map;
 
 public class PanelDashboard extends JPanel {
     private TableComponent<PrestamoDTO> tablaComponent;
+    private JPanel panelResumen; // 🔹 Se agrega la variable
 
     public PanelDashboard() {
         setLayout(new BorderLayout());
         setBackground(ComponentFactory.COLOR_FONDO);
 
-        add(panelResumen(), BorderLayout.NORTH);   // 🔹 Agregado
-        add(panelTabla(), BorderLayout.CENTER);    // 🟦 Ya existente
+        panelResumen = panelResumen();                 // 🟦 Se inicializa
+        add(panelResumen, BorderLayout.NORTH);         // 🔹 Se agrega el inicial
+        add(panelTabla(), BorderLayout.CENTER);        // 🟦 Tabla existente
+
         addAncestorListener(new AncestorListener() {
             @Override
             public void ancestorAdded(AncestorEvent event) {
+                actualizarResumen();                   // 🔄 Al entrar al panel
                 cargarPrestamosPrestados();
             }
 
             @Override
-            public void ancestorRemoved(AncestorEvent event) {
-
-            }
+            public void ancestorRemoved(AncestorEvent event) {}
 
             @Override
-            public void ancestorMoved(AncestorEvent event) {
-
-            }
+            public void ancestorMoved(AncestorEvent event) {}
         });
     }
 
@@ -54,15 +54,17 @@ public class PanelDashboard extends JPanel {
         JScrollPane scrollPane = TableFactory.wrapWithRoundedBorder(tabla);
 
         tabla.setRowHeight(40);
-        cargarPrestamosPrestados(); // << Solo préstamos prestados
+        cargarPrestamosPrestados(); // Solo préstamos activos
 
         panel.add(scrollPane, BorderLayout.CENTER);
         return panel;
     }
+
     private JPanel panelResumen() {
         JPanel panel = new JPanel(new GridLayout(1, 3, 20, 0));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         panel.setBackground(ComponentFactory.COLOR_FONDO);
+
         long cantidadPrestados = ControladorPrestamo.obtenerPrestamos().stream()
                 .filter(p -> Boolean.TRUE.equals(p.get("Estado")))
                 .count();
@@ -77,10 +79,20 @@ public class PanelDashboard extends JPanel {
 
         return panel;
     }
+
+    // 🔄 Este método actualiza el panelResumen dinámicamente
+    private void actualizarResumen() {
+        remove(panelResumen);               // Quita el viejo
+        panelResumen = panelResumen();      // Crea uno nuevo actualizado
+        add(panelResumen, BorderLayout.NORTH);
+        revalidate();                       // Reorganiza layout
+        repaint();                          // Redibuja
+    }
+
     private void cargarPrestamosPrestados() {
         List<Map<String, Object>> datos = ControladorPrestamo.obtenerPrestamos();
         List<PrestamoDTO> prestamos = datos.stream()
-                .filter(row -> (boolean) row.get("Estado")) // << SOLO prestados
+                .filter(row -> (boolean) row.get("Estado"))
                 .map(row -> {
                     PrestamoDTO p = new PrestamoDTO();
                     p.setID((Integer) row.get("ID"));

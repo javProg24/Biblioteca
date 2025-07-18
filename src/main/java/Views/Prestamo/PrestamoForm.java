@@ -92,29 +92,43 @@ public class PrestamoForm extends JDialog {
         add(mainPanel,BorderLayout.CENTER);
     }
     private void editarPrestamo() {
+        comboEstadoInicializado = false; // ⛔ Desactivar momentáneamente los listeners
+
         Prestamo prestamo = new Prestamo();
         prestamo.setID(ID_Prestamo);
         Ejemplar ejemplar = new Ejemplar();
-        prestamo.setID(ID_Ejemplar);
-        List<Map<String,Object>> datosPrestamo=ControladorPrestamo.obtenerPrestamoID(prestamo);
-        List<Map<String,Object>> datosEjemplar=ControladorEjemplar.obtenerEjemplarID(ejemplar);
+        ejemplar.setID(ID_Ejemplar);
+
+        List<Map<String, Object>> datosPrestamo = ControladorPrestamo.obtenerPrestamoID(prestamo);
+        List<Map<String, Object>> datosEjemplar = ControladorEjemplar.obtenerEjemplarID(ejemplar);
+
         try {
-            if (!datosPrestamo.isEmpty()){
-                Map<String,Object> prestamoData=datosPrestamo.get(0);
-                Map<String,Object> ejemplarData=datosEjemplar.get(0);
-                String campoPrestamo=String.valueOf(prestamoData.get("Fecha_Prestamo"));
-                String campoDevolucion=String.valueOf(prestamoData.get("Fecha_Devolucion"));
+            if (!datosPrestamo.isEmpty()) {
+                Map<String, Object> prestamoData = datosPrestamo.get(0);
+                Map<String, Object> ejemplarData = datosEjemplar.get(0);
+
+                String campoPrestamo = String.valueOf(prestamoData.get("Fecha_Prestamo"));
+                String campoDevolucion = String.valueOf(prestamoData.get("Fecha_Devolucion"));
+
                 SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
                 Date fechaPrestamo = inputFormat.parse(campoPrestamo);
                 Date fechaDevolucion = inputFormat.parse(campoDevolucion);
+
                 SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy");
                 txtFechaPrestamo.setText(outputFormat.format(fechaPrestamo));
                 txtFechaDevolucion.setText(outputFormat.format(fechaDevolucion));
-                boolean estadoPrestamo = Boolean.parseBoolean(String.valueOf(prestamoData.get("Estado")));
-                boolean estadoEjemplar= Boolean.parseBoolean(String.valueOf(ejemplarData.get("Estado")));
-//                checkEstado.setSelected(estado);
-                comboEstado_Libro.setSelectedItem(estadoEjemplar ? "No disponible" : "Disponible");
-                comboEstado_Prestamo.setSelectedItem(estadoPrestamo?"Prestado":"Devuelto");
+
+                boolean estadoPrestamoDB = Boolean.parseBoolean(String.valueOf(prestamoData.get("Estado")));
+                boolean estadoEjemplarDB = Boolean.parseBoolean(String.valueOf(ejemplarData.get("Estado")));
+
+                // ✅ Asignar a las variables globales
+                estadoPrestamo = estadoPrestamoDB;
+                estadoEjemplar = estadoEjemplarDB;
+
+                // ✅ Cargar los valores en los combos SIN activar el listener
+                comboEstado_Libro.setSelectedItem(estadoEjemplarDB ? "No Disponible" : "Disponible");
+                comboEstado_Prestamo.setSelectedItem(estadoPrestamoDB ? "Prestado" : "Devuelto");
+
                 int idUsuario = (int) prestamoData.get("ID_Usuario");
                 for (Map.Entry<String, Integer> entry : mapaNombreId.entrySet()) {
                     if (entry.getValue() == idUsuario) {
@@ -122,20 +136,24 @@ public class PrestamoForm extends JDialog {
                         break;
                     }
                 }
-            }
-            else {
+            } else {
                 System.out.println("No hay datos");
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("Error al editar préstamo: " + e.getMessage());
         }
+
+        comboEstadoInicializado = true; // ✅ Activar los listeners solo después de haber cargado todo
     }
+
+    private boolean comboEstadoInicializado = false;
     private JPanel camposPrestamo() {
         JPanel panelCampos = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
+
         // Fecha de Préstamo
         gbc.gridx = 0; gbc.gridy = 0;
         JLabel lblFechaPrestamo = ComponentFactory.crearEtiqueta("Fecha de Préstamo");
@@ -155,6 +173,7 @@ public class PrestamoForm extends JDialog {
         JDatePanelImpl datePanelPrestamo = createDatePanel(txtFechaPrestamo, popupPrestamo);
         popupPrestamo.add(datePanelPrestamo, BorderLayout.CENTER);
         btnFechaPrestamo.addActionListener(e -> toggleCalendar(popupPrestamo, btnFechaPrestamo));
+
         // Fecha de Devolución
         gbc.gridx = 0; gbc.gridy++;
         JLabel lblFechaDevolucion = ComponentFactory.crearEtiqueta("Fecha de Devolución");
@@ -174,48 +193,57 @@ public class PrestamoForm extends JDialog {
         JDatePanelImpl datePanelDevolucion = createDatePanel(txtFechaDevolucion, popupDevolucion);
         popupDevolucion.add(datePanelDevolucion, BorderLayout.CENTER);
         btnFechaDevolucion.addActionListener(e -> toggleCalendar(popupDevolucion, btnFechaDevolucion));
+
         // Estado del ejemplar
         gbc.gridx = 0; gbc.gridy++;
         JLabel lblEstado = ComponentFactory.crearEtiqueta("Estado del Ejemplar: ");
-        panelCampos.add(lblEstado,gbc);
+        panelCampos.add(lblEstado, gbc);
         gbc.gridx = 1;
         comboEstado_Libro = new JComboBox<>();
         comboEstado_Libro.removeAllItems();
         comboEstado_Libro.addItem("--Seleccione--");
-        //comboEstado_Libro.setSelectedIndex(0);
-        comboEstado_Libro.addItem("Disponible");     // false
-        comboEstado_Libro.addItem("No disponible");  // true
+        comboEstado_Libro.addItem("No Disponible"); // true
+        comboEstado_Libro.addItem("Disponible");    // false
+
+        // Usar mapa para evitar errores por texto
+        Map<String, Boolean> mapaEstadoEjemplar = new HashMap<>();
+        mapaEstadoEjemplar.put("No Disponible", true);
+        mapaEstadoEjemplar.put("Disponible", false);
+
         comboEstado_Libro.addActionListener(e -> {
+            if (!comboEstadoInicializado) return; // Solo ejecutar si ya se terminó de cargar todo
             String seleccionado = (String) comboEstado_Libro.getSelectedItem();
-            estadoEjemplar = "No disponible".equals(seleccionado);
+            if (mapaEstadoEjemplar.containsKey(seleccionado)) {
+                estadoEjemplar = mapaEstadoEjemplar.get(seleccionado);
+            }
         });
-        panelCampos.add(comboEstado_Libro,gbc);
-        // Combo Estado del Prestamo (Prestado - Devuelto)
+        panelCampos.add(comboEstado_Libro, gbc);
+
+        // Estado del préstamo
         gbc.gridx = 0; gbc.gridy++;
         JLabel lblEstadoPrestamo = ComponentFactory.crearEtiqueta("Estado del Prestamo: ");
-        panelCampos.add(lblEstadoPrestamo,gbc);
+        panelCampos.add(lblEstadoPrestamo, gbc);
         gbc.gridx = 1;
-        comboEstado_Prestamo=new JComboBox<>();
+        comboEstado_Prestamo = new JComboBox<>();
         comboEstado_Prestamo.removeAllItems();
         comboEstado_Prestamo.addItem("--Seleccione--");
-//        comboEstado_Prestamo.setSelectedIndex(0);
-        comboEstado_Prestamo.addItem("Prestado");
-        comboEstado_Prestamo.addItem("Devuelto");
+        comboEstado_Prestamo.addItem("Prestado"); // true
+        comboEstado_Prestamo.addItem("Devuelto"); // false
         comboEstado_Prestamo.addActionListener(e -> {
             String seleccionado = (String) comboEstado_Prestamo.getSelectedItem();
             estadoPrestamo = "Prestado".equals(seleccionado);
         });
-//        String selecEstPres=(String) comboEstado_Prestamo.getSelectedItem();
-//        estadoPrestamo="Reservado".equals(selecEstPres);
-        panelCampos.add(comboEstado_Prestamo,gbc);
-        //Combo de Usuarios
+        panelCampos.add(comboEstado_Prestamo, gbc);
+
+        // Combo de usuarios
         gbc.gridx = 0; gbc.gridy++;
         JLabel lblUsuarios = ComponentFactory.crearEtiqueta("Usuarios: ");
-        panelCampos.add(lblUsuarios,gbc);
+        panelCampos.add(lblUsuarios, gbc);
         gbc.gridx = 1;
-        comboUsuarios=new JComboBox<>();
-        comboUsuarios.addActionListener(e-> filtrarUsuario());
-        panelCampos.add(comboUsuarios,gbc);
+        comboUsuarios = new JComboBox<>();
+        comboUsuarios.addActionListener(e -> filtrarUsuario());
+        panelCampos.add(comboUsuarios, gbc);
+
         return panelCampos;
     }
     private int idUsuario;

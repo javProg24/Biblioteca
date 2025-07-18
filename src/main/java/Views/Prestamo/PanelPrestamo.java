@@ -182,6 +182,7 @@ public class PanelPrestamo extends JPanel {
                 new Column<>("Usuario", PrestamoDTO::getUsuario, (p, v) -> p.setUsuario((String) v)),
                 new Column<>("Libro", PrestamoDTO::getLibro, (p, v) -> p.setLibro((String) v)),
                 new Column<>("Codigo", PrestamoDTO::getCodigo_Ejemplar, (p, v) -> p.setCodigo_Ejemplar((String) v)),
+                new Column<>("ID Ejemplar",PrestamoDTO::getID_Ejemplar,(p,v)->p.setID_Ejemplar((Integer)v)),
                 new Column<>("Fecha Préstamo",
                         prestamo -> {
                             Date fecha = prestamo.getFechaPrestamo();
