@@ -1,6 +1,7 @@
 package main.java.Views.Prestamo;
 
 import main.java.Controllers.Operadores.Metodos.ControladorPrestamo;
+import main.java.Models.EjemplarDTO;
 import main.java.Models.PrestamoDTO;
 import main.resources.Shared.Table.*;
 import main.resources.Utils.Column;
@@ -9,6 +10,8 @@ import main.resources.Utils.ComponentFactory;
 import javax.swing.*;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -50,12 +53,29 @@ public class PanelPrestamo extends JPanel {
         JPanel panelIzquierdo = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         panelIzquierdo.setBackground(ComponentFactory.COLOR_FONDO);
 
-        JLabel lblID = ComponentFactory.crearEtiqueta("ID Préstamo:");
+        JLabel lblID = ComponentFactory.crearEtiqueta("Usuario:");
         txtID = ComponentFactory.crearCampoTexto();
         txtID.setColumns(15);
 
         panelIzquierdo.add(lblID);
         panelIzquierdo.add(txtID);
+
+        txtID.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                filtrarUsuario();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                filtrarUsuario();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                filtrarUsuario();
+            }
+        });
 
         JPanel panelDerecho = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         panelDerecho.setBackground(ComponentFactory.COLOR_FONDO);
@@ -170,21 +190,45 @@ public class PanelPrestamo extends JPanel {
     }
 
     private void cargarPrestamos() {
-        List<Map<String,Object>> datosPrestamos = ControladorPrestamo.obtenerPrestamos();
-        List<PrestamoDTO> prestamos = datosPrestamos.stream().map(
-                row -> {
-                    PrestamoDTO prestamoDTO = new PrestamoDTO();
-                    prestamoDTO.setID((Integer) row.get("ID"));
-                    prestamoDTO.setUsuario((String) row.get("Usuario"));
-                    prestamoDTO.setLibro((String) row.get("Libro"));
-                    prestamoDTO.setCodigo_Ejemplar((String) row.get("Codigo_Ejemplar"));
-                    prestamoDTO.setFechaPrestamo((Date) row.get("Fecha_Prestamo"));
-                    prestamoDTO.setFechaDevolucion((Date) row.get("Fecha_Devolucion"));
-                    prestamoDTO.setEstado((boolean) row.get("Estado"));
-                    return prestamoDTO;
-                }
-        ).toList();
-
+        filtrarUsuario();
+//        List<Map<String,Object>> datosPrestamos = ControladorPrestamo.obtenerPrestamos();
+//        List<PrestamoDTO> prestamos = datosPrestamos.stream().map(
+//                row -> {
+//                    PrestamoDTO prestamoDTO = new PrestamoDTO();
+//                    prestamoDTO.setID((Integer) row.get("ID"));
+//                    prestamoDTO.setUsuario((String) row.get("Usuario"));
+//                    prestamoDTO.setLibro((String) row.get("Libro"));
+//                    prestamoDTO.setCodigo_Ejemplar((String) row.get("Codigo_Ejemplar"));
+//                    prestamoDTO.setFechaPrestamo((Date) row.get("Fecha_Prestamo"));
+//                    prestamoDTO.setFechaDevolucion((Date) row.get("Fecha_Devolucion"));
+//                    prestamoDTO.setEstado((boolean) row.get("Estado"));
+//                    return prestamoDTO;
+//                }
+//        ).toList();
+//
+//        tablaComponent.clearRows();
+//        tablaComponent.addRows(prestamos);
+    }
+    private void filtrarUsuario(){
+        String usuarioSeleccionado=txtID.getText();
+        List<Map<String,Object>>datosPrestamo=ControladorPrestamo.obtenerPrestamos();
+        List<PrestamoDTO>prestamos=datosPrestamo.stream()
+                .filter(row->{
+                    String nombreUsuario=(String) row.get("Usuario");
+                    if (usuarioSeleccionado.isEmpty())return true;
+                    return nombreUsuario!=null&&
+                            nombreUsuario.toLowerCase().contains(usuarioSeleccionado.toLowerCase());
+                }).map(row->{
+                    PrestamoDTO p = new PrestamoDTO();
+                    p.setID((Integer)row.get("ID"));
+                    p.setUsuario((String) row.get("Usuario"));
+                    p.setLibro((String) row.get("Libro"));
+                    p.setCodigo_Ejemplar((String) row.get("Codigo_Ejemplar"));
+                    p.setFechaPrestamo((Date) row.get("Fecha_Prestamo"));
+                    p.setFechaDevolucion((Date) row.get("Fecha_Devolucion"));
+                    p.setEstado((boolean) row.get("Estado"));
+                    return p;
+                }).toList();
         tablaComponent.clearRows();
         tablaComponent.addRows(prestamos);
     }

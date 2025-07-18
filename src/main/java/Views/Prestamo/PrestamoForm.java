@@ -313,6 +313,7 @@ public class PrestamoForm extends JDialog {
         txtFechaDevolucion.setText("");
         comboUsuarios.setSelectedIndex(0);
         comboEstado_Libro.setSelectedIndex(0);
+        comboEstado_Prestamo.setSelectedIndex(0);
     }
 
     private Prestamo crearPrestamo(){
