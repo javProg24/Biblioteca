@@ -47,6 +47,26 @@ public class ComponentFactory {
         });
         return boton;
     }
+    public static JLabel crearTarjeta(String titulo, int cantidad) {
+        JLabel tarjeta = new JLabel("<html><div style='text-align:center;'>"
+                + "<h2 style='margin: 0;'>" + cantidad + "</h2>"
+                + "<p style='margin: 0; font-size: 14px;'>" + titulo + "</p>"
+                + "</div></html>");
+
+        tarjeta.setOpaque(true);
+        tarjeta.setBackground(new Color(245, 245, 245));
+        tarjeta.setForeground(Color.DARK_GRAY);
+        tarjeta.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        tarjeta.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(220, 220, 220), 1),
+                BorderFactory.createEmptyBorder(15, 20, 15, 20)
+        ));
+        tarjeta.setHorizontalAlignment(SwingConstants.CENTER);
+        tarjeta.setVerticalAlignment(SwingConstants.CENTER);
+        tarjeta.setPreferredSize(new Dimension(160, 80));
+
+        return tarjeta;
+    }
     // Crear una ruta de icono para los botones
     public static String ruta(String icono){
         return rutaIcono(icono);

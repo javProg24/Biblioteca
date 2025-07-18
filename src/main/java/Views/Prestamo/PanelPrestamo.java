@@ -23,7 +23,7 @@ import java.util.Map;
 
 public class PanelPrestamo extends JPanel {
     private JTextField txtID;
-    private TableComponent<PrestamoDTO> tablaComponent;
+    private TableComponent<PrestamoDTO> tablaPrestamo;
 
     public PanelPrestamo() {
         setLayout(new BorderLayout());
@@ -112,15 +112,15 @@ public class PanelPrestamo extends JPanel {
     private JPanel panelTabla(){
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(ComponentFactory.COLOR_FONDO);
-        tablaComponent = getPrestamoTableComponent();
-        JTable tabla = TableFactory.crearTablaEstilo(tablaComponent);
+        tablaPrestamo = getPrestamoTableComponent();
+        JTable tabla = TableFactory.crearTablaEstilo(tablaPrestamo);
         JScrollPane scrollPane = TableFactory.wrapWithRoundedBorder(tabla);
 
         TableActionEvent actionEvent = new TableActionEvent() {
             private int ID_Prestamo = 0;
             @Override
             public void onEdit(int row) {
-                PrestamoDTO prestamoSeleccionado=tablaComponent.getRow(row);
+                PrestamoDTO prestamoSeleccionado= tablaPrestamo.getRow(row);
                 this.ID_Prestamo =prestamoSeleccionado.getID();
                 int ejemplar = prestamoSeleccionado.getID_Ejemplar();
                 Frame parent = (Frame) SwingUtilities.getWindowAncestor(PanelPrestamo.this);
@@ -138,7 +138,7 @@ public class PanelPrestamo extends JPanel {
                 if (tabla.isEditing()) {
                     tabla.getCellEditor().stopCellEditing();
                 }
-                PrestamoDTO prestamoSeleccionado=tablaComponent.getRow(row);
+                PrestamoDTO prestamoSeleccionado= tablaPrestamo.getRow(row);
                 this.ID_Prestamo =prestamoSeleccionado.getID();
                 Frame parent = (Frame) SwingUtilities.getWindowAncestor(PanelPrestamo.this);
                 DialogComponent ventana=new DialogComponent(
@@ -268,7 +268,7 @@ public class PanelPrestamo extends JPanel {
                     p.setEstado((boolean) row.get("Estado"));
                     return p;
                 }).toList();
-        tablaComponent.clearRows();
-        tablaComponent.addRows(prestamos);
+        tablaPrestamo.clearRows();
+        tablaPrestamo.addRows(prestamos);
     }
 }

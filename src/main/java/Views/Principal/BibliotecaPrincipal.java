@@ -1,8 +1,8 @@
-package main.java.Views;
+package main.java.Views.Principal;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import main.java.Views.Libro.PanelEjemplar;
-import main.java.Views.Login.LoginPrincipal;
+import main.java.Views.LoginPrincipal;
 import main.resources.Utils.ComponentFactory;
 import main.java.Views.Libro.PanelLibro;
 import main.java.Views.Prestamo.PanelPrestamo;
@@ -19,7 +19,7 @@ public class BibliotecaPrincipal extends JFrame {
     private final JPanel botonesPanel;
     private final JPanel logoutPanel;
     private final JPanel panelDashboard;
-    private String nombreUsuario; // nombre usuasrio
+    private String nombreUsuario; // nombre usuario
 
     public BibliotecaPrincipal(String nombreUsuario){
         this.nombreUsuario = nombreUsuario;
@@ -131,10 +131,10 @@ public class BibliotecaPrincipal extends JFrame {
     private void initPanelPrincipal(){
         // PANEL PRINCIPAL con CardLayout
         panelPrincipal = new JPanel(cardLayout);
-        panelPrincipal.setBackground(ComponentFactory.COLOR_FONDO);
-        // Crear instancias de los formularios
-        panelDashboard.setBackground(ComponentFactory.COLOR_FONDO);
-
+//        panelPrincipal.setBackground(ComponentFactory.COLOR_FONDO);
+//        // Crear instancias de los formularios
+//        panelDashboard.setBackground(ComponentFactory.COLOR_FONDO);
+        PanelDashboard panelDashboard = new PanelDashboard();
         panelPrincipal.add(panelDashboard, "Dashboard");
         //Panel para los botones del menú
         PanelUsuario panelUsuarios = new PanelUsuario();
@@ -147,7 +147,7 @@ public class BibliotecaPrincipal extends JFrame {
         panelPrincipal.add(panelEjemplar,"Inventario");
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(()->new BibliotecaPrincipal("hola").setVisible(true));
-    }
+//    public static void main(String[] args) {
+//        SwingUtilities.invokeLater(()->new BibliotecaPrincipal("hola").setVisible(true));
+//    }
 }

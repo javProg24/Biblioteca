@@ -1,9 +1,9 @@
-package main.java.Views.Login;
+package main.java.Views;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import main.java.Controllers.Operadores.Metodos.ControladorBiblioteca;
 import main.java.Models.Bibliotecario;
-import main.java.Views.BibliotecaPrincipal;
+import main.java.Views.Principal.BibliotecaPrincipal;
 import main.resources.Utils.ComponentFactory;
 import main.resources.Utils.ImagePanel;
 import main.resources.Utils.LabelField;
