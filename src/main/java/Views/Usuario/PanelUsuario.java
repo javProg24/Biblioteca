@@ -46,7 +46,7 @@ public class PanelUsuario extends JPanel {
         JPanel panelIzquierdo = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         panelIzquierdo.setBackground(ComponentFactory.COLOR_FONDO);
 
-        JLabel lblCedula = ComponentFactory.crearEtiqueta("Cédula:");
+        JLabel lblCedula = ComponentFactory.crearEtiqueta("Nombre:");
         txtNombre = ComponentFactory.crearCampoTexto();
         txtNombre.setColumns(15);
 

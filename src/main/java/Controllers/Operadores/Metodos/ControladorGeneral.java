@@ -116,10 +116,11 @@ public class ControladorGeneral {
     protected static <T extends Entidad> boolean actualizarEntidadParametro(
             T entidad,
             E_ROL rol,
-            E_PARAMETRO parametro
+            E_PARAMETRO parametro,
+            List<String>atributos
     ){
-        Map<Integer,Object> lista = propiedadesEntidad.crearPropiedades(entidad);
-        String spNombre = E_CODIGO_SP.SP_OBTENER + parametro.name(); // Nombre del procedimiento almacenado
+        Map<Integer,Object> lista = propiedadesEntidad.listarPropiedades(entidad,atributos);
+        String spNombre = E_CODIGO_SP.SP_ACTUALIZAR + parametro.name(); // Nombre del procedimiento almacenado
         String procedimiento = spNombre + rol.name();
         return accesoDb.ActualizarEntidad(procedimiento,lista);
     }
