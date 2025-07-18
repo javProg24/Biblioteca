@@ -135,6 +135,9 @@ public class PanelPrestamo extends JPanel {
 
             @Override
             public void onDelete(int row) {
+                if (tabla.isEditing()) {
+                    tabla.getCellEditor().stopCellEditing();
+                }
                 PrestamoDTO prestamoSeleccionado=tablaComponent.getRow(row);
                 this.ID_Prestamo =prestamoSeleccionado.getID();
                 Frame parent = (Frame) SwingUtilities.getWindowAncestor(PanelPrestamo.this);

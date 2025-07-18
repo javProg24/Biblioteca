@@ -1,10 +1,16 @@
 package main.java.Views.Libro;
 
 import com.formdev.flatlaf.FlatLightLaf;
+import main.java.Controllers.Operadores.Enums.E_ROL;
 import main.java.Controllers.Operadores.Metodos.ControladorEjemplar;
 import main.java.Controllers.Operadores.Metodos.ControladorLibro;
+import main.java.Controllers.Operadores.Metodos.ControladorPrestamo;
+import main.java.Models.Ejemplar;
 import main.java.Models.EjemplarDTO;
+import main.java.Models.Prestamo;
 import main.java.Views.Prestamo.PrestamoForm;
+import main.resources.Shared.Dialog.DialogComponent;
+import main.resources.Shared.Notification.NotificationComponent;
 import main.resources.Shared.Table.*;
 import main.resources.Utils.Column;
 import main.resources.Utils.ComponentFactory;
@@ -106,6 +112,27 @@ public class PanelEjemplar extends JPanel {
                 if (tabla.isEditing()) {
                     tabla.getCellEditor().stopCellEditing();
                 }
+                EjemplarDTO ejemplarSeleccionado=modelEjemplar.getRow(row);
+                ID_Ejemplar=ejemplarSeleccionado.getID();
+                Frame parent=(Frame) SwingUtilities.getWindowAncestor(PanelEjemplar.this);
+                DialogComponent ventana=new DialogComponent(
+                        parent,
+                        E_ROL._EJEMPLAR,
+                        ()->{
+                            Ejemplar prestamo=new Ejemplar();
+                            prestamo.setID(ID_Ejemplar);
+                            boolean eliminado= ControladorEjemplar.eliminarEjemplar(prestamo);
+                            NotificationComponent notification;
+                            if(eliminado){
+                                notification=new NotificationComponent(parent,NotificationComponent.Type.EXITO,NotificationComponent.Location.TOP_RIGHT,"Ejemplar eliminado");
+                                cargarDatosEjemplares();
+                            }else {
+                                notification=new NotificationComponent(parent,NotificationComponent.Type.EXITO,NotificationComponent.Location.TOP_RIGHT,"Ejemplar eliminado");
+                            }
+                            notification.showNotification();
+                        }
+                );
+                ventana.setVisible(true);
             }
         };
         int colAcciones=tabla.getColumnCount()-1;
