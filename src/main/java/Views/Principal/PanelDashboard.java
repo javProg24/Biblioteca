@@ -10,6 +10,8 @@ import main.resources.Utils.Column;
 import main.resources.Utils.ComponentFactory;
 
 import javax.swing.*;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,6 +27,22 @@ public class PanelDashboard extends JPanel {
 
         add(panelResumen(), BorderLayout.NORTH);   // 🔹 Agregado
         add(panelTabla(), BorderLayout.CENTER);    // 🟦 Ya existente
+        addAncestorListener(new AncestorListener() {
+            @Override
+            public void ancestorAdded(AncestorEvent event) {
+                cargarPrestamosPrestados();
+            }
+
+            @Override
+            public void ancestorRemoved(AncestorEvent event) {
+
+            }
+
+            @Override
+            public void ancestorMoved(AncestorEvent event) {
+
+            }
+        });
     }
 
     private JPanel panelTabla() {

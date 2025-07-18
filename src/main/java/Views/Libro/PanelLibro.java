@@ -2,9 +2,7 @@ package main.java.Views.Libro;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import main.java.Controllers.Operadores.Enums.E_ROL;
-import main.java.Controllers.Operadores.Metodos.ControladorEjemplar;
 import main.java.Controllers.Operadores.Metodos.ControladorLibro;
-import main.java.Controllers.Operadores.Metodos.ControladorUsuario;
 import main.java.Models.Libro;
 import main.resources.Shared.Dialog.DialogComponent;
 import main.resources.Shared.Notification.NotificationComponent;
