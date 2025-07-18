@@ -12,6 +12,7 @@ import main.resources.Utils.ComponentFactory;
 import javax.swing.*;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
+import javax.swing.table.TableCellEditor;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ public class PanelEjemplar extends JPanel {
     private TableComponent<EjemplarDTO> modelEjemplar;
     JComboBox<String> comboTitulos;
     JComboBox<String> comboEstado;
+
     public PanelEjemplar(){
         try {
             UIManager.setLookAndFeel(new FlatLightLaf());
@@ -81,6 +83,7 @@ public class PanelEjemplar extends JPanel {
         panel.setBackground(ComponentFactory.COLOR_FONDO);
         modelEjemplar=getEjemplarTableComponent();
         JTable tabla = TableFactory.crearTablaEstilo(modelEjemplar);
+
         tabla.setRowSelectionAllowed(false);
         tabla.setColumnSelectionAllowed(false);
         tabla.setCellSelectionEnabled(false);
@@ -94,7 +97,7 @@ public class PanelEjemplar extends JPanel {
                 EjemplarDTO ejemplarSeleccionado=modelEjemplar.getRow(row);
                 this.ID_Ejemplar =ejemplarSeleccionado.getID();
                 Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(PanelEjemplar.this);
-                PrestamoForm dialog=new PrestamoForm(parentFrame, ID_Ejemplar,()->cargarDatosEjemplares());
+                PrestamoForm dialog = new PrestamoForm(parentFrame, ID_Ejemplar, () -> cargarDatosEjemplares());
                 dialog.setVisible(true);
             }
 
@@ -189,4 +192,37 @@ public class PanelEjemplar extends JPanel {
         );
         return new TableComponent<>(columns);
     }
+    private class ActionCellEditor extends AbstractCellEditor implements TableCellEditor {
+        private final JTable table;
+        private final TableActionEvent actionEvent;
+        private final JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        private final JButton btnEditar = new JButton("Editar");
+        private int currentRow = -1;
+
+        public ActionCellEditor(JTable table, TableActionEvent actionEvent) {
+            this.table = table;
+            this.actionEvent = actionEvent;
+            btnEditar.addActionListener(e -> {
+                fireEditingStopped();
+                actionEvent.onEdit(currentRow);
+            });
+            panel.add(btnEditar);
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            currentRow = row;
+            String estado = (String) table.getValueAt(row, 3);
+            boolean disponible = !"No disponible".equals(estado);
+            btnEditar.setEnabled(disponible);
+            btnEditar.setToolTipText(disponible ? null : "Ejemplar no disponible");
+            return panel;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return null;
+        }
+    }
+
 }

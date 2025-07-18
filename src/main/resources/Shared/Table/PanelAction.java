@@ -35,4 +35,11 @@ public class PanelAction extends JPanel {
         cmdEdit.addActionListener(e -> event.onEdit(rowSupplier.get()));
         cmdDelete.addActionListener(e -> event.onDelete(rowSupplier.get()));
     }
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        for (Component comp : getComponents()) {
+            comp.setEnabled(enabled);
+        }
+    }
 }

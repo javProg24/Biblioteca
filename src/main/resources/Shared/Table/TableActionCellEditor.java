@@ -8,15 +8,30 @@ public class TableActionCellEditor extends AbstractCellEditor implements TableCe
     private final TableActionEvent event;
 
     public TableActionCellEditor(TableActionEvent event) {
-
         this.event = event;
     }
 
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
         PanelAction panel = new PanelAction();
-        panel.initEvent(event, table::getEditingRow);
-        //panel.setBackground(table.getSelectionBackground());
+
+        // Obtenemos el estado desde la tabla (ajusta el índice si cambia la columna)
+        Object estadoValue = table.getValueAt(row, 3);
+        boolean habilitado = !("No disponible".equals(estadoValue));
+
+        // Desactivar los botones si el estado no lo permite
+        panel.setEnabled(habilitado);
+
+        // Si está habilitado, se asigna el evento normalmente. Si no, no hace nada.
+        panel.initEvent(habilitado ? event : null, table::getEditingRow);
+
+        // Opcional: Tooltip para explicar por qué está deshabilitado
+        if (!habilitado) {
+            panel.setToolTipText("Ejemplar no disponible");
+        } else {
+            panel.setToolTipText(null);
+        }
+
         return panel;
     }
 
@@ -25,3 +40,4 @@ public class TableActionCellEditor extends AbstractCellEditor implements TableCe
         return null;
     }
 }
+
