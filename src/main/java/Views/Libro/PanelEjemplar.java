@@ -192,37 +192,4 @@ public class PanelEjemplar extends JPanel {
         );
         return new TableComponent<>(columns);
     }
-    private class ActionCellEditor extends AbstractCellEditor implements TableCellEditor {
-        private final JTable table;
-        private final TableActionEvent actionEvent;
-        private final JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        private final JButton btnEditar = new JButton("Editar");
-        private int currentRow = -1;
-
-        public ActionCellEditor(JTable table, TableActionEvent actionEvent) {
-            this.table = table;
-            this.actionEvent = actionEvent;
-            btnEditar.addActionListener(e -> {
-                fireEditingStopped();
-                actionEvent.onEdit(currentRow);
-            });
-            panel.add(btnEditar);
-        }
-
-        @Override
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-            currentRow = row;
-            String estado = (String) table.getValueAt(row, 3);
-            boolean disponible = !"No disponible".equals(estado);
-            btnEditar.setEnabled(disponible);
-            btnEditar.setToolTipText(disponible ? null : "Ejemplar no disponible");
-            return panel;
-        }
-
-        @Override
-        public Object getCellEditorValue() {
-            return null;
-        }
-    }
-
 }
