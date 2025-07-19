@@ -290,9 +290,9 @@ public class PrestamoForm extends JDialog {
         //"Agregar",ComponentFactory.ruta("action-add")
         JButton btnGuardar = ComponentFactory.crearBoton(
                 isEdit ? "Editar" : "Agregar",
-                isEdit ? ComponentFactory.ruta("editar") : ComponentFactory.ruta("action-add")
+                isEdit ? ComponentFactory.ruta("editar") : ComponentFactory.ruta("action-add"),true
         );
-        JButton btnCancelar = ComponentFactory.crearBoton("Cancelar", ComponentFactory.ruta("action-cancel"));
+        JButton btnCancelar = ComponentFactory.crearBoton("Cancelar", ComponentFactory.ruta("action-cancel"),true);
         btnCancelar.addActionListener(e -> dispose());
         panelBotones.add(btnGuardar);
         panelBotones.add(btnCancelar);
@@ -302,6 +302,9 @@ public class PrestamoForm extends JDialog {
 
     private void guardarPrestamo() {
         Prestamo prestamo = crearPrestamo();
+        if(prestamo==null){
+            return;
+        }
         Frame frame = (Frame) SwingUtilities.getWindowAncestor(this);
         NotificationComponent panelComponent;
         boolean valido= isEdit? ControladorPrestamo.actualizarPrestamo(prestamo):ControladorPrestamo.crearPrestamo(prestamo);
@@ -345,31 +348,50 @@ public class PrestamoForm extends JDialog {
         comboEstado_Prestamo.setSelectedIndex(0);
     }
 
-    private Prestamo crearPrestamo(){
-        Prestamo prestamo = new Prestamo();
-        prestamo.setID(isEdit?ID_Prestamo:0);
-        String campoPrestamo=txtFechaPrestamo.getText().trim();
-        String campoDevolucion=txtFechaDevolucion.getText().trim();
-        if (campoPrestamo.isEmpty()) {
-            if (campoDevolucion.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Debe seleccionar una fecha de Prestamo y fecha de Devolucion", "Error", JOptionPane.ERROR_MESSAGE);
-                return null;
-            }
-        }
-        try {
-            Date fechaPrestamo=dateFormat.parse(campoPrestamo);
-            Date fechaDevolucion=dateFormat.parse(campoDevolucion);
-            prestamo.setFechaPrestamo(fechaPrestamo);
-            prestamo.setFechaDevolucion(fechaDevolucion);
-        } catch (ParseException e) {
-            JOptionPane.showMessageDialog(this, "Formato de fecha inválido. Debe ser dd-MM-yyyy", "Error", JOptionPane.ERROR_MESSAGE);
+    private Prestamo crearPrestamo() {
+        String campoPrestamo = txtFechaPrestamo.getText().trim();
+        String campoDevolucion = txtFechaDevolucion.getText().trim();
+
+        // Validar que ambas fechas estén ingresadas
+        if (campoPrestamo.isEmpty() || campoDevolucion.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar una fecha de Préstamo y una fecha de Devolución.", "Campos vacíos", JOptionPane.ERROR_MESSAGE);
             return null;
         }
+
+        Date fechaPrestamo, fechaDevolucion;
+        try {
+            fechaPrestamo = dateFormat.parse(campoPrestamo);
+            fechaDevolucion = dateFormat.parse(campoDevolucion);
+        } catch (ParseException e) {
+            JOptionPane.showMessageDialog(this, "Formato de fecha inválido. Debe ser dd-MM-yyyy.", "Error de formato", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
+        // Validar que la fecha de devolución no sea anterior a la de préstamo
+        if (fechaDevolucion.before(fechaPrestamo)) {
+            JOptionPane.showMessageDialog(this, "La fecha de devolución no puede ser anterior a la fecha de préstamo.", "Fechas inválidas", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
+        // Validar que ninguna fecha esté en el futuro
+        Date hoy = new Date();
+        if (fechaPrestamo.after(hoy) || fechaDevolucion.after(hoy)) {
+            JOptionPane.showMessageDialog(this, "Las fechas no pueden ser futuras.", "Fecha inválida", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
+        // Crear el objeto Prestamo
+        Prestamo prestamo = new Prestamo();
+        prestamo.setID(isEdit ? ID_Prestamo : 0);
+        prestamo.setFechaPrestamo(fechaPrestamo);
+        prestamo.setFechaDevolucion(fechaDevolucion);
         prestamo.setEstado(estadoPrestamo);
         prestamo.setID_Usuario(idUsuario);
         prestamo.setID_Ejemplar(ID_Ejemplar);
+
         return prestamo;
     }
+
     private Map<String, Integer> mapaNombreId = new HashMap<>();
     private void obtenerNombresUsuarios(){
         List<Map<String, Object>> datosUsuarios = ControladorUsuario.obtenerUsuarios();

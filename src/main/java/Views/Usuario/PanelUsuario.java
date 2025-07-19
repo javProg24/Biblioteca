@@ -57,8 +57,8 @@ public class PanelUsuario extends JPanel {
         JPanel panelDerecho = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         panelDerecho.setBackground(ComponentFactory.COLOR_FONDO);
 
-        JButton btnConsultar = ComponentFactory.crearBoton("Buscar", ComponentFactory.ruta("action-search"));
-        JButton btnAgregar = ComponentFactory.crearBoton("Agregar", ComponentFactory.ruta("action-add"));
+        JButton btnConsultar = ComponentFactory.crearBoton("Buscar", ComponentFactory.ruta("action-search"),true);
+        JButton btnAgregar = ComponentFactory.crearBoton("Agregar", ComponentFactory.ruta("action-add"),true);
         panelIzquierdo.add(btnConsultar);
         panelDerecho.add(btnAgregar);
         btnConsultar.addActionListener(e -> consultarUsuario());

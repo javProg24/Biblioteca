@@ -16,6 +16,9 @@ import javax.swing.event.AncestorListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Map;
 
@@ -81,15 +84,38 @@ public class PanelLibro extends JPanel {
         JPanel panelDerecho = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         panelDerecho.setBackground(ComponentFactory.COLOR_FONDO);
 
-        JButton btnConsultar = ComponentFactory.crearBoton("Buscar", ComponentFactory.ruta("action-search"));
-        JButton btnAgregar = ComponentFactory.crearBoton("Agregar", ComponentFactory.ruta("action-add"));
+        JButton btnConsultar = ComponentFactory.crearBoton("Buscar", ComponentFactory.ruta("action-search"),false);
+        JButton btnAgregar = ComponentFactory.crearBoton("Agregar", ComponentFactory.ruta("action-add"),true);
 //        JButton btnEjemplares = ComponentFactory.crearBoton("Ejemplares", ComponentFactory.ruta("archivo")); // ícono arbitrario
 
         panelIzquierdo.add(btnConsultar);
         panelDerecho.add(btnAgregar);
 //        panelDerecho.add(btnEjemplares);
+        btnConsultar.setCursor(Cursor.getDefaultCursor()); // Cursor normal
+        for (ActionListener al : btnConsultar.getActionListeners()) {
+            btnConsultar.removeActionListener(al); // Eliminar cualquier acción previa
+        }
+        btnConsultar.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                e.consume(); // Bloquea evento
+            }
 
-        btnConsultar.addActionListener(e -> {}); // O filtrado en futuro
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                e.consume(); // Bloquea evento
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                e.consume(); // Bloquea evento
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                btnConsultar.setCursor(Cursor.getDefaultCursor()); // Cursor normal
+            }
+        });
         btnAgregar.addActionListener(e -> {
             Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(PanelLibro.this);
             LibroForm dialog = new LibroForm(parentFrame, this::cargarDatosLibros);

@@ -89,11 +89,11 @@ public class BibliotecaPrincipal extends JFrame {
         botonesPanel.setBackground(ComponentFactory.COLOR_MENU);
         botonesPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         // Botones menú con íconos
-        JButton btnDashboard = ComponentFactory.crearBoton("Dashboard", ComponentFactory.ruta("menu-dashboard"));
-        JButton btnLibros = ComponentFactory.crearBoton("Libros", ComponentFactory.ruta("menu-books"));
-        JButton btnUsuarios = ComponentFactory.crearBoton("Usuarios", ComponentFactory.ruta("menu-users"));
-        JButton btnCopias = ComponentFactory.crearBoton("Prestamos",ComponentFactory.ruta("menu-loans"));
-        JButton btnPrestamos = ComponentFactory.crearBoton("Inventario", ComponentFactory.ruta("ejemplo"));
+        JButton btnDashboard = ComponentFactory.crearBoton("Dashboard", ComponentFactory.ruta("menu-dashboard"),true);
+        JButton btnLibros = ComponentFactory.crearBoton("Libros", ComponentFactory.ruta("menu-books"),true);
+        JButton btnUsuarios = ComponentFactory.crearBoton("Usuarios", ComponentFactory.ruta("menu-users"),true);
+        JButton btnCopias = ComponentFactory.crearBoton("Prestamos",ComponentFactory.ruta("menu-loans"),true);
+        JButton btnPrestamos = ComponentFactory.crearBoton("Inventario", ComponentFactory.ruta("ejemplo"),true);
         // Agregar botones con espaciado
         botonesPanel.add(Box.createVerticalStrut(10));
         botonesPanel.add(btnDashboard);
@@ -118,7 +118,7 @@ public class BibliotecaPrincipal extends JFrame {
         logoutPanel.setLayout(new BoxLayout(logoutPanel, BoxLayout.X_AXIS));
         logoutPanel.setBackground(ComponentFactory.COLOR_MENU);
         logoutPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        JButton btnCerrarSesion = ComponentFactory.crearBoton("Cerrar Sesión", ComponentFactory.ruta("menu-logout"));
+        JButton btnCerrarSesion = ComponentFactory.crearBoton("Cerrar Sesión", ComponentFactory.ruta("menu-logout"),true);
         btnCerrarSesion.setBackground(new Color(231, 10, 10)); // Rojo para el botón de cerrar sesión
         btnCerrarSesion.setFont(new Font("Arial", Font.BOLD, 16));
         btnCerrarSesion.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -147,7 +147,7 @@ public class BibliotecaPrincipal extends JFrame {
         panelPrincipal.add(panelEjemplar,"Inventario");
     }
 
-//    public static void main(String[] args) {
-//        SwingUtilities.invokeLater(()->new BibliotecaPrincipal("hola").setVisible(true));
-//    }
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(()->new BibliotecaPrincipal("hola").setVisible(true));
+    }
 }

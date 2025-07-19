@@ -123,9 +123,9 @@ public class LibroForm extends JDialog {
 
         JButton btnGuardar = ComponentFactory.crearBoton(
                 isEdit ? "Editar" : "Agregar",
-                isEdit ? ComponentFactory.ruta("editar") : ComponentFactory.ruta("action-add")
+                isEdit ? ComponentFactory.ruta("editar") : ComponentFactory.ruta("action-add"),true
         );
-        JButton btnCancelar = ComponentFactory.crearBoton("Cancelar", ComponentFactory.ruta("action-cancel"));
+        JButton btnCancelar = ComponentFactory.crearBoton("Cancelar", ComponentFactory.ruta("action-cancel"),true);
 
         btnGuardar.addActionListener(e -> guardarLibro());
         btnCancelar.addActionListener(e -> dispose());
@@ -135,19 +135,47 @@ public class LibroForm extends JDialog {
 
         return panel;
     }
-    private Libro crearLibro(){
+    private Libro crearLibro() {
+        // Validar campos vacíos o nulos
+        String isbnText = txtISBN.getText().trim();
+        String titulo = txtTitulo.getText().trim();
+        String anioText = txtAnio.getText().trim();
+        String autor = txtAutor.getText().trim();
+        Object categoriaObj = comboCategoria.getSelectedItem();
+
+        if (isbnText.isEmpty() || titulo.isEmpty() || anioText.isEmpty() || autor.isEmpty() || categoriaObj == null) {
+            JOptionPane.showMessageDialog(null, "Todos los campos deben estar completos.", "Campos vacíos", JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+
+        // Validar que ISBN y Año sean números válidos
+        int isbn, anio;
+        try {
+            isbn = Integer.parseInt(isbnText);
+            anio = Integer.parseInt(anioText);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "ISBN y Año deben ser números válidos.", "Error de formato", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
+        // Si todo es válido, crear el objeto Libro
         Libro libro = new Libro();
-        libro.setID(isEdit?idLibro:0); // aqui es el problema
-        libro.setISBN(Integer.parseInt(txtISBN.getText()));
-        libro.setTitulo(txtTitulo.getText());
-        libro.setAnio_Publicacion(Integer.parseInt(txtAnio.getText()));
-        libro.setAutor(txtAutor.getText());
-        libro.setCategoria(Objects.requireNonNull(comboCategoria.getSelectedItem()).toString());
+        libro.setID(isEdit ? idLibro : 0);
+        libro.setISBN(isbn);
+        libro.setTitulo(titulo);
+        libro.setAnio_Publicacion(anio);
+        libro.setAutor(autor);
+        libro.setCategoria(categoriaObj.toString());
+
         return libro;
     }
+
     private void guardarLibro() {
         try {
             Libro libro = crearLibro();
+            if(libro==null){
+                return;
+            }
             boolean valido = isEdit
                     ? ControladorLibro.actualizarLibro(libro)
                     : ControladorLibro.crearLibro(libro,6);

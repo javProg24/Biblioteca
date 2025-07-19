@@ -13,6 +13,15 @@ public class Libro implements Entidad{
     private int Anio_Publicacion;
     private String Autor;
     private String Categoria;
+
+    public Libro(String titulo, String autor) {
+        this.Titulo = titulo;
+        this.Autor = autor;
+    }
+    public boolean esValido(){
+        return Titulo !=null&&!Titulo.isEmpty()&&
+                Autor!=null&&!Autor.isEmpty();
+    }
 //    public Libro() {
 //        this.ID = 0;
 //        this.Titulo = "";

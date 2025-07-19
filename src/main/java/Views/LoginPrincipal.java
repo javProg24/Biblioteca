@@ -66,12 +66,15 @@ public class LoginPrincipal extends JFrame {
     private void panelBotones(){
         botonesPanel = new JPanel((new FlowLayout(FlowLayout.CENTER, 0, 0)));
         botonesPanel.setOpaque(false);
-//        botonesPanel.setBackground(ComponentFactory.COLOR_EXITO);
-        JButton btnIniciar = ComponentFactory.crearBoton("Iniciar Sesion",ComponentFactory.ruta("user"));
+        JButton btnIniciar = ComponentFactory.crearBoton("Iniciar Sesion",ComponentFactory.ruta("user"),true);
         botonesPanel.setMaximumSize(new Dimension(200, botonesPanel.getPreferredSize().height));
         botonesPanel.add(btnIniciar);
         btnIniciar.addActionListener(e->{
             Bibliotecario bibliotecario = crearBibliotecario();
+            if (bibliotecario == null) {
+                // Los mensajes de error ya se muestran desde crearBibliotecario()
+                return;
+            }
             List<Map<String,Object>> dato=ControladorBiblioteca.validarBibliotecario(bibliotecario);
             boolean esValido=false;
             String nombreUsuario = campoUsuario.getText(); // Usar el nombre ingresado
@@ -98,7 +101,7 @@ public class LoginPrincipal extends JFrame {
                 SwingUtilities.invokeLater(()->new BibliotecaPrincipal(nombreUsuarioFinal).setVisible(true));
                 this.dispose();
             } else {
-                System.out.println("❌ Usuario o contraseña incorrectos");
+                JOptionPane.showMessageDialog(this, "Usuario o contraseña inválidos", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
     }
@@ -142,12 +145,24 @@ public class LoginPrincipal extends JFrame {
 
         panelLogin.add(contentPanel, gbc);
     }
-    private Bibliotecario crearBibliotecario(){
+    private Bibliotecario crearBibliotecario() {
+        String usuarioTexto = campoUsuario.getText().trim();
+        String contrasenaTexto = campoContrasena.getText().trim();
+
+        // Validar campos vacíos
+        if (usuarioTexto.isEmpty() || contrasenaTexto.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debe ingresar un usuario y una contraseña.", "Campos obligatorios", JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+
+        // Crear el objeto solo si los datos están completos
         Bibliotecario bibliotecario = new Bibliotecario();
-        bibliotecario.setUsuario(campoUsuario.getText());
-        bibliotecario.setContrasena(campoContrasena.getText());
+        bibliotecario.setUsuario(usuarioTexto);
+        bibliotecario.setContrasena(contrasenaTexto);
+
         return bibliotecario;
     }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(()->new LoginPrincipal().setVisible(true));

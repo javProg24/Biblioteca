@@ -64,8 +64,8 @@ public class DialogComponent extends JDialog {
     }
     private JPanel panelBotones(){
         JPanel panelBotones=new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
-        JButton btnAceptar = ComponentFactory.crearBoton("Aceptar", ComponentFactory.ruta("success"));
-        JButton btnCancelar = ComponentFactory.crearBoton("Cancelar", ComponentFactory.ruta("action-cancel"));
+        JButton btnAceptar = ComponentFactory.crearBoton("Aceptar", ComponentFactory.ruta("success"),true);
+        JButton btnCancelar = ComponentFactory.crearBoton("Cancelar", ComponentFactory.ruta("action-cancel"),true);
         panelBotones.add(btnAceptar);
         panelBotones.add(btnCancelar);
         btnAceptar.addActionListener(e->{

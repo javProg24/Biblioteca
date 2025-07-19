@@ -163,9 +163,9 @@ public class UsuarioForm extends JDialog {
         //"Agregar",ComponentFactory.ruta("action-add")
         JButton btnGuardar = ComponentFactory.crearBoton(
                 isEdit ? "Editar" : "Agregar",
-                isEdit ? ComponentFactory.ruta("editar") : ComponentFactory.ruta("action-add")
+                isEdit ? ComponentFactory.ruta("editar") : ComponentFactory.ruta("action-add"),true
         );
-        JButton btnCancelar = ComponentFactory.crearBoton("Cancelar", ComponentFactory.ruta("action-cancel"));
+        JButton btnCancelar = ComponentFactory.crearBoton("Cancelar", ComponentFactory.ruta("action-cancel"),true);
         btnCancelar.addActionListener(e -> dispose());
         panelBotones.add(btnGuardar);
         panelBotones.add(btnCancelar);
@@ -174,6 +174,9 @@ public class UsuarioForm extends JDialog {
     }
     private void guardarUsuario(){
         Usuario usuario=crearUsuario();
+        if(usuario==null){
+            return;
+        }
         Frame frame = (Frame) SwingUtilities.getWindowAncestor(this);
         NotificationComponent panelComponent;
         boolean valido=isEdit? ControladorUsuario.actualizarUsuario(usuario):ControladorUsuario.crearUsuario(usuario);
@@ -231,31 +234,55 @@ public class UsuarioForm extends JDialog {
         txtFecha.setText("");
     }
     // crear usuario
-    private Usuario crearUsuario(){
-        Usuario usuario = new Usuario();
-        usuario.setID(isEdit?idUsuario:0);
-        usuario.setNombre(txtNombre.getText());
-        usuario.setApellido(txtApellido.getText());
-        usuario.setDirreccion(txtDireccion.getText());
-        usuario.setTelefono(Integer.parseInt(txtTelefono.getText()));
+    private Usuario crearUsuario() {
+        // Obtener texto desde los campos
+        String nombre = txtNombre.getText().trim();
+        String apellido = txtApellido.getText().trim();
+        String direccion = txtDireccion.getText().trim();
+        String telefonoTexto = txtTelefono.getText().trim();
+        String fechaTexto = txtFecha.getText().trim();
 
-        String fechaCampo = txtFecha.getText().trim();
-        if (fechaCampo.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar una fecha de nacimiento.", "Error", JOptionPane.ERROR_MESSAGE);
+        // Validar campos vacíos
+        if (nombre.isEmpty() || apellido.isEmpty() || direccion.isEmpty() || telefonoTexto.isEmpty() || fechaTexto.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Todos los campos deben estar completos.", "Campos vacíos", JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+
+        // Validar teléfono numérico y de 10 dígitos
+        int telefono;
+        if (!telefonoTexto.matches("\\d{10}")) {
+            JOptionPane.showMessageDialog(this, "El teléfono debe contener exactamente 10 dígitos numéricos.", "Teléfono inválido", JOptionPane.ERROR_MESSAGE);
             return null;
         }
 
         try {
-            // Usa el formato correcto de tu date picker (dd-MM-yyyy)
-            Date fechaNacimiento = dateFormat.parse(fechaCampo);
-            usuario.setFecha_Nacimiento(fechaNacimiento);
-        } catch (ParseException e) {
-            JOptionPane.showMessageDialog(this, "Formato de fecha inválido. Debe ser dd-MM-yyyy", "Error", JOptionPane.ERROR_MESSAGE);
+            telefono = Integer.parseInt(telefonoTexto);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "El teléfono debe contener solo números válidos.", "Error de formato", JOptionPane.ERROR_MESSAGE);
             return null;
         }
 
+        // Validar fecha
+        Date fechaNacimiento;
+        try {
+            fechaNacimiento = dateFormat.parse(fechaTexto);
+        } catch (ParseException e) {
+            JOptionPane.showMessageDialog(this, "Formato de fecha inválido. Debe ser dd-MM-yyyy.", "Error de fecha", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
+        // Crear el objeto Usuario
+        Usuario usuario = new Usuario();
+        usuario.setID(isEdit ? idUsuario : 0);
+        usuario.setNombre(nombre);
+        usuario.setApellido(apellido);
+        usuario.setDirreccion(direccion);
+        usuario.setTelefono(telefono);
+        usuario.setFecha_Nacimiento(fechaNacimiento);
+
         return usuario;
     }
+
 
 
 }
