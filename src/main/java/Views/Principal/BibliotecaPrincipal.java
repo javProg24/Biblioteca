@@ -1,8 +1,8 @@
 package main.java.Views.Principal;
 
 import com.formdev.flatlaf.FlatLightLaf;
+import main.Login;
 import main.java.Views.Libro.PanelEjemplar;
-import main.java.Views.LoginPrincipal;
 import main.resources.Utils.ComponentFactory;
 import main.java.Views.Libro.PanelLibro;
 import main.java.Views.Prestamo.PanelPrestamo;
@@ -123,7 +123,7 @@ public class BibliotecaPrincipal extends JFrame {
         btnCerrarSesion.setFont(new Font("Arial", Font.BOLD, 16));
         btnCerrarSesion.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnCerrarSesion.addActionListener(e -> {
-            SwingUtilities.invokeLater(()-> new LoginPrincipal().setVisible(true));
+            SwingUtilities.invokeLater(()-> new Login().setVisible(true));
             this.dispose();
         });
         logoutPanel.add(btnCerrarSesion);

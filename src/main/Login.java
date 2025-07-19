@@ -1,4 +1,4 @@
-package main.java.Views;
+package main;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import main.java.Controllers.Operadores.Metodos.ControladorBiblioteca;
@@ -13,14 +13,14 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
-public class LoginPrincipal extends JFrame {
+public class Login extends JFrame {
     private final JPanel panelLogin;
     private JPanel panelPortada;
     private JPanel camposPanel;
     private JPanel botonesPanel;
     private JTextField campoUsuario;
     private JTextField campoContrasena;
-    public LoginPrincipal(){
+    public Login(){
         try{
             UIManager.setLookAndFeel(new FlatLightLaf());
         }catch (Exception e){
@@ -165,6 +165,6 @@ public class LoginPrincipal extends JFrame {
 
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(()->new LoginPrincipal().setVisible(true));
+        SwingUtilities.invokeLater(()->new Login().setVisible(true));
     }
 }

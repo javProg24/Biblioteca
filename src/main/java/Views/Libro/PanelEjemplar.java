@@ -42,6 +42,7 @@ public class PanelEjemplar extends JPanel {
             public void ancestorAdded(AncestorEvent event) {
                 obtenerTitulosLibros();
                 filtrarEjemplares();
+//                modelEjemplar=getEjemplarTableComponent();
             }
             @Override public void ancestorRemoved(AncestorEvent event) {}
             @Override public void ancestorMoved(AncestorEvent event) {}
@@ -57,7 +58,6 @@ public class PanelEjemplar extends JPanel {
         comboEstado.addActionListener(e -> filtrarEjemplares());
         add(panelSuperior(),BorderLayout.NORTH);
         add(panelTabla(),BorderLayout.CENTER);
-//        obtenerTitulosLibros();
     }
 
     private JPanel panelSuperior() {
@@ -143,16 +143,16 @@ public class PanelEjemplar extends JPanel {
     private void obtenerTitulosLibros(){
         List<Map<String, Object>> datosTitulo = ControladorLibro.obtenerLibros();
 
-        comboTitulos.removeAllItems(); // Limpia si ya tenía datos
-        comboTitulos.addItem("-- Selecciona un libro --"); // Opción por defecto
+        comboTitulos.removeAllItems();
+        comboTitulos.addItem("-- Selecciona un libro --");
 
         for (Map<String, Object> fila : datosTitulo) {
-            String titulo = (String) fila.get("Titulo"); // Asegúrate que la clave es exacta
+            String titulo = (String) fila.get("Titulo");
             if (titulo != null) {
-                comboTitulos.addItem(titulo); // Añade solo el título al combo
+                comboTitulos.addItem(titulo);
             }
         }
-        comboTitulos.setSelectedIndex(0); // No seleccionado
+        comboTitulos.setSelectedIndex(0);
     }
     private void filtrarEjemplares() {
         String libroSeleccionado = (String) comboTitulos.getSelectedItem();

@@ -148,7 +148,6 @@ public class LibroForm extends JDialog {
             return null;
         }
 
-        // Validar que ISBN y Año sean números válidos
         int isbn, anio;
         try {
             isbn = Integer.parseInt(isbnText);
@@ -158,7 +157,6 @@ public class LibroForm extends JDialog {
             return null;
         }
 
-        // Si todo es válido, crear el objeto Libro
         Libro libro = new Libro();
         libro.setID(isEdit ? idLibro : 0);
         libro.setISBN(isbn);
@@ -190,6 +188,7 @@ public class LibroForm extends JDialog {
                 panelComponent.showNotification();
                 ID_LibroOut =ExecuteQuery.intOut;
                 obtenerLibro();
+                borrarCampos();
                 //System.out.println(ExecuteQuery.intOut);
                 if (onLibroSaved != null) onLibroSaved.run();
                 //dispose();
@@ -264,7 +263,6 @@ public class LibroForm extends JDialog {
             System.out.println(e.getMessage());
         }
     }
-    //crear Codigo
     private String crearCodigo(int id,int Anio,String titulo,int incremento){
         StringBuilder codigo = new StringBuilder();
         String tituloFormateado = titulo.toUpperCase();
@@ -278,5 +276,13 @@ public class LibroForm extends JDialog {
         codigo.append(tituloNuevo);
         codigo.append(incremento);
         return codigo.toString();
+    }
+    private void borrarCampos(){
+        txtISBN.setText("");
+        txtCantidad.setText("");
+        txtAnio.setText("");
+        txtAutor.setText("");
+        txtTitulo.setText("");
+        comboCategoria.setSelectedIndex(0);
     }
 }

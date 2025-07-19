@@ -1,4 +1,0 @@
-crear 3 componentes reutilizables:
-1. Tabla reutilizable
-2. Notificación reutilizable
-3. Cuadro de diálogo reutilizable

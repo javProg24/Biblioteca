@@ -122,7 +122,9 @@ public class PanelPrestamo extends JPanel {
             public void onEdit(int row) {
                 PrestamoDTO prestamoSeleccionado= tablaPrestamo.getRow(row);
                 this.ID_Prestamo =prestamoSeleccionado.getID();
+                System.out.println(ID_Prestamo);
                 int ejemplar = prestamoSeleccionado.getID_Ejemplar();
+                System.out.println(ejemplar);
                 Frame parent = (Frame) SwingUtilities.getWindowAncestor(PanelPrestamo.this);
                 PrestamoForm dialog = new PrestamoForm(
                         parent,

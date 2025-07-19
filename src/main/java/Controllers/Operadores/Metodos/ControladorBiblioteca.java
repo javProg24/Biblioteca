@@ -10,4 +10,7 @@ public class ControladorBiblioteca {
     public static <T extends Entidad> List<Map<String,Object>> validarBibliotecario(T entidad){
         return ControladorGeneral.validarEntidad(entidad,E_ROL._BIBLIOTECARIO);
     }
+    public static <T extends Entidad> boolean crearBibliotecario(T entidad) {
+        return ControladorGeneral.crearEntidad(entidad, E_ROL._BIBLIOTECARIO);
+    }
 }

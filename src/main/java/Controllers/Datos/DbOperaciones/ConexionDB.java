@@ -8,8 +8,6 @@ import java.util.Properties;
 
 public class ConexionDB {
     private static final Properties props=new Properties();
-    // Bloque estático que se ejecuta una vez cuando la clase es cargada en memoria.
-    // Este bloque carga las propiedades de configuración desde el archivo "config.properties".
     static {
         try {
             props.load(ConexionDB.class.getClassLoader().getResourceAsStream("config.properties"));
@@ -17,12 +15,6 @@ public class ConexionDB {
             System.out.println("Error al cargar las propiedades de la conexion: "+e.getMessage());
         }
     }
-    /**
-     * Abre una conexión a la base de datos utilizando las propiedades configuradas.
-     *
-     * @return Un objeto `Connection` si la conexión se establece correctamente,
-     *         o `null` si ocurre un error durante la conexión.
-     */
     protected Connection AbrirConexion(){
         try{
             // Obtiene la URL, el usuario y la contraseña de las propiedades configuradas
@@ -35,12 +27,7 @@ public class ConexionDB {
             return null;
         }
     }
-    /**
-     * Cierra una conexión a la base de datos si está abierta.
-     *
-     * @param conexion La conexión a la base de datos que se desea cerrar.
-     *                 Puede ser `null` o ya estar cerrada.
-     */
+
     protected void CerrarConexion(Connection conexion){
         try{
             // Verifica si la conexión no es nula y está abierta antes de cerrarla
