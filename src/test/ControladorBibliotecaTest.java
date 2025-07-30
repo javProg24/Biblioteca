@@ -1,9 +1,9 @@
 package test;
 
-import main.java.Controllers.Operadores.Enums.E_ROL;
-import main.java.Controllers.Operadores.Metodos.ControladorBiblioteca;
-import main.java.Controllers.Operadores.Metodos.ControladorGeneral;
-import main.java.Models.Bibliotecario;
+import Controllers.Operadores.Enums.E_ROL;
+import Controllers.Operadores.Metodos.ControladorBiblioteca;
+import Controllers.Operadores.Metodos.ControladorGeneral;
+import Models.Bibliotecario;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;

@@ -1,15 +1,14 @@
 package test;
 
-import main.java.Controllers.Operadores.Enums.E_PARAMETRO;
-import main.java.Controllers.Operadores.Enums.E_ROL;
-import main.java.Controllers.Operadores.Metodos.ControladorGeneral;
-import main.java.Controllers.Operadores.Metodos.ControladorPrestamo;
-import main.java.Models.Prestamo;
+import Controllers.Operadores.Enums.E_PARAMETRO;
+import Controllers.Operadores.Enums.E_ROL;
+import Controllers.Operadores.Metodos.ControladorGeneral;
+import Controllers.Operadores.Metodos.ControladorPrestamo;
+import Models.Prestamo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;

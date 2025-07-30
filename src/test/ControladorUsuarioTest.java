@@ -1,10 +1,10 @@
 package test;
 
-import main.java.Controllers.Operadores.Enums.E_PARAMETRO;
-import main.java.Controllers.Operadores.Enums.E_ROL;
-import main.java.Controllers.Operadores.Metodos.ControladorGeneral;
-import main.java.Controllers.Operadores.Metodos.ControladorUsuario;
-import main.java.Models.Usuario;
+import Controllers.Operadores.Enums.E_PARAMETRO;
+import Controllers.Operadores.Enums.E_ROL;
+import Controllers.Operadores.Metodos.ControladorGeneral;
+import Controllers.Operadores.Metodos.ControladorUsuario;
+import Models.Usuario;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
