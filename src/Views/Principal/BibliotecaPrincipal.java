@@ -18,7 +18,6 @@ public class BibliotecaPrincipal extends JFrame {
     private final JPanel headerPanel;
     private final JPanel botonesPanel;
     private final JPanel logoutPanel;
-    private final JPanel panelDashboard;
     private String nombreUsuario; // nombre usuario
 
     public BibliotecaPrincipal(String nombreUsuario){
@@ -39,7 +38,7 @@ public class BibliotecaPrincipal extends JFrame {
         botonesPanel = new JPanel();
         logoutPanel = new JPanel();
         cardLayout = new CardLayout();
-        panelDashboard = new JPanel();
+        new JPanel();
         initComponents();
     }
     private void initComponents(){

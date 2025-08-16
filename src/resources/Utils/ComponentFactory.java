@@ -117,7 +117,7 @@ public class ComponentFactory {
         return rutaIcono(icono);
     }
     private static String rutaIcono(String nombreIcono) {
-        return "src/main/resources/icons/"+nombreIcono+".png";
+        return "src/resources/icons/"+nombreIcono+".png";
     }
     // Crear colores personalizados para la aplicación
     public static final Color COLOR_FONDO = new Color(240, 248, 255);

@@ -92,8 +92,6 @@ public class PrestamoForm extends JDialog {
         add(mainPanel,BorderLayout.CENTER);
     }
     private void editarPrestamo() {
-        comboEstadoInicializado = false; // ⛔ Desactivar momentáneamente los listeners
-
         Prestamo prestamo = new Prestamo();
         prestamo.setID(ID_Prestamo);
         Ejemplar ejemplar = new Ejemplar();
@@ -145,10 +143,7 @@ public class PrestamoForm extends JDialog {
         } catch (Exception e) {
             System.out.println("Error al editar préstamo: " + e.getMessage());
         }
-
-        comboEstadoInicializado = true; // ✅ Activar los listeners solo después de haber cargado todo
     }
-    private boolean comboEstadoInicializado = false;
     private JPanel camposPrestamo() {
         JPanel panelCampos = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();

@@ -10,7 +10,7 @@ public class ConexionDB {
     private static final Properties props=new Properties();
     static {
         try {
-            props.load(ConexionDB.class.getClassLoader().getResourceAsStream("resources/config.properties"));
+            props.load(ConexionDB.class.getClassLoader().getResourceAsStream("config.properties"));
         }catch (IOException e){
             System.out.println("Error al cargar las propiedades de la conexion: "+e.getMessage());
         }

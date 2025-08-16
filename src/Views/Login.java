@@ -16,8 +16,8 @@ import java.util.Map;
 public class Login extends JFrame {
     private final JPanel panelLogin;
     private JPanel panelPortada;
-    private JPanel camposPanel;
-    private JPanel botonesPanel;
+    //private JPanel camposPanel;
+    //private JPanel botonesPanel;
     private JTextField campoUsuario;
     private JTextField campoContrasena;
     public Login(){
@@ -42,8 +42,8 @@ public class Login extends JFrame {
         add(panelLogin,BorderLayout.WEST);
         add(panelPortada,BorderLayout.CENTER);
     }
-    private void panelCampos() {
-        camposPanel = new JPanel();
+    private JPanel panelCampos() {
+        JPanel camposPanel = new JPanel();
         camposPanel.setLayout(new BoxLayout(camposPanel, BoxLayout.Y_AXIS));
         camposPanel.setOpaque(false);
 
@@ -61,10 +61,11 @@ public class Login extends JFrame {
         camposPanel.add(contrasenaField);
 
         camposPanel.setMaximumSize(new Dimension(300, camposPanel.getPreferredSize().height));
+        return camposPanel;
     }
 
-    private void panelBotones(){
-        botonesPanel = new JPanel((new FlowLayout(FlowLayout.CENTER, 0, 0)));
+    private JPanel panelBotones(){
+        JPanel botonesPanel = new JPanel((new FlowLayout(FlowLayout.CENTER, 0, 0)));
         botonesPanel.setOpaque(false);
         JButton btnIniciar = ComponentFactory.crearBoton("Iniciar Sesion",ComponentFactory.ruta("user"),true);
         botonesPanel.setMaximumSize(new Dimension(200, botonesPanel.getPreferredSize().height));
@@ -104,6 +105,7 @@ public class Login extends JFrame {
                 JOptionPane.showMessageDialog(this, "Usuario o contraseña inválidos", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
+        return botonesPanel;
     }
     private void initPanelPortada() {
         Image img = new ImageIcon("src/resources/Images/login-background.png").getImage();
@@ -131,17 +133,14 @@ public class Login extends JFrame {
         contentPanel.add(lbl_titulo);
         contentPanel.add(Box.createVerticalStrut(20));
 
-        panelCampos();
+        JPanel camposPanel = panelCampos();
         camposPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        camposPanel.setMaximumSize(new Dimension(250, camposPanel.getPreferredSize().height));
         contentPanel.add(camposPanel);
-
         contentPanel.add(Box.createVerticalStrut(20));
-
-        panelBotones();
+        JPanel botonesPanel = panelBotones();
         botonesPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        botonesPanel.setMaximumSize(new Dimension(200, botonesPanel.getPreferredSize().height));
         contentPanel.add(botonesPanel);
+        contentPanel.add(Box.createVerticalGlue());
 
         panelLogin.add(contentPanel, gbc);
     }
